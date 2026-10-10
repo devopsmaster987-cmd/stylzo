@@ -1,3 +1,4 @@
+
 import { site } from '@/config/site.js';
 import { BrandLink, SiteNav, MobileNav } from '@/components/site-header.jsx';
 import { SiteFooter } from '@/components/site-footer.jsx';
@@ -5,10 +6,16 @@ import { Scripts } from '@/components/scripts.jsx';
 
 export const metadata = {
   metadataBase: new URL(process.env.SITE_URL || 'http://localhost:3000'),
-  title: { default: `${site.name}: ${site.tagline}`, template: `%s | ${site.name}` },
+  title: {
+    default: site.name + ': ' + site.tagline,
+    template: '%s | ' + site.name,
+  },
   description: site.defaultDescription,
   icons: { icon: '/favicon.svg' },
   manifest: '/manifest.webmanifest',
+  verification: {
+    google: 'R0XZwqgEgMlRpykRHBE1zAix1XjwbCou8tKneZoUK3U',
+  },
 };
 
 export const viewport = {
@@ -41,7 +48,10 @@ export default function RootLayout({ children }) {
                 hidden
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                  <path fill="currentColor" d="M4 7h16v2H4zm0 4h16v2H4zm0 4h16v2H4z" />
+                  <path
+                    fill="currentColor"
+                    d="M4 7h16v2H4zm0 4h16v2H4zm0 4h16v2H4z"
+                  />
                 </svg>
               </button>
             </div>
@@ -49,7 +59,9 @@ export default function RootLayout({ children }) {
           <MobileNav />
         </header>
 
-        <main id="main" className="wrap">{children}</main>
+        <main id="main" className="wrap">
+          {children}
+        </main>
 
         <SiteFooter />
         <div id="toast" className="toast" role="status" aria-live="polite"></div>
