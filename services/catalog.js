@@ -1,45 +1,56 @@
-// Data access layer for style catalogs. Reads the build artifact produced by
-// scripts/build-catalog.js; falls back to data/fonts.json when that is absent, so a
-// fresh clone still boots.
-//
-// Everything derived (slug map, per-category lists, counts, the default /api/styles
-// payload) is computed once at module load, never on a request. catalog() stays
-// synchronous, so callers are unchanged.
+```javascript
+// Data access layer for style catalogs.
+// Reads the build artifact produced by scripts/build-catalog.js.
+// Falls back to data/fonts.json when the cache is unavailable.
+
 import { readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { buildCache } from './catalog-index.js';
 
-const dataDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../data');
+// Resolve data files from the project root.
+const dataDir = path.join(process.cwd(), 'data');
 const CACHE_FILE = path.join(dataDir, '.catalog-cache.json');
 
 const TTL_MS = 5 * 60 * 1000;
 let cache = null;
 
-const readJson = (f) => JSON.parse(readFileSync(path.join(dataDir, f), 'utf8'));
+const readJson = (filename) =>
+  JSON.parse(readFileSync(path.join(dataDir, filename), 'utf8'));
 
 /**
- * Re-link the persisted position indexes into Maps of real records, and derive the
- * few values that are cheaper to build than to store.
+ * Re-link persisted indexes to actual records and derive
+ * search data and the default API payload.
  */
 function link(raw) {
   const { styles } = raw;
 
   const bySlug = new Map();
-  for (const slug in raw.bySlug) bySlug.set(slug, styles[raw.bySlug[slug]]);
 
-  // Filtering by category is a Map hit instead of a 5.6k-element scan.
+  for (const slug in raw.bySlug) {
+    bySlug.set(slug, styles[raw.bySlug[slug]]);
+  }
+
   const byCategory = new Map();
-  for (const key in raw.byCategory) byCategory.set(key, raw.byCategory[key].map((i) => styles[i]));
 
-  // Search compares against one pre-lowered string per style, built once per process
-  // rather than per query.
-  const haystack = styles.map((s) => `${s.name} ${s.slug} ${(s.tags || []).join(' ')}`.toLowerCase());
+  for (const key in raw.byCategory) {
+    byCategory.set(
+      key,
+      raw.byCategory[key].map((index) => styles[index])
+    );
+  }
 
-  // The default GET /api/styles body is the whole catalog and never varies by request,
-  // so it is serialized here instead of mapping and re-stringifying 0.8 MB every hit.
-  const apiPayload = JSON.stringify({ styles: styles.map((s) => ({ id: s.id, pipeline: s.pipeline })) });
+  const haystack = styles.map(
+    (style) =>
+      `${style.name} ${style.slug} ${(style.tags || []).join(' ')}`.toLowerCase()
+  );
+
+  const apiPayload = JSON.stringify({
+    styles: styles.map((style) => ({
+      id: style.id,
+      pipeline: style.pipeline,
+    })),
+  });
 
   return {
     ...raw,
@@ -51,93 +62,158 @@ function link(raw) {
   };
 }
 
+/**
+ * Load the generated catalog cache.
+ * If unavailable, build the catalog from source JSON files.
+ */
 function load() {
   let raw;
+
   try {
     raw = JSON.parse(readFileSync(CACHE_FILE, 'utf8'));
   } catch {
-    raw = buildCache(readJson('fonts.json'), readJson('categories.json'), readJson('pages.json'));
+    raw = buildCache(
+      readJson('fonts.json'),
+      readJson('categories.json'),
+      readJson('pages.json')
+    );
   }
+
   return link(raw);
 }
 
-/** Async variant used once at boot, so no request ever waits on disk. */
+/**
+ * Async initial load.
+ */
 async function loadAsync() {
   try {
-    return link(JSON.parse(await readFile(CACHE_FILE, 'utf8')));
+    const content = await readFile(CACHE_FILE, 'utf8');
+    return link(JSON.parse(content));
   } catch {
     return load();
   }
 }
 
-// Built once while the module evaluates, before the first request can arrive.
+// Initialize the catalog before serving requests.
 cache = await loadAsync();
 
-// process.env is a getter, so this is read once rather than on every catalog() call.
 const CHECKS_TTL = process.env.NODE_ENV !== 'production';
 
 export function catalog() {
-  // In production the artifact is fixed for the lifetime of the process, so there is
-  // nothing to re-read. Dev keeps a TTL so editing data and re-running the build script
-  // shows up without a restart.
   if (CHECKS_TTL && Date.now() - cache.loadedAt > TTL_MS) {
     cache = load();
   }
+
   return cache;
 }
 
-export const getStyle = (slug) => catalog().bySlug.get(slug) || null;
+export const getStyle = (slug) =>
+  catalog().bySlug.get(slug) || null;
+
 export const getCategory = (key) => {
-  const c = catalog().categories[key];
-  return c ? { key, ...c } : null;
+  const category = catalog().categories[key];
+
+  return category ? { key, ...category } : null;
 };
 
 export function listStyles({ category } = {}) {
-  const c = catalog();
-  if (!category) return c.styles;
-  return c.byCategory.get(category) || [];
+  const current = catalog();
+
+  if (!category) {
+    return current.styles;
+  }
+
+  return current.byCategory.get(category) || [];
 }
 
-/** One page of styles for infinite scroll / load-more. Slices the prebuilt category list. */
-export function pageStyles({ category, offset = 0, limit = 48 } = {}) {
+/**
+ * Return one page of styles for infinite scrolling.
+ */
+export function pageStyles({
+  category,
+  offset = 0,
+  limit = 48,
+} = {}) {
   const items = listStyles({ category });
   const start = Math.max(0, offset);
-  return { total: items.length, items: items.slice(start, start + limit), offset: start };
+
+  return {
+    total: items.length,
+    items: items.slice(start, start + limit),
+    offset: start,
+  };
 }
 
-/** Ranked name/slug/tag search across the whole catalog. */
+/**
+ * Search styles by name, slug, or tags.
+ */
 export function searchStyles(query, n = 24) {
   const q = String(query || '').trim().toLowerCase();
-  if (!q) return [];
-  const c = catalog();
+
+  if (!q) {
+    return [];
+  }
+
+  const current = catalog();
   const starts = [];
   const has = [];
-  for (let i = 0; i < c.styles.length; i++) {
-    const s = c.styles[i];
-    if (!c.haystack[i].includes(q)) continue;
-    if (s.name.toLowerCase().startsWith(q) || s.slug.startsWith(q)) starts.push(s);
-    else has.push(s);
-    if (starts.length >= n) break;
+
+  for (let i = 0; i < current.styles.length; i++) {
+    const style = current.styles[i];
+
+    if (!current.haystack[i].includes(q)) {
+      continue;
+    }
+
+    if (
+      style.name.toLowerCase().startsWith(q) ||
+      style.slug.startsWith(q)
+    ) {
+      starts.push(style);
+    } else {
+      has.push(style);
+    }
+
+    if (starts.length >= n) {
+      break;
+    }
   }
+
   return [...starts, ...has].slice(0, n);
 }
 
-/** Popular curated styles first, then the rest of the indexable ones. */
+/**
+ * Return popular styles first, followed by other indexable styles.
+ */
 export function featuredStyles(n = 24) {
-  const c = catalog();
-  const popular = new Set(c.popularIndexable);
-  const rest = c.indexable.filter((i) => !popular.has(i));
-  return [...c.popularIndexable, ...rest].map((i) => c.styles[i]).slice(0, n);
+  const current = catalog();
+  const popular = new Set(current.popularIndexable);
+  const rest = current.indexable.filter(
+    (index) => !popular.has(index)
+  );
+
+  return [...current.popularIndexable, ...rest]
+    .map((index) => current.styles[index])
+    .slice(0, n);
 }
 
-/** Same-category siblings plus the parent style, from the ~100 indexable styles. */
+/**
+ * Return related styles from the same category and parent.
+ */
 export function relatedStyles(style, n = 6) {
-  const c = catalog();
+  const current = catalog();
   const root = style.parent || style.slug;
-  const pool = c.indexable
-    .map((i) => c.styles[i])
-    .filter((s) => s.slug !== style.slug && (s.category === style.category || s.slug === root));
+
+  const pool = current.indexable
+    .map((index) => current.styles[index])
+    .filter(
+      (item) =>
+        item.slug !== style.slug &&
+        (item.category === style.category || item.slug === root)
+    );
+
   pool.sort((a, b) => (b.slug === root) - (a.slug === root));
+
   return pool.slice(0, n);
 }
 
@@ -145,12 +221,20 @@ export function pageContent(key) {
   return catalog().pages[key] || null;
 }
 
-/** The pre-serialized body for the default GET /api/styles response. */
+/**
+ * Return the pre-serialized default styles API response.
+ */
 export const apiStylesPayload = () => catalog().apiPayload;
 
-// ---- M3 libraries (symbols, emoji, kaomoji) ---------------------------------
+// ---- M3 libraries: symbols, emoji, kaomoji -------------------------------
+
 const libCache = new Map();
+
 export function library(name) {
-  if (!libCache.has(name)) libCache.set(name, readJson(`${name}.json`));
+  if (!libCache.has(name)) {
+    libCache.set(name, readJson(`${name}.json`));
+  }
+
   return libCache.get(name);
 }
+```
