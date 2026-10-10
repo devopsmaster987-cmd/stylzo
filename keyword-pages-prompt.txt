@@ -1,0 +1,64 @@
+Generate one page for every keyword in data/keywords.txt, using the SAME
+design and structure as my existing page http://localhost:3000/styles/whatsapp
+(the WhatsApp Fancy Text Generator page).
+
+STEP 1: STUDY THE EXISTING PAGE
+- Open the code for /styles/whatsapp (app/styles/[key], lib/landing-pages.js,
+  components/landing-page.jsx). Reuse the same components, spacing, fonts,
+  colours, header, and footer. Do not make a new design.
+- The page has: H1, short intro, the generator tool, style cards with copy
+  buttons, FAQ section, a "Related pages" row of rounded chips, and the
+  shared footer (Create, Platforms, Libraries, Company).
+- Keep all of these parts on every new page.
+
+STEP 2: ONE PAGE PER KEYWORD
+- Use data/keywords.txt only (not keyword.txt in the root).
+- The keyword is the heading (H1). Add one emoji at the start and a capital
+  letter on each word.
+  Example: "fancy text generator blue colour" -> "💙 Fancy Text Generator Blue Colour"
+- Route from the keyword, inside the existing system:
+  /styles/<keyword-slug>
+  Example: /styles/fancy-text-generator-blue-colour
+- Keep the pages that already exist (/styles/whatsapp, instagram, discord,
+  gaming, and the others). If a keyword matches an existing page, upgrade
+  that page. Do not make a duplicate.
+- Merge near-duplicates into one page and keep the other wording as an
+  "extra keyword" in keyword-map.json.
+- Do not use any brand or site names in headings, routes, text, or FAQs.
+
+STEP 3: CONTENT ON EACH PAGE (must be different on every page)
+- Unique title, meta description, canonical URL, and FAQ schema.
+- Short intro (2-3 sentences) written for that keyword.
+- 3 to 5 FAQs written for that keyword, in the same style as the WhatsApp
+  page (a clear question and a plain answer).
+- "Related pages" chips: 5 to 7 links to the most related pages from our
+  own keyword list (same group first, then others).
+- 30+ style cards with emoji decorations that match the keyword mood.
+  Similar keywords must get different styles so pages are not copies.
+- No doubled "| Stylzo | Stylzo" in the title.
+
+STEP 4: HONEST PAGES
+- Language keywords (hindi, urdu, arabic, tamil, and so on): say clearly
+  that Unicode fancy fonts do not change these scripts, and link to the
+  closest working styles.
+- Colour keywords (blue, red, colour): say clearly that Unicode text cannot
+  carry font colour, and offer colour emoji styles.
+- GIF, video, download, and app keywords: mark as "planned" with an honest
+  note. Do not fake a feature.
+
+STEP 5: SITE UPDATES
+- Add all new pages to the sitemap.
+- Add the new pages to the footer "Platforms" and "Libraries" lists only
+  where they fit. Do not make the footer too long. Link the rest from a
+  page that lists all styles.
+- Update keyword-map.json, keyword-report.json, and /admin/seo so every
+  keyword shows its heading, route, emoji, group, and status.
+
+STEP 6: FINISH
+- Add tests: every route works, every page has 30+ styles, an FAQ, and
+  related pages, no duplicate routes, no brand names, sitemap has all pages.
+- Update old tests if the keyword counts changed.
+- Run npm test and npm run build. Fix any failures.
+- Do the first 30 keywords now. Stop and tell me when done, then I will
+  say "continue" for the rest.
+- Give me a short summary in easy words.

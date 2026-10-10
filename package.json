@@ -1,0 +1,28 @@
+{
+  "name": "fancy-text-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run sync:engine && npm run build:catalog && npm run build:keywords && next dev",
+    "build": "npm run sync:engine && npm run build:catalog && npm run build:keywords && next build",
+    "start": "next start",
+    "sync:engine": "node scripts/sync-engine.js",
+    "build:catalog": "node scripts/build-catalog.js",
+    "build:keywords": "node scripts/build-keyword-map.js",
+    "build:fonts": "node scripts/build-fonts.js",
+    "build:emoji": "node scripts/build-emoji.js",
+    "test": "npm run build && node --test --test-concurrency=1 \"tests/**/*.test.js\""
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.8.1",
+    "dotenv": "^16.4.5",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.1"
+  }
+}

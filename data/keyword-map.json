@@ -1,0 +1,2293 @@
+{
+  "generatedBy": "scripts/build-keyword-map.js",
+  "source": "data/keywords.txt",
+  "summary": {
+    "sourceEntries": 199,
+    "uniqueKeywords": 173,
+    "mapped": 157,
+    "skipped": 10,
+    "planned": 6,
+    "unmapped": 0,
+    "needsReview": 0,
+    "removed": 25,
+    "duplicates": 1,
+    "indexablePages": 32,
+    "totalVariations": 192,
+    "displayedVariations": 72,
+    "variationSections": 6,
+    "sectionsMeetingTarget": 6,
+    "sectionsShort": 0
+  },
+  "validation": {
+    "failures": 0,
+    "warnings": 0
+  },
+  "keywords": [
+    {
+      "original": "fancy text generator",
+      "normalized": "fancy text generator",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator online",
+      "normalized": "fancy text generator online",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "free fancy text generator",
+      "normalized": "free fancy text generator",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "best fancy text generator",
+      "normalized": "best fancy text generator",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text",
+      "normalized": "fancy text",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "copy and paste fancy text",
+      "normalized": "copy and paste fancy text",
+      "coreModifier": "and",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator 2024",
+      "normalized": "fancy text generator 2024",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator app",
+      "normalized": "fancy text generator app",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator download",
+      "normalized": "fancy text generator download",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "hindi fancy text generator",
+      "normalized": "hindi fancy text generator",
+      "coreModifier": "hindi",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "hindi keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "urdu fancy text generator",
+      "normalized": "urdu fancy text generator",
+      "coreModifier": "urdu",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "urdu keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "arabic fancy text generator",
+      "normalized": "arabic fancy text generator",
+      "coreModifier": "arabic",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "arabic keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "tamil fancy text generator",
+      "normalized": "tamil fancy text generator",
+      "coreModifier": "tamil",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "tamil keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "marathi fancy text generator",
+      "normalized": "marathi fancy text generator",
+      "coreModifier": "marathi",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "marathi keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "coolsymbol fancy text generator",
+      "normalized": "coolsymbol fancy text generator",
+      "coreModifier": "coolsymbol",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"coolsymbol\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "facebook fancy text generator",
+      "normalized": "facebook fancy text generator",
+      "coreModifier": "facebook",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/fonts/bio-hearts",
+      "reason": "Facebook keywords map to the shared Bio Hearts style page instead of a per-platform doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "heart fancy text generator",
+      "normalized": "heart fancy text generator",
+      "coreModifier": "heart",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/cute-bubble",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "www fancy text generator",
+      "normalized": "www fancy text generator",
+      "coreModifier": "www",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "font fancy text generator",
+      "normalized": "font fancy text generator",
+      "coreModifier": "font",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "ai fancy text generator",
+      "normalized": "ai fancy text generator",
+      "coreModifier": "ai",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator blue colour",
+      "normalized": "fancy text generator blue colour",
+      "coreModifier": "blue colour",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"blue\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "cool fancy text generator",
+      "normalized": "cool fancy text generator",
+      "coreModifier": "cool",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "online fancy text generator",
+      "normalized": "online fancy text generator",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator for instagram",
+      "normalized": "fancy text generator for instagram",
+      "coreModifier": "for instagram",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram fancy text generator",
+      "normalized": "instagram fancy text generator",
+      "coreModifier": "instagram",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram bio fonts",
+      "normalized": "instagram bio fonts",
+      "coreModifier": "instagram bio fonts",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram font generator",
+      "normalized": "instagram font generator",
+      "coreModifier": "instagram font",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram username fonts",
+      "normalized": "instagram username fonts",
+      "coreModifier": "instagram username fonts",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram name fonts",
+      "normalized": "instagram name fonts",
+      "coreModifier": "instagram name fonts",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram caption fonts",
+      "normalized": "instagram caption fonts",
+      "coreModifier": "instagram caption fonts",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "fancy text for instagram bio",
+      "normalized": "fancy text for instagram bio",
+      "coreModifier": "for instagram bio",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "instagram aesthetic fonts",
+      "normalized": "instagram aesthetic fonts",
+      "coreModifier": "instagram aesthetic fonts",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/styles/instagram",
+      "reason": "Instagram keywords map to the Instagram bio and username landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "instagram"
+      ]
+    },
+    {
+      "original": "fancy text generator whatsapp",
+      "normalized": "fancy text generator whatsapp",
+      "coreModifier": "whatsapp",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/styles/whatsapp",
+      "reason": "WhatsApp keywords map to the WhatsApp display name and status landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "whatsapp"
+      ]
+    },
+    {
+      "original": "whatsapp fancy text generator",
+      "normalized": "whatsapp fancy text generator",
+      "coreModifier": "whatsapp",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/styles/whatsapp",
+      "reason": "WhatsApp keywords map to the WhatsApp display name and status landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "whatsapp"
+      ]
+    },
+    {
+      "original": "whatsapp font generator",
+      "normalized": "whatsapp font generator",
+      "coreModifier": "whatsapp font",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/styles/whatsapp",
+      "reason": "WhatsApp keywords map to the WhatsApp display name and status landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "whatsapp"
+      ]
+    },
+    {
+      "original": "whatsapp text style generator",
+      "normalized": "whatsapp text style generator",
+      "coreModifier": "whatsapp style",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/styles/whatsapp",
+      "reason": "WhatsApp keywords map to the WhatsApp display name and status landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "whatsapp"
+      ]
+    },
+    {
+      "original": "fancy text for whatsapp status",
+      "normalized": "fancy text for whatsapp status",
+      "coreModifier": "for whatsapp status",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/styles/whatsapp",
+      "reason": "WhatsApp keywords map to the WhatsApp display name and status landing page.",
+      "variations": 34,
+      "displayedVariations": 12,
+      "variationSections": [
+        "whatsapp"
+      ]
+    },
+    {
+      "original": "discord fancy text generator",
+      "normalized": "discord fancy text generator",
+      "coreModifier": "discord",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "Messaging keywords without a dedicated landing page map to a real style page rather than a thin per-app page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator for discord",
+      "normalized": "fancy text generator for discord",
+      "coreModifier": "for discord",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "Messaging keywords without a dedicated landing page map to a real style page rather than a thin per-app page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "discord nickname generator",
+      "normalized": "discord nickname generator",
+      "coreModifier": "discord nickname",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "Messaging keywords without a dedicated landing page map to a real style page rather than a thin per-app page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "discord bio fonts",
+      "normalized": "discord bio fonts",
+      "coreModifier": "discord bio fonts",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "Messaging keywords without a dedicated landing page map to a real style page rather than a thin per-app page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "discord server name fonts",
+      "normalized": "discord server name fonts",
+      "coreModifier": "discord server name fonts",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "Messaging keywords without a dedicated landing page map to a real style page rather than a thin per-app page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "tiktok fancy text generator",
+      "normalized": "tiktok fancy text generator",
+      "coreModifier": "tiktok",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/fonts/bio-hearts",
+      "reason": "TikTok keywords map to the shared Bio Hearts style page instead of a per-platform doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "twitter fancy text generator",
+      "normalized": "twitter fancy text generator",
+      "coreModifier": "twitter",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/fonts/bio-hearts",
+      "reason": "X keywords map to the shared Bio Hearts style page instead of a per-platform doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "snapchat fancy text generator",
+      "normalized": "snapchat fancy text generator",
+      "coreModifier": "snapchat",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/fonts/bio-hearts",
+      "reason": "Snapchat keywords map to the shared Bio Hearts style page instead of a per-platform doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "telegram fancy text generator",
+      "normalized": "telegram fancy text generator",
+      "coreModifier": "telegram",
+      "category": "messaging",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "Messaging keywords without a dedicated landing page map to a real style page rather than a thin per-app page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "reddit fancy text generator",
+      "normalized": "reddit fancy text generator",
+      "coreModifier": "reddit",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/fonts/bio-hearts",
+      "reason": "Reddit keywords map to the shared Bio Hearts style page instead of a per-platform doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "steam fancy text generator",
+      "normalized": "steam fancy text generator",
+      "coreModifier": "steam",
+      "category": "platform",
+      "status": "mapped",
+      "route": "/fonts/bio-hearts",
+      "reason": "Steam keywords map to the shared Bio Hearts style page instead of a per-platform doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "free fire fancy text generator",
+      "normalized": "free fire fancy text generator",
+      "coreModifier": "fire",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"free fire\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "free fire name generator",
+      "normalized": "free fire name generator",
+      "coreModifier": "fire name",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"free fire\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "pubg fancy text generator",
+      "normalized": "pubg fancy text generator",
+      "coreModifier": "pubg",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"pubg\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bgmi fancy text generator",
+      "normalized": "bgmi fancy text generator",
+      "coreModifier": "bgmi",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"bgmi\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bgmi name generator",
+      "normalized": "bgmi name generator",
+      "coreModifier": "bgmi name",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"bgmi\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "roblox fancy text generator",
+      "normalized": "roblox fancy text generator",
+      "coreModifier": "roblox",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"roblox\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "minecraft fancy text generator",
+      "normalized": "minecraft fancy text generator",
+      "coreModifier": "minecraft",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"minecraft\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "codm fancy text generator",
+      "normalized": "codm fancy text generator",
+      "coreModifier": "codm",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"codm\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "agar.io fancy text generator",
+      "normalized": "agar.io fancy text generator",
+      "coreModifier": "agar.io",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"agar.io\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "vrchat fancy text generator",
+      "normalized": "vrchat fancy text generator",
+      "coreModifier": "vrchat",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"vrchat\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "rise of kingdoms fancy text generator",
+      "normalized": "rise of kingdoms fancy text generator",
+      "coreModifier": "rise of kingdoms",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"rise of kingdoms\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "whiteout survival fancy text generator",
+      "normalized": "whiteout survival fancy text generator",
+      "coreModifier": "whiteout survival",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/fonts/clan-tag",
+      "reason": "\"whiteout survival\" keywords map to the Clan Tag style page rather than a thin per-game doorway.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bold fancy text generator",
+      "normalized": "bold fancy text generator",
+      "coreModifier": "bold",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "\"bold\" resolves to the existing bold style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bold fancy text",
+      "normalized": "bold fancy text",
+      "coreModifier": "bold",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/bold",
+      "reason": "\"bold\" resolves to the existing bold style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator small caps",
+      "normalized": "fancy text generator small caps",
+      "coreModifier": "small caps",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "\"small caps\" resolves to the existing small-caps style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "small caps text generator",
+      "normalized": "small caps text generator",
+      "coreModifier": "small caps",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "\"small caps\" resolves to the existing small-caps style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "cursive fancy text generator",
+      "normalized": "cursive fancy text generator",
+      "coreModifier": "cursive",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/script",
+      "reason": "\"cursive\" resolves to the existing script style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "free cursive text generator",
+      "normalized": "free cursive text generator",
+      "coreModifier": "cursive",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/script",
+      "reason": "\"cursive\" resolves to the existing script style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "cursive text generator",
+      "normalized": "cursive text generator",
+      "coreModifier": "cursive",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/script",
+      "reason": "\"cursive\" resolves to the existing script style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "gothic fancy text generator",
+      "normalized": "gothic fancy text generator",
+      "coreModifier": "gothic",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/fraktur",
+      "reason": "\"gothic\" resolves to the existing fraktur style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "old english text generator",
+      "normalized": "old english text generator",
+      "coreModifier": "old english",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/fraktur",
+      "reason": "\"old english\" resolves to the existing fraktur style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator italic",
+      "normalized": "fancy text generator italic",
+      "coreModifier": "italic",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/italic",
+      "reason": "\"italic\" resolves to the existing italic style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "italic text generator",
+      "normalized": "italic text generator",
+      "coreModifier": "italic",
+      "category": "formatting",
+      "status": "mapped",
+      "route": "/fonts/italic",
+      "reason": "\"italic\" resolves to the existing italic style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator outline",
+      "normalized": "fancy text generator outline",
+      "coreModifier": "outline",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/double-struck",
+      "reason": "\"outline\" resolves to the existing double-struck style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "outline text generator",
+      "normalized": "outline text generator",
+      "coreModifier": "outline",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/double-struck",
+      "reason": "\"outline\" resolves to the existing double-struck style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator bubble",
+      "normalized": "fancy text generator bubble",
+      "coreModifier": "bubble",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/circled",
+      "reason": "\"bubble\" resolves to the existing circled style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bubble text generator",
+      "normalized": "bubble text generator",
+      "coreModifier": "bubble",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/circled",
+      "reason": "\"bubble\" resolves to the existing circled style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator monospace",
+      "normalized": "fancy text generator monospace",
+      "coreModifier": "monospace",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/monospace",
+      "reason": "\"monospace\" resolves to the existing monospace style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "monospace text generator",
+      "normalized": "monospace text generator",
+      "coreModifier": "monospace",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/monospace",
+      "reason": "\"monospace\" resolves to the existing monospace style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator wide",
+      "normalized": "fancy text generator wide",
+      "coreModifier": "wide",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/fullwidth",
+      "reason": "\"wide\" resolves to the existing fullwidth style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "wide text generator",
+      "normalized": "wide text generator",
+      "coreModifier": "wide",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/fullwidth",
+      "reason": "\"wide\" resolves to the existing fullwidth style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator serif",
+      "normalized": "fancy text generator serif",
+      "coreModifier": "serif",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/sans",
+      "reason": "\"serif\" resolves to the existing sans style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator upside down",
+      "normalized": "fancy text generator upside down",
+      "coreModifier": "upside down",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/upside-down",
+      "reason": "\"upside down\" resolves to the existing upside-down style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "upside down text generator",
+      "normalized": "upside down text generator",
+      "coreModifier": "upside down",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/upside-down",
+      "reason": "\"upside down\" resolves to the existing upside-down style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator backwards",
+      "normalized": "fancy text generator backwards",
+      "coreModifier": "backwards",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/backwards",
+      "reason": "\"backwards\" resolves to the existing backwards style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "backwards text generator",
+      "normalized": "backwards text generator",
+      "coreModifier": "backwards",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/backwards",
+      "reason": "\"backwards\" resolves to the existing backwards style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator mirrored",
+      "normalized": "fancy text generator mirrored",
+      "coreModifier": "mirrored",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/flipped-letters",
+      "reason": "\"mirrored\" resolves to the existing flipped-letters style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator flip",
+      "normalized": "fancy text generator flip",
+      "coreModifier": "flip",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/flipped-letters",
+      "reason": "\"flip\" resolves to the existing flipped-letters style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator zalgo",
+      "normalized": "fancy text generator zalgo",
+      "coreModifier": "zalgo",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/zalgo-light",
+      "reason": "\"zalgo\" resolves to the existing zalgo-light style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "zalgo text generator",
+      "normalized": "zalgo text generator",
+      "coreModifier": "zalgo",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/zalgo-light",
+      "reason": "\"zalgo\" resolves to the existing zalgo-light style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "glitch text generator",
+      "normalized": "glitch text generator",
+      "coreModifier": "glitch",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/glitch-alternate",
+      "reason": "\"glitch\" resolves to the existing glitch-alternate style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "glitch text effect",
+      "normalized": "glitch text effect",
+      "coreModifier": "glitch effect",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/glitch-alternate",
+      "reason": "\"glitch\" resolves to the existing glitch-alternate style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "corrupted text generator",
+      "normalized": "corrupted text generator",
+      "coreModifier": "corrupted",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/glitch-alternate",
+      "reason": "\"corrupted\" resolves to the existing glitch-alternate style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator heart",
+      "normalized": "fancy text generator heart",
+      "coreModifier": "heart",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/cute-bubble",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "heart text generator",
+      "normalized": "heart text generator",
+      "coreModifier": "heart",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/cute-bubble",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator aesthetic",
+      "normalized": "fancy text generator aesthetic",
+      "coreModifier": "aesthetic",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/aesthetic-wide",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "aesthetic text generator",
+      "normalized": "aesthetic text generator",
+      "coreModifier": "aesthetic",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/aesthetic-wide",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator cute",
+      "normalized": "fancy text generator cute",
+      "coreModifier": "cute",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/cute-bubble",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "cute fancy text",
+      "normalized": "cute fancy text",
+      "coreModifier": "cute",
+      "category": "cute",
+      "status": "mapped",
+      "route": "/fonts/cute-bubble",
+      "reason": "Heart, cute and aesthetic keywords map to a real style page in the social category.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator fancy letters",
+      "normalized": "fancy text generator fancy letters",
+      "coreModifier": "letters",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy letters generator",
+      "normalized": "fancy letters generator",
+      "coreModifier": "letters",
+      "category": "style",
+      "status": "mapped",
+      "route": "/",
+      "reason": "No single style matches this modifier, so it maps to the main generator rather than a fabricated page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator with symbols",
+      "normalized": "fancy text generator with symbols",
+      "coreModifier": "with symbols",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/symbols",
+      "reason": "Symbol keywords map to the existing symbols library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "symbols text generator",
+      "normalized": "symbols text generator",
+      "coreModifier": "symbols",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/symbols",
+      "reason": "Symbol keywords map to the existing symbols library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator stars",
+      "normalized": "fancy text generator stars",
+      "coreModifier": "stars",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/symbols",
+      "reason": "Symbol keywords map to the existing symbols library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "star text generator",
+      "normalized": "star text generator",
+      "coreModifier": "star",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/symbols",
+      "reason": "Symbol keywords map to the existing symbols library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator arrows",
+      "normalized": "fancy text generator arrows",
+      "coreModifier": "arrows",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/symbols",
+      "reason": "Symbol keywords map to the existing symbols library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "arrow text generator",
+      "normalized": "arrow text generator",
+      "coreModifier": "arrow",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/symbols",
+      "reason": "Symbol keywords map to the existing symbols library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator emoji",
+      "normalized": "fancy text generator emoji",
+      "coreModifier": "emoji",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/emoji",
+      "reason": "Emoji keywords map to the existing emoji library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "emoji text generator",
+      "normalized": "emoji text generator",
+      "coreModifier": "emoji",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/emoji",
+      "reason": "Emoji keywords map to the existing emoji library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "kaomoji generator",
+      "normalized": "kaomoji generator",
+      "coreModifier": "kaomoji",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/kaomoji",
+      "reason": "Kaomoji keywords map to the existing kaomoji library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "kaomoji text generator",
+      "normalized": "kaomoji text generator",
+      "coreModifier": "kaomoji",
+      "category": "symbols",
+      "status": "mapped",
+      "route": "/kaomoji",
+      "reason": "Kaomoji keywords map to the existing kaomoji library.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator underline",
+      "normalized": "fancy text generator underline",
+      "coreModifier": "underline",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/underline",
+      "reason": "\"underline\" resolves to the existing underline style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "underline text generator",
+      "normalized": "underline text generator",
+      "coreModifier": "underline",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/underline",
+      "reason": "\"underline\" resolves to the existing underline style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator strikethrough",
+      "normalized": "fancy text generator strikethrough",
+      "coreModifier": "strikethrough",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/strike",
+      "reason": "\"strikethrough\" resolves to the existing strike style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "strikethrough text generator",
+      "normalized": "strikethrough text generator",
+      "coreModifier": "strikethrough",
+      "category": "style",
+      "status": "mapped",
+      "route": "/fonts/strike",
+      "reason": "\"strikethrough\" resolves to the existing strike style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bengali fancy text generator",
+      "normalized": "bengali fancy text generator",
+      "coreModifier": "bengali",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "bengali keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "gujarati fancy text generator",
+      "normalized": "gujarati fancy text generator",
+      "coreModifier": "gujarati",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "gujarati keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "malayalam fancy text generator",
+      "normalized": "malayalam fancy text generator",
+      "coreModifier": "malayalam",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "malayalam keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "punjabi fancy text generator",
+      "normalized": "punjabi fancy text generator",
+      "coreModifier": "punjabi",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "punjabi keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "nepali fancy text generator",
+      "normalized": "nepali fancy text generator",
+      "coreModifier": "nepali",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "nepali keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "odia fancy text generator",
+      "normalized": "odia fancy text generator",
+      "coreModifier": "odia",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "odia keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "telugu fancy text generator",
+      "normalized": "telugu fancy text generator",
+      "coreModifier": "telugu",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "telugu keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "sinhala fancy text generator",
+      "normalized": "sinhala fancy text generator",
+      "coreModifier": "sinhala",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "sinhala keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "sanskrit fancy text generator",
+      "normalized": "sanskrit fancy text generator",
+      "coreModifier": "sanskrit",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "sanskrit keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "persian fancy text generator",
+      "normalized": "persian fancy text generator",
+      "coreModifier": "persian",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "persian keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "greek fancy text generator",
+      "normalized": "greek fancy text generator",
+      "coreModifier": "greek",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "greek keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "russian fancy text generator",
+      "normalized": "russian fancy text generator",
+      "coreModifier": "russian",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "russian keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "myanmar fancy text generator",
+      "normalized": "myanmar fancy text generator",
+      "coreModifier": "myanmar",
+      "category": "languages",
+      "status": "mapped",
+      "route": "/styles/languages",
+      "reason": "myanmar keywords resolve to the script-compatibility page; no misleading alphabet generator is offered.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "languages"
+      ]
+    },
+    {
+      "original": "blue text generator",
+      "normalized": "blue text generator",
+      "coreModifier": "blue",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"blue\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "fancy text generator red colour",
+      "normalized": "fancy text generator red colour",
+      "coreModifier": "red colour",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"red\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "red text generator",
+      "normalized": "red text generator",
+      "coreModifier": "red",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"red\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "fancy text generator gold colour",
+      "normalized": "fancy text generator gold colour",
+      "coreModifier": "gold colour",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"gold\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "gold text generator",
+      "normalized": "gold text generator",
+      "coreModifier": "gold",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"gold\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "fancy text generator dark",
+      "normalized": "fancy text generator dark",
+      "coreModifier": "dark",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"dark\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "dark text generator",
+      "normalized": "dark text generator",
+      "coreModifier": "dark",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"dark\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "fancy text generator white colour",
+      "normalized": "fancy text generator white colour",
+      "coreModifier": "white colour",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"white\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "white text generator",
+      "normalized": "white text generator",
+      "coreModifier": "white",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"white\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "rainbow text generator",
+      "normalized": "rainbow text generator",
+      "coreModifier": "rainbow",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"rainbow\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "coloured text generator",
+      "normalized": "coloured text generator",
+      "coreModifier": "coloured",
+      "category": "colours",
+      "status": "mapped",
+      "route": "/styles/colours",
+      "reason": "\"red\" text maps to the colour-display page, which explains that plain Unicode cannot force font colour.",
+      "variations": 32,
+      "displayedVariations": 12,
+      "variationSections": [
+        "colours"
+      ]
+    },
+    {
+      "original": "fancy username generator",
+      "normalized": "fancy username generator",
+      "coreModifier": "username",
+      "category": "usernames",
+      "status": "mapped",
+      "route": "/fonts/handle-wrap",
+      "reason": "Username and bio keywords map to the Handle Wrap style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "cool username generator",
+      "normalized": "cool username generator",
+      "coreModifier": "cool username",
+      "category": "usernames",
+      "status": "mapped",
+      "route": "/fonts/handle-wrap",
+      "reason": "Username and bio keywords map to the Handle Wrap style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "nickname generator",
+      "normalized": "nickname generator",
+      "coreModifier": "nickname",
+      "category": "usernames",
+      "status": "mapped",
+      "route": "/fonts/handle-wrap",
+      "reason": "Username and bio keywords map to the Handle Wrap style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "bio generator",
+      "normalized": "bio generator",
+      "coreModifier": "bio",
+      "category": "usernames",
+      "status": "mapped",
+      "route": "/fonts/handle-wrap",
+      "reason": "Username and bio keywords map to the Handle Wrap style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy bio generator",
+      "normalized": "fancy bio generator",
+      "coreModifier": "bio",
+      "category": "usernames",
+      "status": "mapped",
+      "route": "/fonts/handle-wrap",
+      "reason": "Username and bio keywords map to the Handle Wrap style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "aesthetic username generator",
+      "normalized": "aesthetic username generator",
+      "coreModifier": "aesthetic username",
+      "category": "usernames",
+      "status": "mapped",
+      "route": "/fonts/handle-wrap",
+      "reason": "Username and bio keywords map to the Handle Wrap style page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "gaming name generator",
+      "normalized": "gaming name generator",
+      "coreModifier": "gaming name",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/styles/gaming",
+      "reason": "Gaming keywords map to the shared gaming landing page.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "gaming"
+      ]
+    },
+    {
+      "original": "clan tag generator",
+      "normalized": "clan tag generator",
+      "coreModifier": "clan tag",
+      "category": "gaming",
+      "status": "mapped",
+      "route": "/styles/gaming",
+      "reason": "Gaming keywords map to the shared gaming landing page.",
+      "variations": 31,
+      "displayedVariations": 12,
+      "variationSections": [
+        "gaming"
+      ]
+    },
+    {
+      "original": "fancy number text generator",
+      "normalized": "fancy number text generator",
+      "coreModifier": "number",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "number text generator",
+      "normalized": "number text generator",
+      "coreModifier": "number",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator tiny",
+      "normalized": "fancy text generator tiny",
+      "coreModifier": "tiny",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "tiny text generator",
+      "normalized": "tiny text generator",
+      "coreModifier": "tiny",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "small text generator",
+      "normalized": "small text generator",
+      "coreModifier": "small",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "big text generator",
+      "normalized": "big text generator",
+      "coreModifier": "big",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "large text generator",
+      "normalized": "large text generator",
+      "coreModifier": "large",
+      "category": "numbers",
+      "status": "mapped",
+      "route": "/fonts/small-caps",
+      "reason": "Size-variation keywords map to the small caps style family.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text gif generator",
+      "normalized": "fancy text gif generator",
+      "coreModifier": "gif",
+      "category": "unsupported",
+      "status": "planned",
+      "route": null,
+      "reason": "\"gif\" generation is not implemented; recorded as planned rather than faked.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "gif text generator",
+      "normalized": "gif text generator",
+      "coreModifier": "gif",
+      "category": "unsupported",
+      "status": "planned",
+      "route": null,
+      "reason": "\"gif\" generation is not implemented; recorded as planned rather than faked.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "ascii art generator",
+      "normalized": "ascii art generator",
+      "coreModifier": "ascii art",
+      "category": "unsupported",
+      "status": "planned",
+      "route": null,
+      "reason": "\"ascii art\" generation is not implemented; recorded as planned rather than faked.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "image text generator",
+      "normalized": "image text generator",
+      "coreModifier": "image",
+      "category": "unsupported",
+      "status": "planned",
+      "route": null,
+      "reason": "\"image text\" generation is not implemented; recorded as planned rather than faked.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "video text generator",
+      "normalized": "video text generator",
+      "coreModifier": "video",
+      "category": "unsupported",
+      "status": "planned",
+      "route": null,
+      "reason": "\"video text\" generation is not implemented; recorded as planned rather than faked.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "animated text generator",
+      "normalized": "animated text generator",
+      "coreModifier": "animated",
+      "category": "unsupported",
+      "status": "planned",
+      "route": null,
+      "reason": "\"animated text\" generation is not implemented; recorded as planned rather than faked.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "lingojam fancy text generator",
+      "normalized": "lingojam fancy text generator",
+      "coreModifier": "lingojam",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"lingojam\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "lingojam",
+      "normalized": "lingojam",
+      "coreModifier": "lingojam",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"lingojam\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "coolsymbol",
+      "normalized": "coolsymbol",
+      "coreModifier": "coolsymbol",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"coolsymbol\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fontvilla fancy text generator",
+      "normalized": "fontvilla fancy text generator",
+      "coreModifier": "fontvilla",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"fontvilla\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fontvilla",
+      "normalized": "fontvilla",
+      "coreModifier": "fontvilla",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"fontvilla\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "messletters fancy text generator",
+      "normalized": "messletters fancy text generator",
+      "coreModifier": "messletters",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"messletters\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "messletters",
+      "normalized": "messletters",
+      "coreModifier": "messletters",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"messletters\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "texttrick fancy text generator",
+      "normalized": "texttrick fancy text generator",
+      "coreModifier": "texttrick",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"texttrick\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "nickfinder fancy text generator",
+      "normalized": "nickfinder fancy text generator",
+      "coreModifier": "nickfinder",
+      "category": "competitor",
+      "status": "skipped",
+      "route": null,
+      "reason": "Competitor brand \"nickfinder\" - no landing page is created for third-party brands.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator no sign up",
+      "normalized": "fancy text generator no sign up",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "offline fancy text generator",
+      "normalized": "offline fancy text generator",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "fancy text generator without install",
+      "normalized": "fancy text generator without install",
+      "coreModifier": "fancy text generator",
+      "category": "main",
+      "status": "mapped",
+      "route": "/",
+      "reason": "General generator keywords map to the main generator page.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "how to make fancy text",
+      "normalized": "how to make fancy text",
+      "coreModifier": "how to",
+      "category": "informational",
+      "status": "mapped",
+      "route": "/about",
+      "reason": "Explanatory queries map to the About page, which documents how the Unicode styles work.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "what is unicode text",
+      "normalized": "what is unicode text",
+      "coreModifier": "what is unicode",
+      "category": "informational",
+      "status": "mapped",
+      "route": "/about",
+      "reason": "Explanatory queries map to the About page, which documents how the Unicode styles work.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    },
+    {
+      "original": "unicode text meaning",
+      "normalized": "unicode text meaning",
+      "coreModifier": "unicode meaning",
+      "category": "informational",
+      "status": "mapped",
+      "route": "/about",
+      "reason": "Explanatory queries map to the About page, which documents how the Unicode styles work.",
+      "variations": 0,
+      "displayedVariations": 0,
+      "variationSections": []
+    }
+  ],
+  "categories": [
+    {
+      "id": "all",
+      "icon": "✨",
+      "label": "All Keywords",
+      "count": 173
+    },
+    {
+      "id": "main",
+      "icon": "🎯",
+      "label": "Main Generator Keywords",
+      "count": 12
+    },
+    {
+      "id": "platform",
+      "icon": "📸",
+      "label": "Instagram & Social Media",
+      "count": 15
+    },
+    {
+      "id": "messaging",
+      "icon": "💬",
+      "label": "WhatsApp & Messaging",
+      "count": 11
+    },
+    {
+      "id": "gaming",
+      "icon": "🎮",
+      "label": "Gaming & Game Names",
+      "count": 14
+    },
+    {
+      "id": "style",
+      "icon": "✍️",
+      "label": "Text Styles & Fancy Fonts",
+      "count": 33
+    },
+    {
+      "id": "cute",
+      "icon": "💖",
+      "label": "Cute, Heart & Aesthetic Text",
+      "count": 7
+    },
+    {
+      "id": "formatting",
+      "icon": "🔠",
+      "label": "Bold, Cursive & Small Caps",
+      "count": 9
+    },
+    {
+      "id": "symbols",
+      "icon": "🔣",
+      "label": "Symbols & Unicode",
+      "count": 10
+    },
+    {
+      "id": "languages",
+      "icon": "🌍",
+      "label": "Languages & Script Compatibility",
+      "count": 18
+    },
+    {
+      "id": "colours",
+      "icon": "🎨",
+      "label": "Colours & Display Limitations",
+      "count": 12
+    },
+    {
+      "id": "usernames",
+      "icon": "👤",
+      "label": "Usernames, Nicknames & Bios",
+      "count": 6
+    },
+    {
+      "id": "numbers",
+      "icon": "🔢",
+      "label": "Numbers & Size Variations",
+      "count": 7
+    },
+    {
+      "id": "informational",
+      "icon": "📖",
+      "label": "General & Informational Keywords",
+      "count": 3
+    },
+    {
+      "id": "competitor",
+      "icon": "🏷️",
+      "label": "Competitor Keywords — Skipped",
+      "count": 10
+    },
+    {
+      "id": "unsupported",
+      "icon": "🚧",
+      "label": "Unsupported & Planned Features",
+      "count": 6
+    }
+  ]
+}

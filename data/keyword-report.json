@@ -1,0 +1,1571 @@
+{
+  "generatedBy": "scripts/build-keyword-map.js",
+  "summary": {
+    "sourceEntries": 199,
+    "uniqueKeywords": 173,
+    "mapped": 157,
+    "skipped": 10,
+    "planned": 6,
+    "unmapped": 0,
+    "needsReview": 0,
+    "removed": 25,
+    "duplicates": 1,
+    "indexablePages": 32,
+    "totalVariations": 192,
+    "displayedVariations": 72,
+    "variationSections": 6,
+    "sectionsMeetingTarget": 6,
+    "sectionsShort": 0
+  },
+  "validation": {
+    "failures": [],
+    "warnings": []
+  },
+  "sections": [
+    {
+      "page": "instagram",
+      "section": "instagram",
+      "h2": "Explore Instagram text styles",
+      "source": "instagram:variation-rule",
+      "target": 30,
+      "generated": 34,
+      "displayed": 12,
+      "met": true,
+      "shortfall": 0,
+      "allVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "instagram fancy text",
+          "text": "✨ Instagram fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "instagram bio fonts",
+          "text": "💖 Instagram bio fonts 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "instagram stylish letters",
+          "text": "🔥 Instagram stylish letters 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "instagram username fonts",
+          "text": "🌟 Instagram username fonts 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "instagram text styles",
+          "text": "🎨 Instagram text styles 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "instagram profile text",
+          "text": "🦋 Instagram profile text 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "instagram decorative letters",
+          "text": "💎 Instagram decorative letters 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "instagram aesthetic fonts",
+          "text": "🌈 Instagram aesthetic fonts 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "instagram fancy lettering",
+          "text": "💫 Instagram fancy lettering 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "instagram unicode text",
+          "text": "💗 Instagram unicode text 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "instagram cute bio text",
+          "text": "🖋️ Instagram cute bio text 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "instagram cursive bio fonts",
+          "text": "🌸 Instagram cursive bio fonts 🌸"
+        },
+        {
+          "emoji": "🦄",
+          "phrase": "instagram elegant lettering",
+          "text": "🦄 Instagram elegant lettering 🦄"
+        },
+        {
+          "emoji": "💕",
+          "phrase": "instagram pretty username text",
+          "text": "💕 Instagram pretty username text 💕"
+        },
+        {
+          "emoji": "🌺",
+          "phrase": "instagram creative profile text",
+          "text": "🌺 Instagram creative profile text 🌺"
+        },
+        {
+          "emoji": "👑",
+          "phrase": "instagram love bio fonts",
+          "text": "👑 Instagram love bio fonts 👑"
+        },
+        {
+          "emoji": "🪞",
+          "phrase": "instagram soft aesthetic lettering",
+          "text": "🪞 Instagram soft aesthetic lettering 🪞"
+        },
+        {
+          "emoji": "🎀",
+          "phrase": "instagram decorative bio text",
+          "text": "🎀 Instagram decorative bio text 🎀"
+        },
+        {
+          "emoji": "🌷",
+          "phrase": "instagram fantasy lettering",
+          "text": "🌷 Instagram fantasy lettering 🌷"
+        },
+        {
+          "emoji": "💝",
+          "phrase": "instagram royal name fonts",
+          "text": "💝 Instagram royal name fonts 💝"
+        },
+        {
+          "emoji": "🪷",
+          "phrase": "instagram bubble letters",
+          "text": "🪷 Instagram bubble letters 🪷"
+        },
+        {
+          "emoji": "🫧",
+          "phrase": "instagram stylish name text",
+          "text": "🫧 Instagram stylish name text 🫧"
+        },
+        {
+          "emoji": "🧚",
+          "phrase": "instagram heart text styles",
+          "text": "🧚 Instagram heart text styles 🧚"
+        },
+        {
+          "emoji": "🎯",
+          "phrase": "instagram cute username fonts",
+          "text": "🎯 Instagram cute username fonts 🎯"
+        },
+        {
+          "emoji": "🎉",
+          "phrase": "instagram copyable fancy letters",
+          "text": "🎉 Instagram copyable fancy letters 🎉"
+        },
+        {
+          "emoji": "🍀",
+          "phrase": "instagram profile name styles",
+          "text": "🍀 Instagram profile name styles 🍀"
+        },
+        {
+          "emoji": "⚡",
+          "phrase": "instagram decorative username text",
+          "text": "⚡ Instagram decorative username text ⚡"
+        },
+        {
+          "emoji": "🌙",
+          "phrase": "instagram caption text styles",
+          "text": "🌙 Instagram caption text styles 🌙"
+        },
+        {
+          "emoji": "☄️",
+          "phrase": "instagram unique name lettering",
+          "text": "☄️ Instagram unique name lettering ☄️"
+        },
+        {
+          "emoji": "🔮",
+          "phrase": "instagram creative bio lettering",
+          "text": "🔮 Instagram creative bio lettering 🔮"
+        },
+        {
+          "emoji": "🪄",
+          "phrase": "instagram bio name generator",
+          "text": "🪄 Instagram bio name generator 🪄"
+        },
+        {
+          "emoji": "🧿",
+          "phrase": "instagram highlight name text",
+          "text": "🧿 Instagram highlight name text 🧿"
+        },
+        {
+          "emoji": "🍭",
+          "phrase": "instagram short bio lettering",
+          "text": "🍭 Instagram short bio lettering 🍭"
+        },
+        {
+          "emoji": "🧁",
+          "phrase": "instagram story caption fonts",
+          "text": "🧁 Instagram story caption fonts 🧁"
+        }
+      ],
+      "displayVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "instagram fancy text",
+          "text": "✨ Instagram fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "instagram bio fonts",
+          "text": "💖 Instagram bio fonts 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "instagram stylish letters",
+          "text": "🔥 Instagram stylish letters 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "instagram username fonts",
+          "text": "🌟 Instagram username fonts 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "instagram text styles",
+          "text": "🎨 Instagram text styles 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "instagram profile text",
+          "text": "🦋 Instagram profile text 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "instagram decorative letters",
+          "text": "💎 Instagram decorative letters 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "instagram aesthetic fonts",
+          "text": "🌈 Instagram aesthetic fonts 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "instagram fancy lettering",
+          "text": "💫 Instagram fancy lettering 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "instagram unicode text",
+          "text": "💗 Instagram unicode text 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "instagram cute bio text",
+          "text": "🖋️ Instagram cute bio text 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "instagram cursive bio fonts",
+          "text": "🌸 Instagram cursive bio fonts 🌸"
+        }
+      ]
+    },
+    {
+      "page": "whatsapp",
+      "section": "whatsapp",
+      "h2": "Explore WhatsApp text styles",
+      "source": "whatsapp:variation-rule",
+      "target": 30,
+      "generated": 34,
+      "displayed": 12,
+      "met": true,
+      "shortfall": 0,
+      "allVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "whatsapp fancy text",
+          "text": "✨ WhatsApp fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "whatsapp bold text style",
+          "text": "💖 WhatsApp bold text style 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "whatsapp status fonts",
+          "text": "🔥 WhatsApp status fonts 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "whatsapp chat letter styles",
+          "text": "🌟 WhatsApp chat letter styles 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "whatsapp name text styles",
+          "text": "🎨 WhatsApp name text styles 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "whatsapp display name fonts",
+          "text": "🦋 WhatsApp display name fonts 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "whatsapp stylish text for status",
+          "text": "💎 WhatsApp stylish text for status 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "whatsapp underline text",
+          "text": "🌈 WhatsApp underline text 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "whatsapp strikethrough text",
+          "text": "💫 WhatsApp strikethrough text 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "whatsapp italic text style",
+          "text": "💗 WhatsApp italic text style 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "whatsapp fancy letters for status",
+          "text": "🖋️ WhatsApp fancy letters for status 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "whatsapp contact name lettering",
+          "text": "🌸 WhatsApp contact name lettering 🌸"
+        },
+        {
+          "emoji": "🦄",
+          "phrase": "whatsapp group name fonts",
+          "text": "🦄 WhatsApp group name fonts 🦄"
+        },
+        {
+          "emoji": "💕",
+          "phrase": "whatsapp profile name text",
+          "text": "💕 WhatsApp profile name text 💕"
+        },
+        {
+          "emoji": "🌺",
+          "phrase": "whatsapp announcement lettering",
+          "text": "🌺 WhatsApp announcement lettering 🌺"
+        },
+        {
+          "emoji": "👑",
+          "phrase": "whatsapp text decoration styles",
+          "text": "👑 WhatsApp text decoration styles 👑"
+        },
+        {
+          "emoji": "🪞",
+          "phrase": "whatsapp mono text style",
+          "text": "🪞 WhatsApp mono text style 🪞"
+        },
+        {
+          "emoji": "🎀",
+          "phrase": "whatsapp small caps text",
+          "text": "🎀 WhatsApp small caps text 🎀"
+        },
+        {
+          "emoji": "🌷",
+          "phrase": "whatsapp wide spaced text",
+          "text": "🌷 WhatsApp wide spaced text 🌷"
+        },
+        {
+          "emoji": "💝",
+          "phrase": "whatsapp symbol wrapped text",
+          "text": "💝 WhatsApp symbol wrapped text 💝"
+        },
+        {
+          "emoji": "🪷",
+          "phrase": "whatsapp heart wrapped letters",
+          "text": "🪷 WhatsApp heart wrapped letters 🪷"
+        },
+        {
+          "emoji": "🫧",
+          "phrase": "whatsapp star wrapped text",
+          "text": "🫧 WhatsApp star wrapped text 🫧"
+        },
+        {
+          "emoji": "🧚",
+          "phrase": "whatsapp double underline text",
+          "text": "🧚 WhatsApp double underline text 🧚"
+        },
+        {
+          "emoji": "🎯",
+          "phrase": "whatsapp wavy underline text",
+          "text": "🎯 WhatsApp wavy underline text 🎯"
+        },
+        {
+          "emoji": "🎉",
+          "phrase": "whatsapp dotted underline text",
+          "text": "🎉 WhatsApp dotted underline text 🎉"
+        },
+        {
+          "emoji": "🍀",
+          "phrase": "whatsapp crossed out text",
+          "text": "🍀 WhatsApp crossed out text 🍀"
+        },
+        {
+          "emoji": "⚡",
+          "phrase": "whatsapp overline text",
+          "text": "⚡ WhatsApp overline text ⚡"
+        },
+        {
+          "emoji": "🌙",
+          "phrase": "whatsapp superscript text",
+          "text": "🌙 WhatsApp superscript text 🌙"
+        },
+        {
+          "emoji": "☄️",
+          "phrase": "whatsapp subscript text",
+          "text": "☄️ WhatsApp subscript text ☄️"
+        },
+        {
+          "emoji": "🔮",
+          "phrase": "whatsapp bold italic text",
+          "text": "🔮 WhatsApp bold italic text 🔮"
+        },
+        {
+          "emoji": "🪄",
+          "phrase": "whatsapp sans serif lettering",
+          "text": "🪄 WhatsApp sans serif lettering 🪄"
+        },
+        {
+          "emoji": "🧿",
+          "phrase": "whatsapp gothic status text",
+          "text": "🧿 WhatsApp gothic status text 🧿"
+        },
+        {
+          "emoji": "🍭",
+          "phrase": "whatsapp handwritten style text",
+          "text": "🍭 WhatsApp handwritten style text 🍭"
+        },
+        {
+          "emoji": "🧁",
+          "phrase": "whatsapp fancy text copy paste",
+          "text": "🧁 WhatsApp fancy text copy paste 🧁"
+        }
+      ],
+      "displayVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "whatsapp fancy text",
+          "text": "✨ WhatsApp fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "whatsapp bold text style",
+          "text": "💖 WhatsApp bold text style 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "whatsapp status fonts",
+          "text": "🔥 WhatsApp status fonts 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "whatsapp chat letter styles",
+          "text": "🌟 WhatsApp chat letter styles 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "whatsapp name text styles",
+          "text": "🎨 WhatsApp name text styles 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "whatsapp display name fonts",
+          "text": "🦋 WhatsApp display name fonts 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "whatsapp stylish text for status",
+          "text": "💎 WhatsApp stylish text for status 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "whatsapp underline text",
+          "text": "🌈 WhatsApp underline text 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "whatsapp strikethrough text",
+          "text": "💫 WhatsApp strikethrough text 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "whatsapp italic text style",
+          "text": "💗 WhatsApp italic text style 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "whatsapp fancy letters for status",
+          "text": "🖋️ WhatsApp fancy letters for status 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "whatsapp contact name lettering",
+          "text": "🌸 WhatsApp contact name lettering 🌸"
+        }
+      ]
+    },
+    {
+      "page": "discord",
+      "section": "discord",
+      "h2": "Explore Discord text styles",
+      "source": "discord:variation-rule",
+      "target": 30,
+      "generated": 30,
+      "displayed": 12,
+      "met": true,
+      "shortfall": 0,
+      "allVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "discord fancy text",
+          "text": "✨ Discord fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "discord nickname fonts",
+          "text": "💖 Discord nickname fonts 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "discord server name fonts",
+          "text": "🔥 Discord server name fonts 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "discord clan tag styles",
+          "text": "🌟 Discord clan tag styles 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "discord bio fonts",
+          "text": "🎨 Discord bio fonts 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "discord display name lettering",
+          "text": "🦋 Discord display name lettering 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "discord channel name text",
+          "text": "💎 Discord channel name text 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "discord role name fonts",
+          "text": "🌈 Discord role name fonts 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "discord status text styles",
+          "text": "💫 Discord status text styles 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "discord avatar caption text",
+          "text": "💗 Discord avatar caption text 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "discord gg message fonts",
+          "text": "🖋️ Discord gg message fonts 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "discord respawn text style",
+          "text": "🌸 Discord respawn text style 🌸"
+        },
+        {
+          "emoji": "🦄",
+          "phrase": "discord boss mode lettering",
+          "text": "🦄 Discord boss mode lettering 🦄"
+        },
+        {
+          "emoji": "💕",
+          "phrase": "discord health bar text",
+          "text": "💕 Discord health bar text 💕"
+        },
+        {
+          "emoji": "🌺",
+          "phrase": "discord console tag fonts",
+          "text": "🌺 Discord console tag fonts 🌺"
+        },
+        {
+          "emoji": "👑",
+          "phrase": "discord frag line text",
+          "text": "👑 Discord frag line text 👑"
+        },
+        {
+          "emoji": "🪞",
+          "phrase": "discord shout caps text",
+          "text": "🪞 Discord shout caps text 🪞"
+        },
+        {
+          "emoji": "🎀",
+          "phrase": "discord framed nickname text",
+          "text": "🎀 Discord framed nickname text 🎀"
+        },
+        {
+          "emoji": "🌷",
+          "phrase": "discord kaomoji framed status",
+          "text": "🌷 Discord kaomoji framed status 🌷"
+        },
+        {
+          "emoji": "💝",
+          "phrase": "discord emoji framed name",
+          "text": "💝 Discord emoji framed name 💝"
+        },
+        {
+          "emoji": "🪷",
+          "phrase": "discord sparkle nickname text",
+          "text": "🪷 Discord sparkle nickname text 🪷"
+        },
+        {
+          "emoji": "🫧",
+          "phrase": "discord star framed letters",
+          "text": "🫧 Discord star framed letters 🫧"
+        },
+        {
+          "emoji": "🧚",
+          "phrase": "discord heart framed username",
+          "text": "🧚 Discord heart framed username 🧚"
+        },
+        {
+          "emoji": "🎯",
+          "phrase": "discord small caps server name",
+          "text": "🎯 Discord small caps server name 🎯"
+        },
+        {
+          "emoji": "🎉",
+          "phrase": "discord bold guild name text",
+          "text": "🎉 Discord bold guild name text 🎉"
+        },
+        {
+          "emoji": "🍀",
+          "phrase": "discord italic role title",
+          "text": "🍀 Discord italic role title 🍀"
+        },
+        {
+          "emoji": "⚡",
+          "phrase": "discord gothic team name",
+          "text": "⚡ Discord gothic team name ⚡"
+        },
+        {
+          "emoji": "🌙",
+          "phrase": "discord wide spaced nickname",
+          "text": "🌙 Discord wide spaced nickname 🌙"
+        },
+        {
+          "emoji": "☄️",
+          "phrase": "discord fancy text for discord bio",
+          "text": "☄️ Discord fancy text for discord bio ☄️"
+        },
+        {
+          "emoji": "🔮",
+          "phrase": "discord copyable discord fonts",
+          "text": "🔮 Discord copyable discord fonts 🔮"
+        }
+      ],
+      "displayVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "discord fancy text",
+          "text": "✨ Discord fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "discord nickname fonts",
+          "text": "💖 Discord nickname fonts 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "discord server name fonts",
+          "text": "🔥 Discord server name fonts 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "discord clan tag styles",
+          "text": "🌟 Discord clan tag styles 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "discord bio fonts",
+          "text": "🎨 Discord bio fonts 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "discord display name lettering",
+          "text": "🦋 Discord display name lettering 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "discord channel name text",
+          "text": "💎 Discord channel name text 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "discord role name fonts",
+          "text": "🌈 Discord role name fonts 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "discord status text styles",
+          "text": "💫 Discord status text styles 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "discord avatar caption text",
+          "text": "💗 Discord avatar caption text 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "discord gg message fonts",
+          "text": "🖋️ Discord gg message fonts 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "discord respawn text style",
+          "text": "🌸 Discord respawn text style 🌸"
+        }
+      ]
+    },
+    {
+      "page": "gaming",
+      "section": "gaming",
+      "h2": "Explore gaming text styles",
+      "source": "gaming:variation-rule",
+      "target": 30,
+      "generated": 31,
+      "displayed": 12,
+      "met": true,
+      "shortfall": 0,
+      "allVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "gaming fancy text",
+          "text": "✨ Gaming fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "gaming clan tag fonts",
+          "text": "💖 Gaming clan tag fonts 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "gaming player name lettering",
+          "text": "🔥 Gaming player name lettering 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "gaming guild name text",
+          "text": "🌟 Gaming guild name text 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "gaming lobby title styles",
+          "text": "🎨 Gaming lobby title styles 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "gaming squad name fonts",
+          "text": "🦋 Gaming squad name fonts 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "gaming game username text",
+          "text": "💎 Gaming game username text 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "gaming status line lettering",
+          "text": "🌈 Gaming status line lettering 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "gaming respawn text style",
+          "text": "💫 Gaming respawn text style 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "gaming frag line fonts",
+          "text": "💗 Gaming frag line fonts 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "gaming boss mode text",
+          "text": "🖋️ Gaming boss mode text 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "gaming gg message text",
+          "text": "🌸 Gaming gg message text 🌸"
+        },
+        {
+          "emoji": "🦄",
+          "phrase": "gaming console tag style",
+          "text": "🦄 Gaming console tag style 🦄"
+        },
+        {
+          "emoji": "💕",
+          "phrase": "gaming shout caps name",
+          "text": "💕 Gaming shout caps name 💕"
+        },
+        {
+          "emoji": "🌺",
+          "phrase": "gaming health bar text",
+          "text": "🌺 Gaming health bar text 🌺"
+        },
+        {
+          "emoji": "👑",
+          "phrase": "gaming esports team name",
+          "text": "👑 Gaming esports team name 👑"
+        },
+        {
+          "emoji": "🪞",
+          "phrase": "gaming speedrun name text",
+          "text": "🪞 Gaming speedrun name text 🪞"
+        },
+        {
+          "emoji": "🎀",
+          "phrase": "gaming battle tag lettering",
+          "text": "🎀 Gaming battle tag lettering 🎀"
+        },
+        {
+          "emoji": "🌷",
+          "phrase": "gaming rank badge text",
+          "text": "🌷 Gaming rank badge text 🌷"
+        },
+        {
+          "emoji": "💝",
+          "phrase": "gaming loadout name fonts",
+          "text": "💝 Gaming loadout name fonts 💝"
+        },
+        {
+          "emoji": "🪷",
+          "phrase": "gaming character name text",
+          "text": "🪷 Gaming character name text 🪷"
+        },
+        {
+          "emoji": "🫧",
+          "phrase": "gaming server tag styles",
+          "text": "🫧 Gaming server tag styles 🫧"
+        },
+        {
+          "emoji": "🧚",
+          "phrase": "gaming tournament name lettering",
+          "text": "🧚 Gaming tournament name lettering 🧚"
+        },
+        {
+          "emoji": "🎯",
+          "phrase": "gaming arena name text",
+          "text": "🎯 Gaming arena name text 🎯"
+        },
+        {
+          "emoji": "🎉",
+          "phrase": "gaming raid team fonts",
+          "text": "🎉 Gaming raid team fonts 🎉"
+        },
+        {
+          "emoji": "🍀",
+          "phrase": "gaming survival name text",
+          "text": "🍀 Gaming survival name text 🍀"
+        },
+        {
+          "emoji": "⚡",
+          "phrase": "gaming sandbox title lettering",
+          "text": "⚡ Gaming sandbox title lettering ⚡"
+        },
+        {
+          "emoji": "🌙",
+          "phrase": "gaming mobile game name text",
+          "text": "🌙 Gaming mobile game name text 🌙"
+        },
+        {
+          "emoji": "☄️",
+          "phrase": "gaming shooter clan lettering",
+          "text": "☄️ Gaming shooter clan lettering ☄️"
+        },
+        {
+          "emoji": "🔮",
+          "phrase": "gaming survival clan name",
+          "text": "🔮 Gaming survival clan name 🔮"
+        },
+        {
+          "emoji": "🪄",
+          "phrase": "gaming hardcore mode text",
+          "text": "🪄 Gaming hardcore mode text 🪄"
+        }
+      ],
+      "displayVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "gaming fancy text",
+          "text": "✨ Gaming fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "gaming clan tag fonts",
+          "text": "💖 Gaming clan tag fonts 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "gaming player name lettering",
+          "text": "🔥 Gaming player name lettering 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "gaming guild name text",
+          "text": "🌟 Gaming guild name text 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "gaming lobby title styles",
+          "text": "🎨 Gaming lobby title styles 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "gaming squad name fonts",
+          "text": "🦋 Gaming squad name fonts 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "gaming game username text",
+          "text": "💎 Gaming game username text 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "gaming status line lettering",
+          "text": "🌈 Gaming status line lettering 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "gaming respawn text style",
+          "text": "💫 Gaming respawn text style 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "gaming frag line fonts",
+          "text": "💗 Gaming frag line fonts 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "gaming boss mode text",
+          "text": "🖋️ Gaming boss mode text 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "gaming gg message text",
+          "text": "🌸 Gaming gg message text 🌸"
+        }
+      ]
+    },
+    {
+      "page": "languages",
+      "section": "languages",
+      "h2": "Explore script compatibility searches",
+      "source": "languages:variation-rule",
+      "target": 30,
+      "generated": 31,
+      "displayed": 12,
+      "met": true,
+      "shortfall": 0,
+      "allVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "unicode fancy text",
+          "text": "✨ Unicode fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "unicode letter mapping",
+          "text": "💖 Unicode letter mapping 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "unicode script support",
+          "text": "🔥 Unicode script support 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "unicode character compatibility",
+          "text": "🌟 Unicode character compatibility 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "unicode glyph coverage",
+          "text": "🎨 Unicode glyph coverage 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "unicode font rendering",
+          "text": "🦋 Unicode font rendering 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "unicode text shaping",
+          "text": "💎 Unicode text shaping 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "unicode right to left display",
+          "text": "🌈 Unicode right to left display 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "unicode combining marks",
+          "text": "💫 Unicode combining marks 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "unicode codepoint support",
+          "text": "💗 Unicode codepoint support 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "unicode emoji coverage",
+          "text": "🖋️ Unicode emoji coverage 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "unicode device rendering",
+          "text": "🌸 Unicode device rendering 🌸"
+        },
+        {
+          "emoji": "🦄",
+          "phrase": "unicode app compatibility",
+          "text": "🦄 Unicode app compatibility 🦄"
+        },
+        {
+          "emoji": "💕",
+          "phrase": "unicode letter substitution",
+          "text": "💕 Unicode letter substitution 💕"
+        },
+        {
+          "emoji": "🌺",
+          "phrase": "unicode style limitations",
+          "text": "🌺 Unicode style limitations 🌺"
+        },
+        {
+          "emoji": "👑",
+          "phrase": "unicode plain text fallback",
+          "text": "👑 Unicode plain text fallback 👑"
+        },
+        {
+          "emoji": "🪞",
+          "phrase": "unicode clipboard copy",
+          "text": "🪞 Unicode clipboard copy 🪞"
+        },
+        {
+          "emoji": "🎀",
+          "phrase": "unicode browser rendering",
+          "text": "🎀 Unicode browser rendering 🎀"
+        },
+        {
+          "emoji": "🌷",
+          "phrase": "unicode mobile keyboard support",
+          "text": "🌷 Unicode mobile keyboard support 🌷"
+        },
+        {
+          "emoji": "💝",
+          "phrase": "unicode platform differences",
+          "text": "💝 Unicode platform differences 💝"
+        },
+        {
+          "emoji": "🪷",
+          "phrase": "unicode character coverage",
+          "text": "🪷 Unicode character coverage 🪷"
+        },
+        {
+          "emoji": "🫧",
+          "phrase": "unicode encoding support",
+          "text": "🫧 Unicode encoding support 🫧"
+        },
+        {
+          "emoji": "🧚",
+          "phrase": "unicode diacritics",
+          "text": "🧚 Unicode diacritics 🧚"
+        },
+        {
+          "emoji": "🎯",
+          "phrase": "non latin text",
+          "text": "🎯 non latin text 🎯"
+        },
+        {
+          "emoji": "🎉",
+          "phrase": "unicode translation styling",
+          "text": "🎉 Unicode translation styling 🎉"
+        },
+        {
+          "emoji": "🍀",
+          "phrase": "transliteration limits",
+          "text": "🍀 transliteration limits 🍀"
+        },
+        {
+          "emoji": "⚡",
+          "phrase": "unicode typography rules",
+          "text": "⚡ Unicode typography rules ⚡"
+        },
+        {
+          "emoji": "🌙",
+          "phrase": "unicode display width",
+          "text": "🌙 Unicode display width 🌙"
+        },
+        {
+          "emoji": "☄️",
+          "phrase": "bidirectional text",
+          "text": "☄️ bidirectional text ☄️"
+        },
+        {
+          "emoji": "🔮",
+          "phrase": "missing glyphs",
+          "text": "🔮 missing glyphs 🔮"
+        },
+        {
+          "emoji": "🪄",
+          "phrase": "font fallback rules",
+          "text": "🪄 font fallback rules 🪄"
+        }
+      ],
+      "displayVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "unicode fancy text",
+          "text": "✨ Unicode fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "unicode letter mapping",
+          "text": "💖 Unicode letter mapping 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "unicode script support",
+          "text": "🔥 Unicode script support 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "unicode character compatibility",
+          "text": "🌟 Unicode character compatibility 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "unicode glyph coverage",
+          "text": "🎨 Unicode glyph coverage 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "unicode font rendering",
+          "text": "🦋 Unicode font rendering 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "unicode text shaping",
+          "text": "💎 Unicode text shaping 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "unicode right to left display",
+          "text": "🌈 Unicode right to left display 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "unicode combining marks",
+          "text": "💫 Unicode combining marks 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "unicode codepoint support",
+          "text": "💗 Unicode codepoint support 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "unicode emoji coverage",
+          "text": "🖋️ Unicode emoji coverage 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "unicode device rendering",
+          "text": "🌸 Unicode device rendering 🌸"
+        }
+      ]
+    },
+    {
+      "page": "colours",
+      "section": "colours",
+      "h2": "Explore colour display questions",
+      "source": "colours:variation-rule",
+      "target": 30,
+      "generated": 32,
+      "displayed": 12,
+      "met": true,
+      "shortfall": 0,
+      "allVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "fancy text",
+          "text": "✨ fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "coloured text",
+          "text": "💖 coloured text 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "font colour",
+          "text": "🔥 font colour 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "text colour",
+          "text": "🌟 text colour 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "display colours",
+          "text": "🎨 display colours 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "colour rendering",
+          "text": "🦋 colour rendering 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "blue text",
+          "text": "💎 blue text 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "red text",
+          "text": "🌈 red text 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "gold text",
+          "text": "💫 gold text 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "dark text",
+          "text": "💗 dark text 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "white text",
+          "text": "🖋️ white text 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "rainbow text",
+          "text": "🌸 rainbow text 🌸"
+        },
+        {
+          "emoji": "🦄",
+          "phrase": "coloured unicode",
+          "text": "🦄 coloured unicode 🦄"
+        },
+        {
+          "emoji": "💕",
+          "phrase": "colour emoji",
+          "text": "💕 colour emoji 💕"
+        },
+        {
+          "emoji": "🌺",
+          "phrase": "emoji colours",
+          "text": "🌺 emoji colours 🌺"
+        },
+        {
+          "emoji": "👑",
+          "phrase": "coloured letters",
+          "text": "👑 coloured letters 👑"
+        },
+        {
+          "emoji": "🪞",
+          "phrase": "text appearance",
+          "text": "🪞 text appearance 🪞"
+        },
+        {
+          "emoji": "🎀",
+          "phrase": "styling limits",
+          "text": "🎀 styling limits 🎀"
+        },
+        {
+          "emoji": "🌷",
+          "phrase": "app colour support",
+          "text": "🌷 app colour support 🌷"
+        },
+        {
+          "emoji": "💝",
+          "phrase": "monochrome text",
+          "text": "💝 monochrome text 💝"
+        },
+        {
+          "emoji": "🪷",
+          "phrase": "colour and unicode",
+          "text": "🪷 colour and unicode 🪷"
+        },
+        {
+          "emoji": "🫧",
+          "phrase": "plain text colours",
+          "text": "🫧 plain text colours 🫧"
+        },
+        {
+          "emoji": "🧚",
+          "phrase": "styling vs colour",
+          "text": "🧚 styling vs colour 🧚"
+        },
+        {
+          "emoji": "🎯",
+          "phrase": "colour explained",
+          "text": "🎯 colour explained 🎯"
+        },
+        {
+          "emoji": "🎉",
+          "phrase": "rendering environment",
+          "text": "🎉 rendering environment 🎉"
+        },
+        {
+          "emoji": "🍀",
+          "phrase": "platform colour",
+          "text": "🍀 platform colour 🍀"
+        },
+        {
+          "emoji": "⚡",
+          "phrase": "colour fonts",
+          "text": "⚡ colour fonts ⚡"
+        },
+        {
+          "emoji": "🌙",
+          "phrase": "coloured bios",
+          "text": "🌙 coloured bios 🌙"
+        },
+        {
+          "emoji": "☄️",
+          "phrase": "coloured usernames",
+          "text": "☄️ coloured usernames ☄️"
+        },
+        {
+          "emoji": "🔮",
+          "phrase": "colour mistakes",
+          "text": "🔮 colour mistakes 🔮"
+        },
+        {
+          "emoji": "🪄",
+          "phrase": "colour truth",
+          "text": "🪄 colour truth 🪄"
+        },
+        {
+          "emoji": "🧿",
+          "phrase": "colour limits",
+          "text": "🧿 colour limits 🧿"
+        }
+      ],
+      "displayVariations": [
+        {
+          "emoji": "✨",
+          "phrase": "fancy text",
+          "text": "✨ fancy text ✨"
+        },
+        {
+          "emoji": "💖",
+          "phrase": "coloured text",
+          "text": "💖 coloured text 💖"
+        },
+        {
+          "emoji": "🔥",
+          "phrase": "font colour",
+          "text": "🔥 font colour 🔥"
+        },
+        {
+          "emoji": "🌟",
+          "phrase": "text colour",
+          "text": "🌟 text colour 🌟"
+        },
+        {
+          "emoji": "🎨",
+          "phrase": "display colours",
+          "text": "🎨 display colours 🎨"
+        },
+        {
+          "emoji": "🦋",
+          "phrase": "colour rendering",
+          "text": "🦋 colour rendering 🦋"
+        },
+        {
+          "emoji": "💎",
+          "phrase": "blue text",
+          "text": "💎 blue text 💎"
+        },
+        {
+          "emoji": "🌈",
+          "phrase": "red text",
+          "text": "🌈 red text 🌈"
+        },
+        {
+          "emoji": "💫",
+          "phrase": "gold text",
+          "text": "💫 gold text 💫"
+        },
+        {
+          "emoji": "💗",
+          "phrase": "dark text",
+          "text": "💗 dark text 💗"
+        },
+        {
+          "emoji": "🖋️",
+          "phrase": "white text",
+          "text": "🖋️ white text 🖋️"
+        },
+        {
+          "emoji": "🌸",
+          "phrase": "rainbow text",
+          "text": "🌸 rainbow text 🌸"
+        }
+      ]
+    }
+  ],
+  "removals": [
+    {
+      "line": 1,
+      "original": "# Stylix source keyword list - one keyword per line.",
+      "reason": "comment_line"
+    },
+    {
+      "line": 2,
+      "original": "# Lines starting with # and blank lines are ignored by scripts/build-keyword-map.js.",
+      "reason": "comment_line"
+    },
+    {
+      "line": 3,
+      "original": "# This file is the human-editable source of truth and is never rewritten by the build.",
+      "reason": "comment_line"
+    },
+    {
+      "line": 4,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 14,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 29,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 39,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 45,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 51,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 58,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 71,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 92,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 99,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 105,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 114,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 121,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 126,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 131,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 145,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 157,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 166,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 174,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 181,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 191,
+      "original": "",
+      "reason": "empty_line"
+    },
+    {
+      "line": 199,
+      "original": "",
+      "reason": "empty_line"
+    }
+  ],
+  "duplicates": [
+    {
+      "line": 198,
+      "original": "fancy text generator",
+      "normalized": "fancy text generator",
+      "firstSeenLine": 5
+    }
+  ]
+}

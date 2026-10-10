@@ -1,0 +1,32 @@
+Add the main home page (route "/") to my Stylzo project.
+
+STEP 1: READ THE INSTRUCTIONS
+- Read the file book.txt in the project root. It has the instructions for
+  this home page. Follow them exactly.
+- If anything in book.txt is unclear or missing, tell me before you build.
+
+STEP 2: USE THE KEYWORDS
+- Use the keywords from data/keywords.txt for the headings, page text,
+  and SEO.
+- Do NOT use keyword.txt in the project root. Use only data/keywords.txt.
+- Reuse the cleaned keyword map we already built (lib/keywords.js and
+  keyword-map.json).
+
+STEP 3: KEEP WHAT WORKS
+- Do not break any page that already works (/fonts, /tools, /styles,
+  /about, /admin/seo, and the others).
+- If a home page already exists at "/", upgrade it. Do not make a
+  second one.
+
+STEP 4: KEEP OUR RULES
+- No brand names in any heading, title, route, or page text.
+- No fake features. If something is not supported, mark it as planned.
+- Unique title and meta description for the home page.
+- No doubled "| Stylzo | Stylzo" in the title.
+- Keep the home page in the sitemap.
+- Keep the design clean, fast, and good on mobile.
+
+STEP 5: TESTS AND FINISH
+- Add tests for the home page.
+- Run npm test and npm run build. Fix any failures.
+- When done, give me a short summary in easy words.

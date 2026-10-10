@@ -1,0 +1,485 @@
+# Stylix SEO Landing Pages, Keyword Dashboard & Emoji Optimization — Master Prompt
+
+You are working on **Stylix**, an existing server-rendered fancy text generator built with Node.js, Express, EJS, CSS, and vanilla JavaScript. The project does not use a SPA or React, except for one lazy-loaded 3D hero.
+
+Your task is to inspect the actual project and supplied keyword list, then implement a production-ready SEO keyword system with a **left-side keyword dashboard**, relevant landing pages, emoji-wrapped keyword variations, SEO metadata, and automated tests.
+
+Do not return another conceptual plan. Implement changes directly in the existing codebase.
+
+## STEP 1 — Inspect the existing project
+
+1. Inspect the complete project structure, `package.json`, Express routes, EJS templates, stylesheets, JavaScript, existing generators, sitemap, metadata, and current landing pages.
+2. Find and read the complete keyword-list source file. Also use the keyword list supplied in this prompt if it is not stored separately.
+3. Identify existing H1, H2, and H3 headings and preserve relevant headings.
+4. Identify existing functionality before making changes.
+5. Reuse existing templates, layouts, routes, and generator logic wherever possible.
+6. Do not migrate to Next.js, React, or another framework.
+7. Do not overwrite unrelated files or remove working features.
+8. Do not create duplicate routes or landing pages.
+9. If a file is missing, create it only when necessary.
+10. Before implementation, identify the existing route structure and the best place to integrate the keyword dashboard.
+
+## STEP 2 — Build a left-side keyword dashboard
+
+Create a professional, responsive dashboard integrated into the existing Stylix interface or its existing SEO administration/workspace page.
+
+**Required layout:**
+
+* A fixed or sticky left sidebar on desktop.
+* A collapsible navigation drawer on mobile.
+* A main content area on the right.
+* A clear page heading such as `SEO Keyword Dashboard`.
+* Search, category filters, keyword counts, mapping status, and keyword details.
+* Styling consistent with the existing Stylix design system.
+
+Do not create an entirely separate application or introduce an unnecessary frontend framework.
+
+### Sidebar structure
+
+Build the sidebar navigation dynamically from the actual cleaned keyword data.
+
+Use headings and icons similar to the following, but only show categories supported by the real keyword list.
+
+* ✨ All Keywords
+* 🎯 Main Generator Keywords
+* 📸 Instagram & Social Media
+* 💬 WhatsApp & Messaging
+* 🎮 Gaming & Game Names
+* ✍️ Text Styles & Fancy Fonts
+* 💖 Cute, Heart & Aesthetic Text
+* 🔠 Bold, Cursive & Small Caps
+* 🔣 Symbols & Unicode
+* 🌍 Languages & Script Compatibility
+* 🎨 Colours & Display Limitations
+* 👤 Usernames, Nicknames & Bios
+* 🔢 Numbers & Size Variations
+* 🧰 Tools & Supported Features
+* 🔎 General & Informational Keywords
+* 🏷️ Competitor Keywords — Skipped
+* 🚧 Unsupported & Planned Features
+* ⚠️ Unmapped Keywords
+* 🧪 SEO Validation & Reports
+
+Do not show empty categories. Additional categories may be generated when the actual keywords justify them.
+
+### Sidebar interaction
+
+1. Clicking a category displays its relevant keyword list in the main content area.
+2. Highlight the currently selected category.
+3. Display a count beside each category.
+4. Add a keyword search input that filters by original keyword, normalized keyword, classification, or target route.
+5. Provide filters for `All`, `Mapped`, `Skipped`, `Planned`, `Unmapped`, and `Needs Review`.
+6. Add sorting by keyword, category, mapping status, and number of valid variations.
+7. Allow users to open a keyword's mapping details.
+8. Show the target route, classification, reason, and variation count for each keyword.
+9. Include clear empty states when a category or search has no results.
+10. Keep filtering and navigation functional using the existing stack and vanilla JavaScript.
+11. Ensure all controls have accessible labels, keyboard support, and visible focus states.
+12. Never expose server secrets or provide public visitors with unauthorized access to administrative functionality.
+
+The dashboard is an interface for reviewing keyword data. It must not automatically publish a landing page merely because a keyword exists.
+
+### Dashboard overview
+
+Display useful statistics based on actual generated data:
+
+* Total source entries.
+* Unique cleaned keywords.
+* Mapped keywords.
+* Skipped competitor keywords.
+* Planned unsupported features.
+* Unmapped keywords.
+* Approved indexable pages.
+* Emoji variation counts.
+* Sections that meet the variation target.
+* Sections that have a legitimate variation shortfall.
+* SEO validation failures.
+
+Do not fabricate statistics. Compute every count from the actual generated dataset.
+
+## STEP 3 — Read and clean the actual keyword list
+
+Use the supplied list, including terms such as:
+
+* `fancy text generator`
+* `fancy text generator for instagram`
+* `fancy text generator whatsapp`
+* `discord fancy text generator`
+* `bold fancy text generator`
+* `cursive fancy text generator`
+* `fancy text generator small caps`
+* `fancy text generator upside down`
+* `fancy text generator zalgo`
+* `fancy text generator blue colour`
+* `hindi fancy text generator`
+* `urdu fancy text generator`
+* `free fire fancy text generator`
+* `minecraft fancy text generator`
+* `fancy text generator with symbols`
+* `fancy text gif generator`
+* `fancy number text generator`
+* `lingojam fancy text generator`
+* `coolsymbol fancy text generator`
+* `fontvilla fancy text generator`
+
+These are examples from the supplied list, not a replacement for it. Process every source entry, including duplicates and entries that must be skipped.
+
+Create a deterministic keyword-cleaning script that:
+
+1. Converts normalized keywords to lowercase.
+2. Trims whitespace.
+3. Removes duplicate normalized entries while preserving every original entry in the audit.
+4. Removes empty lines, header rows, URLs, emoji-only entries, and obvious junk.
+5. Preserves meaningful modifiers.
+6. Extracts core modifiers by removing generic terms such as `fancy`, `text`, `generator`, `copy`, `paste`, `online`, `free`, `app`, and `download` where appropriate.
+7. Preserves the original keyword for traceability.
+8. Records every removal and its reason.
+9. Does not treat a core modifier as a replacement for the original SEO keyword.
+
+Examples:
+
+* `instagram fancy text generator` → core modifier: `instagram`
+* `discord fancy text generator` → core modifier: `discord`
+* `bold fancy text` → core modifier: `bold`
+* `free cursive text generator` → core modifier: `cursive`
+
+Do not remove meaningful terms that change the search intent.
+
+## STEP 4 — Classify all keywords
+
+Classify the cleaned keywords into these groups.
+
+### A. Platform and social media
+
+Instagram, WhatsApp, Discord, Facebook, X/Twitter, TikTok, Telegram, Reddit, Steam, and other supported platforms.
+
+### B. Games
+
+Free Fire, PUBG, BGMI, Roblox, Minecraft, CODM, Agar.io, VRChat, Rise of Kingdoms, Whiteout Survival, and other games.
+
+### C. Text styles
+
+Cursive, bold, gothic, old English, small caps, tiny text, small text, big text, large text, upside-down text, zalgo, glitch, heart, aesthetic, cute, bubble, italic, emoji, royal, Victorian, and similar styles.
+
+### D. Languages and scripts
+
+Hindi, Urdu, Arabic, Tamil, Marathi, Bengali, Gujarati, Malayalam, Punjabi, Nepali, Odia, Telugu, Sinhala, Sanskrit, Persian, Greek, Russian, Myanmar, and other languages in the actual list.
+
+Do not create misleading fancy-alphabet generators for scripts without appropriate supported character mappings. Provide an honest script-compatibility information page where useful.
+
+### E. Colours
+
+Blue, red, gold, dark, white, and other colour modifiers.
+
+Do not claim ordinary Unicode text can force a font colour across platforms. Explain that display depends on the application, rendering environment, and platform. Emoji may have their own colours.
+
+### F. Competitors and third-party brands
+
+Lingojam, Coolsymbol, FontVilla, MessLetters, TextTrick, NickFinder, and other identified competitors.
+
+Do not create competitor-targeted landing pages, copy competitor content, or imitate their page structure. Report these keywords as skipped with reasons.
+
+### G. Unsupported features
+
+Symbols, ASCII art, GIFs, graphics, number generators, video generators, and other features not actually implemented.
+
+Record these as planned or unsupported. Never claim they work unless the project genuinely supports them.
+
+### H. General and ambiguous keywords
+
+Classify remaining keywords according to their actual intent. Mark ambiguous entries for review rather than forcing them into unrelated categories.
+
+## STEP 5 — Keyword-to-page mapping
+
+Inspect existing routes and adapt the following patterns where appropriate:
+
+* `/styles/:key`
+* `/fonts/:slug`
+* `/tools/:slug`
+* `/fancy-text-generator`
+
+Rules:
+
+1. Reuse existing pages when search intent matches.
+2. Create new landing pages only for distinct, useful search intents.
+3. Never create doorway pages or duplicate-intent pages.
+4. Never map competitors to landing pages.
+5. Never map unsupported features to working generators.
+6. Never map language-related keywords to misleading generator pages.
+7. Validate every internal link against real application routes.
+8. Store original, normalized, and core-modifier values.
+9. Include classification, target route, mapping status, and explanation.
+10. Preserve skipped and unmapped keywords in the audit.
+
+Save the result to `data/keyword-map.json`.
+
+## STEP 6 — Increase emoji-wrapped keyword variations
+
+This is a core requirement.
+
+Create a reusable function that generates **at least 30 unique, relevant emoji-wrapped keyword variations per applicable landing-page section when at least 30 legitimate variations can be produced**.
+
+Make the minimum configurable, with a default of 30.
+
+Each variation must start and end with an emoji.
+
+Examples:
+
+* ✨ Instagram fancy text ✨
+* 🔥 Instagram bio fonts 🔥
+* 💖 Instagram stylish letters 💖
+* 🌟 Instagram username fonts 🌟
+* 🎨 Instagram text styles 🎨
+* 🦋 Instagram profile text 🦋
+* 💎 Instagram decorative letters 💎
+* 🌈 Instagram aesthetic fonts 🌈
+* 🪄 Instagram fancy lettering 🪄
+* 💫 Instagram Unicode text 💫
+* 💗 Instagram cute bio text 💗
+* 🖋️ Instagram cursive bio fonts 🖋️
+* 🪷 Instagram elegant lettering 🪷
+* 🌸 Instagram pretty username text 🌸
+* 🦄 Instagram creative profile text 🦄
+* 💕 Instagram love bio fonts 💕
+* 🪻 Instagram soft aesthetic lettering 🪻
+* 🌺 Instagram decorative bio text 🌺
+* 🧚 Instagram fantasy lettering 🧚
+* 👑 Instagram royal name fonts 👑
+* 🫧 Instagram bubble letters 🫧
+* 🪞 Instagram stylish name text 🪞
+* 🩷 Instagram heart text styles 🩷
+* 🎀 Instagram cute username fonts 🎀
+* 🪄 Instagram copyable fancy letters 🪄
+* 🌷 Instagram profile name styles 🌷
+* 🦋 Instagram decorative username text 🦋
+* ✨ Instagram caption text styles ✨
+* 💎 Instagram unique name lettering 💎
+* 🌈 Instagram creative bio lettering 🌈
+
+These examples demonstrate the format only. Generate phrases that genuinely match the page's topic and supported functionality. Do not blindly reuse these examples for unrelated categories.
+
+### Emoji-generation rules
+
+1. Vary meaningful search phrases, not just emoji wrappers.
+2. Deduplicate case-insensitively after normalization.
+3. Reject emoji-only and irrelevant entries.
+4. Do not invent unsupported functionality.
+5. Do not claim that a platform accepts every Unicode character.
+6. Preserve ordinary, non-emoji keywords separately.
+7. Track the source keyword or generation rule behind each variation.
+8. Record how many valid variations were generated.
+9. Record the shortfall if fewer than the configured minimum are legitimate.
+10. Keep the minimum configurable.
+11. Do not generate unlimited combinations or arbitrary emoji permutations.
+12. Do not insert keyword lists into hidden HTML, hidden metadata, or concealed text.
+
+### Visible content versus audit data
+
+Separate generated variations into two collections:
+
+* `displayVariations`: a useful, readable subset shown on the landing page.
+* `allVariations`: all validated variations stored in the keyword report.
+
+Show only as many visible phrases as genuinely improve the page. Use a concise, accessible section such as `Explore Instagram Text Styles` or `Popular Instagram Font Searches`.
+
+If displaying 30 phrases makes the page repetitive or spammy, do not force them into the visible page. Preserve the variations in the report and record the actual displayed count.
+
+The dashboard must show both the generated variation count and the displayed variation count.
+
+## STEP 7 — Landing-page content
+
+For every approved, indexable landing page, implement:
+
+### Metadata
+
+* A unique SEO title.
+* Exactly one clear H1.
+* A unique meta description.
+* A self-referencing canonical URL.
+* Correct robots directives.
+* Open Graph metadata where appropriate.
+
+### Introduction
+
+Write two or three unique, useful sentences explaining:
+
+* What the tool does.
+* How to use it.
+* Relevant limitations.
+
+Do not copy the same introduction across pages.
+
+### Headings
+
+Generate relevant H2 and H3 headings based on actual keywords and supported features.
+
+For example:
+
+* H1: Instagram Fancy Text Generator
+* H2: Stylish Instagram Bio Fonts
+* H2: Instagram Username Text Styles
+* H2: Copy and Use Instagram Fonts
+* H2: Instagram Text Compatibility
+* H2: Frequently Asked Questions
+
+Use actual search intent to determine final headings.
+
+### Functional content
+
+Where appropriate, include:
+
+* A working text input.
+* Real output generated by the existing engine.
+* Working copy-to-clipboard buttons.
+* Related styles and tools.
+* Relevant use-case examples.
+* Platform compatibility information.
+* The applicable emoji-wrapped variation section.
+* Breadcrumbs and useful internal links.
+
+Do not create fake previews, nonfunctional controls, or features unsupported by the application.
+
+### FAQs
+
+Provide exactly three useful, page-specific FAQs for each indexable landing page.
+
+Cover relevant topics such as:
+
+1. Where the generated text works.
+2. Why certain characters appear as boxes or question marks.
+3. Which characters or features may not be supported.
+
+Avoid duplicating identical answers across all pages.
+
+### Navigation
+
+Add breadcrumbs, a parent-category link, and a small set of relevant sibling-page links. Do not create enormous irrelevant link lists.
+
+## STEP 8 — Platform and game compatibility
+
+For each approved platform or game landing page:
+
+1. Use the actual generator implementation.
+2. Implement functional copy buttons.
+3. Validate input and output where appropriate.
+4. Enforce character limits only when verified for the specific field and current platform rules.
+5. Show `No limit checked` when a reliable limit has not been verified.
+6. Explain that Unicode support varies by platform, device, game, and account field.
+7. Never promise that every generated character will be accepted.
+8. Distinguish account usernames from chat messages, display names, bios, and server nicknames.
+
+Do not invent platform restrictions.
+
+## STEP 9 — Technical SEO
+
+Implement and validate:
+
+* Correct HTML heading hierarchy.
+* Unique page titles, descriptions, and introductions.
+* Self-referencing canonical URLs.
+* Breadcrumb navigation.
+* Valid `BreadcrumbList` JSON-LD.
+* `FAQPage` JSON-LD only when corresponding visible FAQs qualify under current search-engine guidelines.
+* A sitemap containing every eligible canonical indexable page.
+* Appropriate noindex rules for internal search results, pagination beyond page one, and `?text=` result URLs.
+* Robots directives that do not accidentally block important pages.
+* Valid internal links and HTTP status codes.
+* Server-rendered page content that works without JavaScript.
+* Accessible controls and responsive styling.
+* No unnecessary JavaScript dependencies.
+
+Do not add nonexistent pages to the sitemap or generate structured data for content that is not visible.
+
+## STEP 10 — Implementation files
+
+Create or update files according to existing project conventions.
+
+Potential files include:
+
+* `scripts/build-keyword-map.js`
+* `data/keyword-map.json`
+* `data/keyword-report.json`
+* `data/keyword-audit.md`
+* Existing Express route files.
+* Existing EJS layout and landing-page templates.
+* Existing CSS and vanilla JavaScript.
+* Existing sitemap generation.
+* Existing automated tests.
+
+These are suggested paths, not instructions to duplicate existing files.
+
+The implementation script must:
+
+1. Read the actual keyword source.
+2. Normalize and classify every entry.
+3. Map keywords to existing or approved routes.
+4. Generate and deduplicate emoji variations.
+5. Produce the keyword map.
+6. Produce an audit of mapped, skipped, planned, unmapped, and insufficient-variation entries.
+7. Include reasons for every skipped, planned, or unmapped keyword.
+8. Preserve original entries and duplicate-source traceability.
+9. Run deterministically.
+10. Never overwrite the original keyword list.
+
+## STEP 11 — Automated tests
+
+Use the existing test framework or the smallest compatible alternative.
+
+Test:
+
+1. All mapped targets resolve to real routes.
+2. No duplicate normalized keywords exist.
+3. Competitor keywords are never mapped to landing pages.
+4. Language keywords do not create misleading generators.
+5. Unsupported features do not create fake working pages.
+6. Every eligible indexable page appears in the sitemap.
+7. Every indexable page has a unique title, description, H1, and canonical URL.
+8. Introductions are unique across different pages.
+9. Every indexable page contains exactly three appropriate FAQs.
+10. Emoji variations are unique and relevant.
+11. Applicable sections meet the configurable minimum when enough valid variations exist.
+12. Legitimate shortfalls are reported rather than fabricated away.
+13. Internal links resolve to valid routes.
+14. Search and `?text=` URLs have the intended robots directives.
+15. Existing generator functionality remains intact.
+16. The sidebar search, category filters, navigation, and status filters work.
+17. Dashboard statistics match the generated data.
+18. The build and tests complete without errors.
+
+Do not weaken validation rules to make tests pass.
+
+## STEP 12 — Final deliverables
+
+Implement the changes directly in the existing Stylix project.
+
+Provide:
+
+1. Updated source code and templates.
+2. The functional left-side keyword dashboard.
+3. Updated or new routes only where necessary.
+4. The keyword-processing script.
+5. `data/keyword-map.json`.
+6. The keyword audit report.
+7. The emoji variation report.
+8. Updated sitemap generation and SEO metadata.
+9. Automated tests.
+10. A list of created and modified files.
+11. Exact commands to build the keyword map, build the application, and run tests.
+12. Actual totals for mapped, skipped, planned, unmapped, and insufficient-variation keywords.
+13. Actual test results and remaining manual verification requirements.
+
+### Final implementation rules
+
+* Inspect the real project before editing.
+* Use the actual supplied keywords and meaningful existing headings.
+* Make the left sidebar functional, not decorative.
+* Increase the emoji-wrapped variation target to 30 where legitimate phrases exist.
+* Never satisfy counts using meaningless emoji permutations.
+* Keep the visible landing-page content readable and useful.
+* Preserve the existing Node.js, Express, EJS, and vanilla JavaScript architecture.
+* Do not break existing functionality.
+* Do not invent routes, platform rules, features, statistics, or test results.
+* If the project or keyword source is unavailable, clearly report what is missing.
+* Work in small, verifiable steps and run the actual tests.
+
+**Begin now:** inspect the project files, locate the keyword list, identify existing headings and routes, and then implement the dashboard and SEO system using the real codebase.
