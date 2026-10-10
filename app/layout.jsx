@@ -5,7 +5,9 @@ import { SiteFooter } from '@/components/site-footer.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
 export const metadata = {
-  metadataBase: new URL(process.env.SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.SITE_URL || 'https://stylzo.vercel.app'
+  ),
   title: {
     default: site.name + ': ' + site.tagline,
     template: '%s | ' + site.name,
@@ -33,10 +35,12 @@ export default function RootLayout({ children }) {
       <body>
         <Scripts />
         <a className="skip" href="#main">Skip to content</a>
+
         <header className="site-header">
           <div className="wrap bar">
             <BrandLink />
             <SiteNav />
+
             <div className="bar-actions">
               <button
                 type="button"
@@ -47,7 +51,12 @@ export default function RootLayout({ children }) {
                 aria-controls="mobile-nav"
                 hidden
               >
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
                   <path
                     fill="currentColor"
                     d="M4 7h16v2H4zm0 4h16v2H4zm0 4h16v2H4z"
@@ -56,6 +65,7 @@ export default function RootLayout({ children }) {
               </button>
             </div>
           </div>
+
           <MobileNav />
         </header>
 
@@ -64,7 +74,13 @@ export default function RootLayout({ children }) {
         </main>
 
         <SiteFooter />
-        <div id="toast" className="toast" role="status" aria-live="polite"></div>
+
+        <div
+          id="toast"
+          className="toast"
+          role="status"
+          aria-live="polite"
+        ></div>
       </body>
     </html>
   );
