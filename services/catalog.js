@@ -1,5 +1,5 @@
-```javascript
-// Data access layer for style catalogs.
+
+ // Data access layer for style catalogs.
 // Reads the build artifact produced by scripts/build-catalog.js.
 // Falls back to data/fonts.json when the cache is unavailable.
 
@@ -24,7 +24,6 @@ const readJson = (filename) =>
  */
 function link(raw) {
   const { styles } = raw;
-
   const bySlug = new Map();
 
   for (const slug in raw.bySlug) {
@@ -40,9 +39,14 @@ function link(raw) {
     );
   }
 
-  const haystack = styles.map(
-    (style) =>
-      `${style.name} ${style.slug} ${(style.tags || []).join(' ')}`.toLowerCase()
+  const haystack = styles.map((style) =>
+    [
+      style.name,
+      style.slug,
+      ...(style.tags || []),
+    ]
+      .join(' ')
+      .toLowerCase()
   );
 
   const apiPayload = JSON.stringify({
@@ -237,4 +241,3 @@ export function library(name) {
 
   return libCache.get(name);
 }
-```
