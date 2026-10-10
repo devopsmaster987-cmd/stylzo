@@ -2,8 +2,14 @@
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  experimental: {
-    // Enable app router (default in Next 16)
+  outputFileTracingIncludes: {
+    "/*": [
+      "./data/fonts.json",
+      "./data/categories.json",
+      "./data/pages.json",
+      "./data/.catalog-cache.json",
+    ],
   },
 };
+
 export default nextConfig;
