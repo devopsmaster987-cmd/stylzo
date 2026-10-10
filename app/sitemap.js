@@ -1,15 +1,36 @@
+
 import { env } from '@/config/environment.js';
 import { catalog } from '@/services/catalog.js';
 import { boardSlugs } from '@/lib/keyword-board.js';
 
-// Only active, indexable pages. Composed combinations stay out of the sitemap by design.
+const SITE_URL = 'https://stylzo.vercel.app';
+
+// Only active, indexable pages. Composed combinations stay out of the sitemap.
 export default function sitemap() {
   const landingPaths = boardSlugs().map((key) => `/styles/${key}`);
+
   const paths = [
-    '/', '/fonts', '/symbols', '/emoji', '/kaomoji', '/tools', '/about', '/privacy', '/terms', '/contact',
+    '/',
+    '/fonts',
+    '/symbols',
+    '/emoji',
+    '/kaomoji',
+    '/tools',
+    '/about',
+    '/privacy',
+    '/terms',
+    '/contact',
     '/styles',
     ...landingPaths,
-    ...catalog().styles.filter((s) => s.indexable).map((s) => `/fonts/${s.slug}`),
+    ...catalog()
+      .styles
+      .filter((style) => style.indexable)
+      .map((style) => `/fonts/${style.slug}`),
   ];
-  return paths.map((p) => ({ url: `${env.siteUrl}${p}`, changeFrequency: 'weekly' }));
+
+  return paths.map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+  }));
 }
