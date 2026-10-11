@@ -5,8 +5,10 @@ import { Scripts } from '@/components/scripts.jsx';
 
 function toolsMeta() {
   return pageMeta({
-    title: 'Free Text Tools — Count, Convert & Clean Text',
-    description: 'Free browser-based text tools: word counter, case converter, reverse text, slug generator, find and replace, line sorter and deduper. Nothing is uploaded.',
+    // "Word counter" is the largest query this site can realistically win: high
+    // volume, low competition, and the tool genuinely does it. It leads the title.
+    title: 'Word Counter — Count Words & Characters Free',
+    description: 'Free word counter and character counter, plus a text case converter. Count words, characters and sentences, then convert case, reverse text or clean it up.',
     path: '/tools',
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Tools', path: '/tools' }],
     faq: TOOLS_QA,
@@ -47,7 +49,12 @@ export default function ToolsPage() {
       </nav>
 
       <section className="hero">
-        <h1>Text tools</h1>
+        <h1>Word counter and text tools</h1>
+        <p className="lede">
+          Count words, characters and sentences as you type, then convert case, reverse text,
+          build a slug, find and replace, or clean up a list. Everything runs in your browser,
+          so there is no upload and no limit on how much text you can check.
+        </p>
       </section>
 
       <div className="tool-layout">

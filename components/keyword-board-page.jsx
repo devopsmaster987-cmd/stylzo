@@ -24,7 +24,7 @@ import {
 
 function boardMeta() {
   return pageMeta({
-    title: 'Fancy Text Keyword Board — 25 Styles With Colour Emoji',
+    title: 'Fancy Text Keyword Board — 25 Styled Words',
     description: `Pick any of ${BOARD_SIZE} searches. Each one opens ${WORDS_PER_KEYWORD} words in ${WORDS_PER_KEYWORD} different styles, every word decorated with ${EMOJI_MIN} to ${EMOJI_MAX} colour emoji you can copy in one tap.`,
     path: '/styles',
     breadcrumbs: [

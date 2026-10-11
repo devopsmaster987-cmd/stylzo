@@ -18,6 +18,7 @@
     "build:icons": "node scripts/build-icons.js",
     "build:ads": "node scripts/build-ads-txt.js",
     "build:llms": "node scripts/build-llms-txt.js",
+    "adsense:check": "node scripts/adsense-preflight.js",
     "test": "npm run build && node --test --test-concurrency=1 \"tests/**/*.test.js\""
   },
   "dependencies": {

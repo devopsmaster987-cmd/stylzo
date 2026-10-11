@@ -2,21 +2,41 @@ import { notFound } from 'next/navigation';
 import { getStyle, getCategory, relatedStyles } from '@/services/catalog.js';
 import { SLUG_RE } from '@/lib/validation.js';
 import { pageMeta, toMetadata, renderCards, inputFromQuery, faqFor, SUPPORT_LABEL } from '@/lib/pages.js';
+import { site as SITE } from '@/config/site.js';
 import { styleContent } from '@/lib/style-content.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
+const SITE_NAME = SITE.name;
+
 function load(slug) {
   if (typeof slug !== 'string' || !SLUG_RE.test(slug)) return null;
   return getStyle(slug);
 }
 
+/**
+ * Title for a style page.
+ *
+ * Two constraints fight here. The query people actually type carries the
+ * "copy and paste" modifier, which is worth having. But 29 style names already
+ * end in "Text", so naively appending "Text Generator" produces
+ * "Underline Text Text Generator". The trailing word is dropped first, and the
+ * modifier is only added when the result still fits the search-result budget.
+ */
+function styleTitle(name, budget = 60) {
+  const base = / Text$/.test(name) ? name.replace(/ Text$/, '') : name;
+  const core = `${base} Text Generator`;
+  const withModifier = `${core} — Copy & Paste`;
+  const suffix = ` | ${SITE_NAME}`;
+  return (withModifier + suffix).length <= budget ? withModifier : core;
+}
+
 function detailMeta(style, parent, hasText) {
   const support = SUPPORT_LABEL[style.support] || '';
   return pageMeta({
-    title: `${style.name} Text Generator`,
+    title: styleTitle(style.name),
     description: `${style.description}`.slice(0, 160),
     path: `/fonts/${style.slug}`,
     canonicalPath: `/fonts/${style.indexable ? style.slug : (parent ? parent.slug : style.slug)}`,

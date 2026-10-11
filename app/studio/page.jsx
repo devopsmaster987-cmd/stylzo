@@ -5,7 +5,7 @@ import { Scripts } from '@/components/scripts.jsx';
 
 function studioMeta() {
   return pageMeta({
-    title: 'Fancy Text Image Generator — Make a PNG in Your Browser',
+    title: 'Fancy Text Image Generator — Make a PNG',
     description: 'Turn styled text into a 1200x630 image. Pick a Unicode style, colours and background, then download a watermark-free PNG drawn entirely in your browser.',
     path: '/studio',
     // This page was noindex while being linked from the main nav, the footer and

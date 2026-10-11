@@ -82,10 +82,13 @@ function renderPanel(data) {
   }
   if (progressLabel) progressLabel.textContent = `Keyword ${pad(data.position)} / ${data.total}`;
   if (progressFill) progressFill.style.width = `${(data.position / data.total) * 100}%`;
-  // Must stay in step with the BOARD_TITLE_TAIL in lib/keyword-board.js. The
-  // in-page panel has no <title> of its own, so it is rewritten to match the
-  // standalone page it is standing in for.
-  document.title = `${data.heading} — 25 Styled Words | ${document.title.split(' | ').at(-1)}`;
+  // Must stay in step with the title built in lib/keyword-board.js, which drops
+  // the tail when it would push the title past 60 characters. The in-page panel
+  // has no <title> of its own, so it is rewritten to match the standalone page
+  // it is standing in for.
+  const site = document.title.split(' | ').at(-1);
+  const tail = `${data.heading} — 25 Styled Words | ${site}`;
+  document.title = (tail.length <= 60 ? tail : `${data.heading} | ${site}`);
   // The canonical is deliberately NOT rewritten here. Swapping /styles for
   // /styles/<slug> would make the canonical depend on whether JS ran, so the
   // same URL would report two different canonical targets to crawlers. The

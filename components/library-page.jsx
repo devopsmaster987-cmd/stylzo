@@ -9,6 +9,24 @@ export function libraryMeta(key) {
   return LIB_META[key];
 }
 
+/** Short, plain H1s. The long targeting lives in the title, not the heading. */
+const LIB_HEADING = {
+  symbols: 'Text symbols',
+  emoji: 'Emoji',
+  kaomoji: 'Kaomoji',
+};
+
+/** The lead restates the query in a sentence, then says what the page does. */
+const LIB_LEAD = {
+  symbols: `Copy and paste symbols straight into a bio, a username or a message. `
+    + `Every symbol on this page is one click to copy, and there are `
+    + `${libraryGroups('symbols').total} of them.`,
+  emoji: `Find the emoji you want and copy it to your keyboard in one tap. `
+    + `No app, no long-press menu, and no account — pick an emoji, press copy, and paste it anywhere.`,
+  kaomoji: `Kaomoji are text emoticons made from ordinary characters, so you can copy and paste them `
+    + `into any app that accepts text. Pick a face for the mood you are going for.`,
+};
+
 export function libraryGroups(key) {
   const data = library(key);
   const groups = data.categories.map((c) => ({
@@ -99,7 +117,10 @@ export function LibraryPage({ libraryKey }) {
       </nav>
 
       <section className="hero">
-        <h1>{meta.title}</h1>
+        {/* The H1 is short and readable; the query terms live in the title and
+            in this lead, which is what the page is actually about. */}
+        <h1>{LIB_HEADING[key]}</h1>
+        <p className="lede">{LIB_LEAD[key]}</p>
         <div className="search">
           <label className="skip" htmlFor="lib-search">Search {meta.title}</label>
           <input
