@@ -12,6 +12,10 @@ import { env } from '../config/environment.js';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const file = path.join(root, 'public', 'ads.txt');
 
+// Google's fixed certification token, identical on every AdSense ads.txt line.
+// It is a constant, not part of the publisher id: f08c47fec0942fa0.
+const GOOGLE_CERT = 'f08c47fec0942fa0';
+
 if (!env.adsense.client) {
   // Leave any previously generated file alone rather than writing an empty one,
   // so a build without credentials cannot break a working deployment's file.
@@ -19,13 +23,18 @@ if (!env.adsense.client) {
   process.exit(0);
 }
 
-const line = `google.com, ${env.adsense.client}, DIRECT, f08c47fec0942fa0`;
+// ads.txt carries the bare publisher id: the "ca-" that data-ad-client uses is
+// stripped, so a ca-pub client id becomes a pub- one. Google rejects the file
+// outright (and serves no ads at all) if the prefixed form is written instead.
+const publisher = env.adsense.client.replace(/^ca-/, '');
+
+const line = `google.com, ${publisher}, DIRECT, ${GOOGLE_CERT}`;
 const existing = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
 
-if (existing === line) {
+if (existing === `${line}\n`) {
   console.log('ads.txt: unchanged');
   process.exit(0);
 }
 
 fs.writeFileSync(file, `${line}\n`);
-console.log(`ads.txt: wrote ${env.adsense.client}`);
+console.log(`ads.txt: wrote ${publisher}`);

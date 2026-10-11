@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { get, startServer } from '../helpers/server.js';
@@ -11,8 +12,12 @@ const count = (html, re) => (text(html).match(re) || []).length;
 // The integration suite runs against a single prebuilt .next, so exactly one of
 // the two advertising states can be live in a given run. The privacy policy
 // checks are configuration-independent and always run.
+//
+// dotenv is imported above so this reads the same values `next build` read.
+// Without it the process env is empty, ADS_ON is false, and the "ads off" suite
+// runs against an ads-on build and fails for the wrong reason.
 const ADS_ON = Boolean(process.env.ADSENSE_CLIENT && process.env.ADSENSE_SLOT);
-const onlyWith = (on) => ({ skip: (on ? false : true) && (on ? '' : 'build without ads') });
+const onlyWith = (on) => (on ? {} : { skip: 'build without ads' });
 
 describe('privacy policy', () => {
   let server;
@@ -78,7 +83,8 @@ describe('privacy policy', () => {
 describe('ads.txt generation', () => {
   test('is generated from ADSENSE_CLIENT, not committed with a placeholder', () => {
     const build = readFileSync(new URL('../../scripts/build-ads-txt.js', import.meta.url), 'utf8');
-    assert.match(build, /google\.com, \$\{env\.adsense\.client\}, DIRECT/);
+    assert.match(build, /publisher = env\.adsense\.client\.replace\(\/\^ca-\/, ''\)/);
+    assert.match(build, /google\.com, \$\{publisher\}, DIRECT/);
     // A file with the wrong publisher id silently serves zero ads, so no id may
     // be baked into the script itself.
     assert.ok(!/ca-pub-\d/.test(build), 'the generator must not hard-code a publisher id');
@@ -122,10 +128,13 @@ describe('advertising with a configured publisher', () => {
   after(() => server?.stop());
 
   test('ads are wired end to end when a publisher id is configured', onlyWith(enabled), async () => {
-    // ads.txt exists, otherwise Google serves nothing even once approved.
+    // ads.txt exists, otherwise Google serves nothing even once approved. It
+    // carries the bare pub- id: the ca- from data-ad-client is stripped.
     const adsTxt = await get(server.base, '/ads.txt');
     assert.equal(adsTxt.status, 200);
-    assert.match(await adsTxt.text(), new RegExp(`^google\\.com, ${CLIENT}, DIRECT`));
+    const body = await adsTxt.text();
+    assert.match(body, new RegExp(`^google\\.com, ${CLIENT.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0`));
+    assert.ok(!body.includes('ca-pub-'), 'ads.txt must not carry the ca- prefix');
 
     // The consent banner is offered before any ad can load.
     const html = await (await get(server.base, '/')).text();
@@ -139,6 +148,33 @@ describe('advertising with a configured publisher', () => {
 
     // A visitor can change their mind later.
     assert.match(html, /href="\/privacy"[^>]*>cookie policy</);
+  });
+
+  test('the unit uses the responsive display settings', onlyWith(enabled), async () => {
+    const html = await (await get(server.base, '/')).text();
+    const unit = text(html).match(/<ins[^>]*class="adsbygoogle"[^>]*>/)?.[0] || '';
+    assert.match(unit, /data-ad-format="auto"/);
+    assert.match(unit, /data-full-width-responsive="true"/);
+  });
+
+  test('ads appear only on pages with real content, at most one each', onlyWith(enabled), async () => {
+    for (const p of ['/', '/fonts', '/styles/instagram', '/styles/gaming']) {
+      const html = await (await get(server.base, p)).text();
+      const n = count(html, /class="adsbygoogle"/g);
+      assert.equal(n, 1, `${p} should carry exactly one ad, found ${n}`);
+    }
+    // Thin and policy pages never carry one.
+    for (const p of ['/about', '/contact', '/privacy', '/terms', '/tools']) {
+      const html = await (await get(server.base, p)).text();
+      assert.equal(count(html, /class="adsbygoogle"/g), 0, `${p} must not render an ad`);
+    }
+  });
+
+  test('every ad is visibly labelled', onlyWith(enabled), async () => {
+    // Google requires ads to be distinguishable from site content.
+    const html = text(await (await get(server.base, '/')).text());
+    assert.equal(count(html, /class="ad-slot"/g), count(html, /class="ad-label"/g),
+      'every ad slot needs a visible label');
   });
 
   test('the CSP permits the ad tag, ad frames and their beacons', onlyWith(enabled), async () => {

@@ -16,9 +16,15 @@ import { fileURLToPath } from 'node:url';
 import { env, adsenseConfigured } from '../config/environment.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const argUrl = process.argv.includes('--url')
-  ? process.argv[process.argv.indexOf('--url') + 1]
-  : null;
+// Accepts both "--url https://x" and "--url=https://x". Only the space form was
+// handled before, so the documented equals form silently fell back to checking
+// the local build and reported a result about the wrong target.
+const argUrl = (() => {
+  const inline = process.argv.find((a) => a.startsWith('--url='));
+  if (inline) return inline.slice('--url='.length);
+  const i = process.argv.indexOf('--url');
+  return i !== -1 ? process.argv[i + 1] : null;
+})();
 
 const results = [];
 const check = (name, ok, detail = '', fix = '') => {
@@ -67,9 +73,17 @@ const words = (html) => {
 
 /* ------------------------------------------------------- configuration --- */
 
-bar('Configuration');
+bar(argUrl ? `Configuration (local — not authoritative for ${argUrl})` : 'Configuration');
 
-if (!env.adsense.client) {
+if (argUrl) {
+  // The environment variables behind a deployed build live on the host, not in
+  // this shell. Reporting the local values here would claim ads are
+  // unconfigured when they may well be configured in production, so the local
+  // environment is explicitly out of scope and only what the live site actually
+  // serves is checked further down.
+  warn('Local environment not checked', 'this run targets a deployed build',
+    'Set ADSENSE_CLIENT and ADSENSE_SLOT on the host, then re-run');
+} else if (!env.adsense.client) {
   check('Publisher ID (ADSENSE_CLIENT)', false, 'not set',
     'AdSense > Account > Settings > Account information > Publisher ID');
 } else if (!/^ca-pub-\d{6,}$/.test(env.adsense.client)) {
@@ -79,7 +93,9 @@ if (!env.adsense.client) {
   check('Publisher ID (ADSENSE_CLIENT)', true, env.adsense.client);
 }
 
-if (!env.adsense.slot) {
+if (argUrl) {
+  // Nothing local can answer these.
+} else if (!env.adsense.slot) {
   check('Ad unit ID (ADSENSE_SLOT)', false, 'not set',
     'AdSense > Ads > Inventory > your unit > the digits after slot=');
 } else if (!/^\d+$/.test(env.adsense.slot)) {
@@ -88,19 +104,23 @@ if (!env.adsense.slot) {
   check('Ad unit ID (ADSENSE_SLOT)', true, env.adsense.slot);
 }
 
-if (!adsenseConfigured) {
+if (argUrl) {
+  // skipped
+} else if (!adsenseConfigured) {
   warn('Both values present', 'ads will stay switched off until they are',
     'Set both, then rebuild so ads.txt and the CSP are generated');
 }
 
-if (env.nodeEnv !== 'production') {
+if (argUrl) {
+  // The deployed build is a production build by definition.
+} else if (env.nodeEnv !== 'production') {
   warn('Running as a production build', `NODE_ENV=${env.nodeEnv}`,
     'Several defects only appear in production; the local build matches it');
 } else {
   check('Running as a production build', true);
 }
 
-check('SITE_URL resolves', /^https?:\/\//.test(env.siteUrl), env.siteUrl);
+if (!argUrl) check('SITE_URL resolves', /^https?:\/\//.test(env.siteUrl), env.siteUrl);
 
 /* ------------------------------------------------------------- content --- */
 
@@ -119,6 +139,13 @@ for (const p of REQUIRED) {
   const res = await get(base, p);
   check(`${p} reachable`, res.status === 200, `status ${res.status}`);
 }
+
+// Thin and policy pages. Google expects ads only where there is content to
+// scroll past, so a unit on any of these is a policy problem, not just clutter.
+const NO_AD_PAGES = ['/about', '/contact', '/privacy', '/terms', '/tools'];
+
+// One representative guide page under /styles/*, which must carry an ad.
+const STYLE_GUIDES = ['/styles/instagram', '/styles/gaming'];
 
 const privacy = await text(base, '/privacy');
 check('Privacy policy is substantial', words(privacy) >= 300, `${words(privacy)} words`,
@@ -189,34 +216,59 @@ check('Home page has a self-referencing canonical', canonicalOk,
 
 bar('Advertising');
 
-if (!adsenseConfigured) {
-  check('ads.txt generated', false, 'not generated (no publisher ID)',
-    'Rebuild after setting ADSENSE_CLIENT');
-  warn('Ad units rendered', 'skipped, ads are not configured',
-    'Once configured, /, /fonts and the board pages should each show a unit');
-  warn('CSP permits Google ad origins', 'skipped, ads are not configured',
-    'Without this every ad is silently blocked in production');
+// Always decide from what the site actually serves. The local env cannot
+// describe a deployed build, and guessing either way would give a false answer.
+const adsTxtRes = await get(base, '/ads.txt');
+const adsTxtBody = adsTxtRes.status === 200 ? (await adsTxtRes.text()).trim() : '';
+const liveCsp = (await get(base, '/')).headers.get('content-security-policy') || '';
+const liveUnits = (home.match(/class="adsbygoogle"/g) || []).length;
+const adsLive = adsTxtRes.status === 200 || liveUnits > 0;
+
+if (!adsLive) {
+  check('ads.txt served', false, `status ${adsTxtRes.status}`,
+    argUrl
+      ? 'Set ADSENSE_CLIENT on the host and redeploy; ads.txt is generated at build time'
+      : 'Set ADSENSE_CLIENT, then rebuild so public/ads.txt is written');
+  check('Ad unit rendered on the home page', false, '0 units',
+    'No ad units means the reviewer has nothing to inspect');
+  warn('CSP permits Google ad origins', 'not applicable while ads are off',
+    'This only becomes a risk once ads are configured');
 } else {
-  const adsTxt = await get(base, '/ads.txt');
-  if (adsTxt.status !== 200) {
-    check('ads.txt served', false, `status ${adsTxt.status}`, 'Rebuild so public/ads.txt is written');
-  } else {
-    const body = await adsTxt.text();
-    const ok = body.includes(env.adsense.client);
-    check('ads.txt served', true, body.trim());
-    check('ads.txt names this publisher', ok, ok ? '' : `expected ${env.adsense.client}`);
+  check('ads.txt served', true, adsTxtBody || `status ${adsTxtRes.status}`);
+  // ads.txt carries the bare publisher id: Google's spec strips the "ca-" that
+  // data-ad-client uses, so matching "ca-pub-" here flagged a correct file as
+  // broken. pub- is what the IAB spec and every AdSense account expect.
+  const named = adsTxtBody.match(/(?:^|,\s*)pub-\d+/);
+  check('ads.txt names a publisher', Boolean(named), named ? named[0] : 'no pub- id found in ads.txt',
+    'A wrong id here silently serves zero ads even after approval');
+  const prefixed = adsTxtBody.match(/ca-pub-/);
+  check('ads.txt omits the ca- prefix', !prefixed, prefixed ? `found ${prefixed[0]}` : '',
+    'ca-pub- is the data-ad-client form; ads.txt must use pub-');
+
+  check('CSP permits the ad tag', liveCsp.includes('https://pagead2.googlesyndication.com'),
+    liveCsp.includes('https://pagead2.googlesyndication.com') ? '' : 'every ad would be silently blocked');
+  check('CSP permits ad frames', liveCsp.includes('doubleclick'));
+
+  check('Ad unit rendered on the home page', liveUnits > 0, `${liveUnits} unit(s)`);
+
+  const fontsUnits = ((await text(base, '/fonts')).match(/class="adsbygoogle"/g) || []).length;
+  check('Ad unit rendered on /fonts', fontsUnits > 0);
+
+  // A guide page under /styles/* is the other money page, so it carries an ad too.
+  for (const g of STYLE_GUIDES) {
+    const n = ((await text(base, g)).match(/class="adsbygoogle"/g) || []).length;
+    check(`Ad unit rendered on ${g}`, n > 0, n ? `${n} unit(s)` : '');
+    // At most one unit per page: a second on a page this thin reads as a layout
+    // bug to a reviewer rather than as inventory.
+    check(`At most one ad on ${g}`, n <= 1, `${n} unit(s)`);
   }
 
-  const csp = (await get(base, '/')).headers.get('content-security-policy') || '';
-  check('CSP permits the ad tag', csp.includes('https://pagead2.googlesyndication.com'),
-    csp.includes('https://pagead2.googlesyndication.com') ? '' : 'ads would be silently blocked');
-  check('CSP permits ad frames', csp.includes('doubleclick'));
-
-  const units = (home.match(/class="adsbygoogle"/g) || []).length;
-  check('Ad unit rendered on the home page', units > 0, `${units} unit(s)`);
-
-  const fonts = await text(base, '/fonts');
-  check('Ad unit rendered on /fonts', (fonts.match(/class="adsbygoogle"/g) || []).length > 0);
+  // Rule: thin and policy pages never carry ads. A unit here is a policy
+  // violation, not just a layout annoyance, so this fails rather than warns.
+  for (const p of NO_AD_PAGES) {
+    const n = ((await text(base, p)).match(/class="adsbygoogle"/g) || []).length;
+    check(`No ad unit on ${p}`, n === 0, n ? `${n} unit(s)` : '');
+  }
 
   const beforeConsent = home.includes('pagead2.googlesyndication.com');
   check('Ad tag waits for consent', !beforeConsent,
@@ -276,9 +328,11 @@ if (fail.length) {
   console.log('\x1b[31mNot ready to apply.\x1b[0m Fix the blocking items above.');
   process.exit(1);
 }
-if (!adsenseConfigured) {
-  console.log('\x1b[33mTechnically sound, but ads are switched off.\x1b[0m');
-  console.log('  Set ADSENSE_CLIENT and ADSENSE_SLOT, rebuild, then re-run this check.');
+if (!adsLive) {
+  console.log('\x1b[33mTechnically sound, but ads are switched off on this build.\x1b[0m');
+  console.log(argUrl
+    ? '  Set ADSENSE_CLIENT and ADSENSE_SLOT in the host environment, then redeploy.'
+    : '  Set ADSENSE_CLIENT and ADSENSE_SLOT, rebuild, then re-run this check.');
 } else {
   console.log('\x1b[32mReady to apply.\x1b[0m');
   console.log('  Reminder: consider letting the site run 2-4 weeks before applying.');

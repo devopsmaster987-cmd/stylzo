@@ -807,6 +807,20 @@ pre code { display: block; padding: .8rem; overflow: auto; }
    creative actually loads, which avoids a layout shift on slow connections. */
 .ad-slot { display: block; margin: 2rem 0; min-height: 0; }
 .ad-slot:empty { display: none; }
+/* Consent withdrawn: the <ins> was emptied, so collapse the whole slot rather
+   than leaving the label above a blank box. Not keyed off :has(ins:empty),
+   which would also hide the slot while the tag is still filling it. */
+.ad-slot[data-withdrawn] { display: none; }
+/* Google's own policy asks for ads to be distinguishable from site content. */
+.ad-label {
+  display: block; margin: 0 0 .5rem;
+  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); text-align: center;
+}
+/* A responsive unit needs a block-level container. Set here rather than with an
+   inline style attribute, so the server HTML stays free of style="" (which the
+   integration suite asserts). */
+.ad-slot .adsbygoogle { display: block; }
 
 /* Consent banner: fixed so it cannot shift the page, and high in the stacking
    order so a later ad refresh cannot cover it. */

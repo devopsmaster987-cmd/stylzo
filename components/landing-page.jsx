@@ -2,8 +2,10 @@ import { LANDING_PAGES, siblings } from '@/lib/landing-pages.js';
 
 import { getStyle } from '@/services/catalog.js';
 import { pageMeta, toMetadata, renderCards, inputFromQuery } from '@/lib/pages.js';
+import { env, adsenseConfigured } from '@/config/environment.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
+import { AdUnit } from '@/components/ad-unit.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 import { Hero3D } from '@/components/hero-3d.jsx';
@@ -99,6 +101,10 @@ export async function renderLandingPage({ key, searchParams }) {
           </ul>
         </section>
       ))}
+
+      {/* One ad, after every style list and before the prose. Never above the
+          generator and never inside a <ul className="rows"> copy list. */}
+      <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} />
 
       <section className="prose" aria-labelledby="field-limits">
         <h2 id="field-limits">Where this text works</h2>

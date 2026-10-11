@@ -51,9 +51,12 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
 
   return (
     <aside className="ad-slot" aria-label={label}>
+      {/* Visible, not screen-reader only: Google requires ads to be labelled and
+          distinguishable from the surrounding site. aria-hidden because the
+          <aside> already carries the label for assistive tech. */}
+      <span className="ad-label" aria-hidden="true">{label}</span>
       <ins
         className="adsbygoogle"
-        style={{ display: 'block' }}
         data-ad-client={client}
         data-ad-slot={slot}
         data-ad-format={format}
