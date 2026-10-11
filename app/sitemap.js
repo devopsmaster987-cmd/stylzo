@@ -3,8 +3,6 @@ import { env } from '@/config/environment.js';
 import { catalog } from '@/services/catalog.js';
 import { boardSlugs } from '@/lib/keyword-board.js';
 
-const SITE_URL = 'https://stylzo.vercel.app';
-
 // Only active, indexable pages. Composed combinations stay out of the sitemap.
 export default function sitemap() {
   const landingPaths = boardSlugs().map((key) => `/styles/${key}`);
@@ -29,7 +27,7 @@ export default function sitemap() {
   ];
 
   return paths.map((path) => ({
-    url: `${SITE_URL}${path}`,
+    url: `${env.siteUrl}${path}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
   }));

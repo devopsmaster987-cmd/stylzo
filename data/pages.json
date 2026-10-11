@@ -29,6 +29,9 @@
   "contact": {
     "title": "Contact",
     "description": "How to reach the team behind this site.",
-    "body": []
+    "body": [
+      "Questions, bug reports, feature requests or partnership enquiries are all welcome. The quickest way to reach us is by email.",
+      "When reporting a problem, include the style name, the app or site where the text did not display correctly, and your device if you know it. That makes the issue much faster to diagnose."
+    ]
   }
 }

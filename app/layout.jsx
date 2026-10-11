@@ -1,13 +1,12 @@
 
 import { site } from '@/config/site.js';
+import { env } from '@/config/environment.js';
 import { BrandLink, SiteNav, MobileNav } from '@/components/site-header.jsx';
 import { SiteFooter } from '@/components/site-footer.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
 export const metadata = {
-  metadataBase: new URL(
-    process.env.SITE_URL || 'https://stylzo.vercel.app'
-  ),
+  metadataBase: new URL(env.siteUrl),
   title: {
     default: site.name + ': ' + site.tagline,
     template: '%s | ' + site.name,

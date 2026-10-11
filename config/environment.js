@@ -17,13 +17,13 @@ export const env = {
 
   // Website URL for production and sitemap generation.
   siteUrl: (
-    process.env.SITE_URL || 'https://stylzo.vercel.app'
+    process.env.SITE_URL || 'https://www.abdulsamad.shop'
   ).replace(/\/$/, ''),
 
   maxInputLength: num(process.env.MAX_INPUT_LENGTH, 5000),
   ssrTextLimit: 300, // Longer input is handled live in the browser.
   rateLimitPerMinute: num(process.env.RATE_LIMIT_PER_MINUTE, 60),
-  contactEmail: process.env.CONTACT_EMAIL || '',
+  contactEmail: process.env.CONTACT_EMAIL || 'mastersamaddevops@gmail.com',
 
   // M6 - Firebase configuration.
   firebase: {
