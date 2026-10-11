@@ -5,7 +5,7 @@ import {
 } from '@/components/landing-page.jsx';
 import { keywordBoard, boardEntry } from '@/lib/keyword-board.js';
 import {
-  renderKeywordPage, generateKeywordMetadata, BOARD_SIZE, generateStaticParams,
+  renderKeywordPage, generateKeywordMetadata, generateStaticParams,
 } from '@/components/keyword-board-page.jsx';
 
 export { generateStaticParams };
@@ -28,5 +28,3 @@ export default async function StylePage({ params, searchParams }) {
   if (!page) notFound();
   return page;
 }
-
-export { BOARD_SIZE };

@@ -1,5 +1,7 @@
 import { site } from '@/config/site.js';
+import { env, adsenseConfigured } from '@/config/environment.js';
 import { catalog } from '@/services/catalog.js';
+import { ConsentControl } from '@/components/consent-control.jsx';
 import { LANDING_PAGES } from '@/lib/landing-pages.js';
 import { wordmark } from './site-header.jsx';
 
@@ -59,7 +61,19 @@ export function SiteFooter() {
 
       <div className="wrap foot-base">
         <p>© {new Date().getFullYear()} {site.name}. Made for copy and paste.</p>
-        <p className="muted">{totalStyles} styles · no tracking cookies</p>
+        <p className="muted">
+          {totalStyles} styles · your text never leaves your browser
+          {/* "no tracking cookies" is only true while ads are off. Advertising
+              cookies are real once AdSense is configured, so the claim has to
+              change with the configuration rather than quietly become false. */}
+          {adsenseConfigured ? (
+            <>
+              {' · '}
+              <a href="/privacy">cookie policy</a>
+              <ConsentControl client={env.adsense.client} />
+            </>
+          ) : null}
+        </p>
       </div>
     </footer>
   );

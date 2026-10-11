@@ -5,10 +5,15 @@ import { Scripts } from '@/components/scripts.jsx';
 
 function studioMeta() {
   return pageMeta({
-    title: 'Font Studio',
-    description: 'Design a styled text image in your browser: pick a style, colours, spacing and background, then export a PNG or copy the text.',
+    title: 'Fancy Text Image Generator — Make a PNG in Your Browser',
+    description: 'Turn styled text into a 1200x630 image. Pick a Unicode style, colours and background, then download a watermark-free PNG drawn entirely in your browser.',
     path: '/studio',
-    noindex: true,
+    // This page was noindex while being linked from the main nav, the footer and
+    // the home page, which spent three of the site's strongest internal links on
+    // a page that could not rank. With the explainer below it has real content
+    // to index, so the link is worth keeping.
+    noindex: false,
+    app: true,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Studio', path: '/studio' }],
   });
 }
@@ -128,6 +133,66 @@ export default function StudioPage() {
           <p className="studio-note">Everything runs on this device. Downloaded PNGs are yours — no watermark, no upload.</p>
         </div>
       </div>
+
+      <section className="prose" aria-labelledby="studio-about">
+        <h2 id="studio-about">What the font studio does</h2>
+        <p>
+          The generator on the home page turns your text into Unicode characters, which means
+          it can be pasted into any app that accepts plain text. The studio solves the other
+          half of the problem: turning styled text into an actual image. Choose a style, a
+          foreground colour and a background, set the letter spacing, and the preview above
+          redraws as you type.
+        </p>
+        <p>
+          The result is a 1200 by 630 PNG, the size most social platforms crop to, generated
+          on your own device by a canvas the browser draws directly. Nothing is uploaded and
+          nothing is watermarked, so the image is yours to use wherever you need it.
+        </p>
+
+        <h3>How to make a text image</h3>
+        <ol className="how-steps">
+          <li>
+            <h3>Type your text</h3>
+            <p>Up to 120 characters. Shorter phrases read better at image sizes.</p>
+          </li>
+          <li>
+            <h3>Pick a style</h3>
+            <p>
+              Search the style list or browse it. Each style shows the same support warning
+              the generator uses, so you can tell in advance whether it will survive being
+              pasted elsewhere.
+            </p>
+          </li>
+          <li>
+            <h3>Set the colours</h3>
+            <p>
+              Pick a text colour and a background. The background options include gradients
+              rather than flat fills, which usually separates better from a busy feed.
+            </p>
+          </li>
+          <li>
+            <h3>Download the PNG</h3>
+            <p>
+              The image is drawn locally, so the download is immediate. If you only want the
+              characters rather than the picture, use the copy button instead.
+            </p>
+          </li>
+        </ol>
+
+        <h3>When to use an image instead of styled text</h3>
+        <p>
+          Styled text is the better choice when the destination accepts plain text, because it
+          stays editable and searchable. An image is better when the destination flattens or
+          strips unusual characters, which is common in image-based messaging, some profile
+          fields and most comment sections.
+        </p>
+        <p>
+          If you need the characters themselves, start with the{' '}
+          <a href="/">main text generator</a>, browse the <a href="/fonts">full list of font
+          styles</a>, or try a <a href="/styles/fancy-text-generator">ready-made keyword
+          board</a>.
+        </p>
+      </section>
     </>
   );
 }

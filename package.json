@@ -8,13 +8,16 @@
   },
   "scripts": {
     "dev": "npm run sync:engine && npm run build:catalog && npm run build:keywords && next dev",
-    "build": "npm run sync:engine && npm run build:catalog && npm run build:keywords && next build",
+    "build": "npm run sync:engine && npm run build:catalog && npm run build:keywords && npm run build:ads && npm run build:llms && next build",
     "start": "next start",
     "sync:engine": "node scripts/sync-engine.js",
     "build:catalog": "node scripts/build-catalog.js",
     "build:keywords": "node scripts/build-keyword-map.js",
     "build:fonts": "node scripts/build-fonts.js",
     "build:emoji": "node scripts/build-emoji.js",
+    "build:icons": "node scripts/build-icons.js",
+    "build:ads": "node scripts/build-ads-txt.js",
+    "build:llms": "node scripts/build-llms-txt.js",
     "test": "npm run build && node --test --test-concurrency=1 \"tests/**/*.test.js\""
   },
   "dependencies": {

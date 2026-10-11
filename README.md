@@ -78,12 +78,17 @@ homepage), so request cost is dominated by the React render, not by the catalog.
   `ADMIN_KEY` the dashboard stays closed.
 - The 100 curated styles are indexable and in the sitemap. Composed combinations stay `noindex`
   and canonicalise to their parent.
+- `/fancy-text-generator` is a 308 to `/`; uppercase `/fonts/Bold` and `/styles/Instagram`
+  normalise to their lowercase routes.
+- Titles are budgeted to roughly 60 characters and descriptions to roughly 160, because
+  anything longer is truncated in the results.
+- `/studio` is indexable: it carries its own explainer rather than being an app shell.
 
 ## Routes
 
-`/`, `/fancy-text-generator` (`?category=`, `?text=`), `/fonts`, `/fonts/[slug]`,
-`/styles/[key]` (`/styles` itself redirects to `/`), `/symbols`, `/emoji`, `/kaomoji`, `/tools`,
-`/studio`, `/admin`, `/admin/seo`,
+`/`, `/fancy-text-generator` (308 to `/`), `/fonts` (`?q=`), `/fonts/[slug]`,
+`/styles` (the keyword board) and `/styles/[key]`, `/symbols`, `/emoji`, `/kaomoji`, `/tools`,
+`/studio`, `/admin` (`noindex`), `/admin/seo` (`noindex`),
 `/about`, `/privacy`, `/terms`, `/contact`, `/robots.txt`, `/sitemap.xml`, plus `GET /api/styles`,
 `/api/search`, `/api/ai/suggest`, `/api/health`, `/api/config`, `/api/beat`,
 `POST /api/generate`.

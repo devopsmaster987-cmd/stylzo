@@ -1,37 +1,203 @@
 {
   "about": {
     "title": "About",
-    "description": "What this tool does, how the text styles work, and what we do and do not collect.",
+    "description": "What Stylzo does, how Unicode text styles actually work, why some apps render them as empty boxes, and what the site stores about you.",
     "body": [
       "This site turns ordinary text into styled text. It does not use a special font. Each style swaps letters for look-alike characters that already exist in Unicode, such as Mathematical Bold or Fraktur, so the result can be pasted into places that only accept plain text.",
       "Some styles add combining marks (for underline or strikethrough) or wrap your text in symbols. All of this happens with a small script that runs in your browser, so typing is instant and your text stays on your device.",
       "Because these are characters rather than fonts, support depends on the app and the device. If you see empty boxes, that app's font has no glyph for the character. Each style page says how widely it is supported."
+    ],
+    "sections": [
+      {
+        "heading": "How the styling works",
+        "body": [
+          "A font changes the shape of ordinary letters without changing the letters themselves, so the text stays readable and searchable but only renders correctly if the font is installed on the device doing the reading.",
+          "This site does something different. It replaces each character with a different character from the Unicode standard that happens to look like the one you wanted, such as U+1D400 for a bold capital A or the Fraktur letters used for Old English style. The result is ordinary text made of unusual characters.",
+          "That difference is what makes the output portable. It can be pasted into a chat, a bio field or a comment box with nothing installed on either side, because the characters travel with the text rather than depending on a typeface being present."
+        ]
+      },
+      {
+        "heading": "Why some apps show boxes",
+        "body": [
+          "Not every device has a font covering every Unicode block. The mathematical alphanumeric symbols, the combining marks and the newer emoji ranges were all added to the standard over time, and older systems ship without them.",
+          "When a character is missing, the app has to substitute something. Most draw an empty box, some fall back to a different character, and a few quietly drop it. None of these mean the style is broken: the text is correct, the receiving app simply cannot draw it.",
+          "This is why every style page here states a support level. Styles built from common ranges such as the mathematical alphabets work almost everywhere. Styles relying on combining marks or rarely used blocks are more likely to break somewhere."
+        ]
+      },
+      {
+        "heading": "What is on the site",
+        "body": [
+          "The text generator holds more than 5,600 generated styles across eighteen categories, a hundred of which have their own page explaining what the style is, what it looks like and which apps it works in.",
+          "The keyword board turns common searches such as a language or a platform into ready-made pages, so you can see a batch of styled words without typing anything first.",
+          "There are three copyable libraries for symbols, emoji and kaomoji, a set of browser-based text tools for counting, converting and cleaning text, and a font studio that renders styled text to a PNG image."
+        ]
+      },
+      {
+        "heading": "How it is built",
+        "body": [
+          "The whole site runs from a small server that sends the same page to everyone. There is no account system, no database of users and no upload step: the styling runs in your browser, so what you type never reaches our server.",
+          "The style catalogue is generated from the Unicode tables and stored as a compact index that the site reads once at startup. That is why the generator responds instantly no matter how many styles are available."
+        ]
+      }
     ]
   },
   "privacy": {
     "title": "Privacy",
-    "description": "What data this site handles. Your typed text is not sent anywhere.",
+    "description": "What data this site handles, what advertising cookies do, and how to change your choice. Your typed text is never sent to our server.",
     "body": [
-      "The text you type into the generator is processed in your browser. It is not sent to our server and is not stored.",
-      "The site remembers one setting, your light or dark theme choice, in your browser's local storage. Nothing else is saved on your device right now.",
-      "When features that need sharing are added, this page will be updated before they go live. Sharing a result will always be an explicit action that you start."
+      "This page explains what Stylzo does with information. It is written in plain language so you can check it rather than take it on trust."
+    ],
+    "sections": [
+      {
+        "heading": "The text you type",
+        "body": [
+          "Everything you type into the generator, the tools, the libraries and the keyword boards is transformed in your browser by a script that runs on your own device. Your text is not sent to our servers, not stored, and not read by us.",
+          "If you use the share button to send a result somewhere, that action goes directly from your browser to the app you chose, and that app's own privacy rules then apply."
+        ]
+      },
+      {
+        "heading": "Advertising and cookies",
+        "body": [
+          "This site is supported by advertising. If you accept advertising cookies, Google AdSense and its partners may set cookies or read existing ones to serve ads and to measure how they perform.",
+          "If you decline, no advertising script is loaded at all, so no advertising cookies are set and no ads are shown. You can change your decision at any time using the link in the footer.",
+          "Visitors in the European Economic Area, the United Kingdom and Switzerland are asked for consent before any advertising script loads. Advertising is not loaded for anyone until that answer is recorded as accepted.",
+          "Google's use of advertising cookies enables it and its partners to serve ads based on your visits to this and other sites. You can opt out of personalised advertising at Google's Ad Settings, or opt out of third-party cookie use for personalised advertising at aboutads.info."
+        ],
+        "links": [
+          { "href": "https://policies.google.com/technologies/ads", "label": "Google's advertising policies", "external": true },
+          { "href": "https://www.google.com/settings/ads", "label": "Change your Google ad settings", "external": true },
+          { "href": "https://optout.aboutads.info/", "label": "Opt out of third-party vendor cookies", "external": true },
+          { "href": "https://www.youronlinechoices.com/", "label": "Opt out of a European advertising consortium", "external": true }
+        ]
+      },
+      {
+        "heading": "Analytics",
+        "body": [
+          "We count page views with a small, cookieless beacon of our own. It sends only the page path and the name of an action, such as a copy. It sends no advertising identifiers and sets no cookies.",
+          "A single flag is kept in your browser's session storage so that one visit is counted once rather than on every page you open."
+        ]
+      },
+      {
+        "heading": "What is stored on your device",
+        "body": [
+          "Anything the site saves stays in your own browser and is never transmitted to us. You can clear all of it at any time with your browser's clear-site-data control.",
+          "Your advertising choice, accepted or declined. Stored in local storage so you are not asked again.",
+          "A list of styles you have favourited and a short list of the styles you used most recently. Stored in local storage and never sent anywhere.",
+          "The single session flag described above, stored in session storage and cleared when you close the tab."
+        ]
+      },
+      {
+        "heading": "What we do not do",
+        "body": [
+          "We do not operate accounts, so we do not ask for your name, an email address or any other identity unless you choose to email us.",
+          "We do not sell, rent or trade personal information. We do not build advertising profiles from your typed text."
+        ]
+      },
+      {
+        "heading": "Children",
+        "body": [
+          "This site is not directed at children under 13, and we do not knowingly collect personal information from them."
+        ]
+      },
+      {
+        "heading": "Contact and changes",
+        "body": [
+          "If you have a question about this policy, or want to ask us to delete something, use the contact page.",
+          "When we change what this site collects, this page is updated before the change goes live."
+        ],
+        "links": [
+          { "href": "/contact", "label": "Contact Stylzo", "external": false }
+        ]
+      }
     ]
   },
   "terms": {
     "title": "Terms of use",
-    "description": "Plain-language terms for using this site.",
+    "description": "The rules for using Stylzo: what you can do with the generated text, what we ask you not to do with it, and the limits of a Unicode text tool.",
     "body": [
-      "You may use the tools on this site for personal or commercial purposes. The generated text is yours.",
-      "Please do not use styled, invisible or glitch text to impersonate others, evade moderation or harass people.",
-      "The site is provided as is. Styled text may display differently, or not at all, in apps we do not control."
+      "By using this site you agree to the terms below. They are deliberately short and written in plain language, because a term nobody can read protects nobody.",
+      "Nothing here is legal advice, and nothing here is a substitute for your own judgement about where you work and what your audience expects."
+    ],
+    "sections": [
+      {
+        "heading": "What you can do with the output",
+        "body": [
+          "The text and images this site produces are yours. Use them for personal or commercial purposes, published or unpublished, without attribution and without permission.",
+          "The output is built from characters in the Unicode standard rather than from a licensed typeface. There is no font licence attached to what you generate and no royalty owed on it.",
+          "Where a style depends on a particular typeface's design, such as Old English and other blackletter styles, the result is a Unicode character that resembles that typeface. It is not a copy of the typeface itself, which is why it carries no licence terms."
+        ]
+      },
+      {
+        "heading": "What we ask you not to do",
+        "body": [
+          "Do not use styled, invisible or obfuscated text to impersonate another person or organisation. If someone cannot tell who is really writing, that is deception, whatever the intention behind it.",
+          "Do not use these tools to evade moderation, filters or bans on a platform. Filters exist for reasons, and routing around them puts you outside the rules of every service here.",
+          "Do not use them to harass, threaten or target anyone. This includes baiting, pile-on campaigns and hiding abusive text behind characters a human cannot read.",
+          "Do not use them for fraud or phishing: fake account names, spoofed customer support messages, or links disguised as something they are not.",
+          "Do not present generated images as photographs or as the work of a person other than yourself."
+        ]
+      },
+      {
+        "heading": "What this site does not promise",
+        "body": [
+          "The site is provided as is. We do not guarantee it will be available, uninterrupted or free of defects, and we may change or remove features without notice.",
+          "Styled text may render differently, or not at all, in applications we do not control and cannot test against. If a style matters to you, check it in the app you intend to use before relying on it.",
+          "We do not guarantee that a given style will be accepted by any particular platform. Platforms change their filters and their rendering without warning."
+        ]
+      },
+      {
+        "heading": "Your content and your privacy",
+        "body": [
+          "The text you type is processed in your browser and is not sent to us or stored. We cannot see it, so we cannot disclose it, and we cannot restore it if you lose it.",
+          "The only information about you this site holds is the anonymous page view counts described on the privacy page. There is no account, no profile and no way for us to identify you.",
+          "Clear your browser's storage for this site at any time to remove your saved styles and cookie choice."
+        ]
+      },
+      {
+        "heading": "Changes to these terms",
+        "body": [
+          "If these terms change, this page is updated before the change takes effect. The version that applied is the one published here at the time you used the site."
+        ]
+      }
     ]
   },
   "contact": {
     "title": "Contact",
-    "description": "How to reach the team behind this site.",
+    "description": "How to reach the team behind Stylzo, how to report a broken style or an incorrect result, and what happens to a message you send us.",
     "body": [
-      "Questions, bug reports, feature requests or partnership enquiries are all welcome. The quickest way to reach us is by email.",
-      "When reporting a problem, include the style name, the app or site where the text did not display correctly, and your device if you know it. That makes the issue much faster to diagnose."
+      "Questions, bug reports, feature requests or partnership enquiries are all welcome. The quickest way to reach us is by email, and the address is on this page.",
+      "We read every message. We cannot always reply to each one, but a report that includes enough detail to reproduce usually gets a response, and it always makes the site better for the next person."
+    ],
+    "sections": [
+      {
+        "heading": "Reporting a broken style",
+        "body": [
+          "Support problems are almost always about a specific character missing from a specific app, so three details let us fix it in minutes instead of guessing:",
+          "The style name, and what you typed. The app or website where it did not display correctly. Your device and operating system, if you know it.",
+          "If you can, say whether the same text worked in another app. That single fact usually identifies the cause immediately, because it separates a broken style from an app that cannot draw it."
+        ]
+      },
+      {
+        "heading": "Suggesting a feature",
+        "body": [
+          "Tell us what you were trying to do and what stopped you. The most useful feature requests describe a situation rather than a solution, because the situation often has a better answer than the one first imagined.",
+          "If a style is missing that you want, name the text you typed and what you expected instead. Several of the styles on the site came from exactly that kind of message."
+        ]
+      },
+      {
+        "heading": "Business and press",
+        "body": [
+          "For advertising, licensing, partnerships or press, use the same address with the subject line you need. There is no separate form to fill in and no sales funnel here: you will reach the people who run the site.",
+          "We are happy to talk about a written permission for a screenshot of the tool, and about sponsored placements, provided the placement is labelled and does not change how the tools behave."
+        ]
+      },
+      {
+        "heading": "What happens to your message",
+        "body": [
+          "Your message is used to answer your question and, where it describes a fault, to fix it. It is not sold, shared or added to a mailing list, and we do not have a mailing list to add you to.",
+          "Because there is no account system, nothing you send is linked to anything else we hold. If you would like a reply, leave a way to reach you back and we will use it for that reply only."
+        ]
+      }
     ]
   }
 }

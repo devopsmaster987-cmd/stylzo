@@ -564,6 +564,15 @@ pre code { display: block; padding: .8rem; overflow: auto; }
   transition: width .5s cubic-bezier(.22,.68,.32,1);
 }
 
+/* Prev/next between keyword pages */
+.kw-pager {
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.kw-pager a { flex: 1 1 12rem; padding: .7rem .9rem; border: 1px solid var(--line); border-radius: var(--radius); }
+.kw-pager a:last-child { text-align: right; }
+.kw-pager a:hover { border-color: var(--grad); }
+
 /* Sticky keyword list */
 .kw-boards { overflow-y: auto; overscroll-behavior: contain; padding: .65rem; flex: 1; min-height: 0; }
 .kw-boards h2 {
@@ -751,9 +760,67 @@ pre code { display: block; padding: .8rem; overflow: auto; }
   }
 }
 
+/* Style page examples ------------------------------------------------------- */
+/* Real rendered output, with the typed input shown underneath so a reader can
+   see exactly how the characters were produced. */
+.style-examples { margin: 2rem 0; }
+.style-examples h2 { margin-bottom: .3rem; }
+.example-list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .75rem; }
+.example-list li {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .8rem 1rem; background: var(--surface);
+}
+.example-label {
+  display: block; font: 600 .72rem var(--body); text-transform: uppercase;
+  letter-spacing: .08em; color: var(--muted); margin-bottom: .35rem;
+}
+.example-out {
+  margin: 0 0 .35rem; font-size: 1.1rem; line-height: 1.4;
+  word-break: break-word;
+}
+/* The typed source, so the transformation is legible rather than magic. */
+.example-plain { font-size: .78rem; color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+/* Answer-first blocks -------------------------------------------------------- */
+/* Used to answer the page's core question in one or two sentences before the
+   longer prose, both for readers who scan and for AI engines that need a
+   self-contained passage to quote. Deliberately understated: it must not read
+   as an ad or an interstitial. */
+.quick-answer {
+  margin: 2rem 0; padding: 1.1rem 1.25rem;
+  border: 1px solid var(--line); border-left: 3px solid var(--grad);
+  border-radius: var(--radius); background: var(--surface-2);
+}
+.quick-answer h2 { margin: 0 0 .5rem; font-size: 1.05rem; line-height: 1.35; }
+.quick-answer p { margin: 0; }
+
 /* Reduced motion: reveal.js already skips the animation, this stops the
    transition from running if the class is applied another way. */
 @media (prefers-reduced-motion: reduce) {
   .reveal-armed { transition: none; }
   [data-reveal="pending"] { opacity: 1; transform: none; }
+}
+
+/* Advertising ----------------------------------------------------------- */
+/* Ad units collapse to nothing when ads are unconfigured, so an unconfigured
+   build never shows an ad-shaped gap. min-height reserves no space until the
+   creative actually loads, which avoids a layout shift on slow connections. */
+.ad-slot { display: block; margin: 2rem 0; min-height: 0; }
+.ad-slot:empty { display: none; }
+
+/* Consent banner: fixed so it cannot shift the page, and high in the stacking
+   order so a later ad refresh cannot cover it. */
+.consent {
+  position: fixed; inset: auto 0 0 0; z-index: 60;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: .75rem 1.25rem; padding: .9rem 1.25rem calc(.9rem + env(safe-area-inset-bottom));
+  background: var(--surface); border-top: 1px solid var(--line);
+  box-shadow: 0 -4px 20px rgb(0 0 0 / .12);
+}
+.consent-text { margin: 0; font-size: .9rem; max-width: 56ch; }
+.consent-text a { text-decoration: underline; }
+.consent-actions { display: flex; gap: .6rem; }
+.linkish {
+  background: none; border: 0; padding: 0; font: inherit; color: inherit;
+  text-decoration: underline; cursor: pointer;
 }

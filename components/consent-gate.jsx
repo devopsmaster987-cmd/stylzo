@@ -1,0 +1,56 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { readConsent, writeConsent, syncAds } from '@/lib/consent.js';
+
+/**
+ * Consent banner plus the ad loader.
+ *
+ * Two jobs, deliberately in one component so there is a single owner of the
+ * "have we got permission yet" question:
+ *   1. ask, and remember the answer;
+ *   2. inject the AdSense tag only after a "yes".
+ *
+ * With no client id configured this renders nothing at all, so an unconfigured
+ * build stays exactly as it is today.
+ */
+export function ConsentGate({ client }) {
+  const [choice, setChoice] = useState(null);
+
+  useEffect(() => {
+    if (!client) return undefined;
+    setChoice(readConsent());
+    syncAds(client);
+
+    const onChange = (e) => {
+      setChoice(e.detail);
+      syncAds(client);
+    };
+    window.addEventListener('stylzo:consent', onChange);
+    return () => window.removeEventListener('stylzo:consent', onChange);
+  }, [client]);
+
+  if (!client || choice) return null;
+
+  const answer = (value) => {
+    writeConsent(value);
+    syncAds(client);
+    setChoice(value);
+  };
+
+  return (
+    <div className="consent" role="dialog" aria-label="Cookie choices" aria-live="polite">
+      <p className="consent-text">
+        We use cookies to show ads and keep the site working. You can accept or decline.
+        See our <a href="/privacy">privacy policy</a>.
+      </p>
+      <div className="consent-actions">
+        <button type="button" className="btn" data-consent="granted" onClick={() => answer('granted')}>
+          Accept
+        </button>
+        <button type="button" className="btn ghost" data-consent="denied" onClick={() => answer('denied')}>
+          Decline
+        </button>
+      </div>
+    </div>
+  );
+}

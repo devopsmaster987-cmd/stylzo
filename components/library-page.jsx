@@ -1,5 +1,7 @@
 import { library } from '@/services/catalog.js';
 import { LIB_META, pageMeta, toMetadata } from '@/lib/pages.js';
+import { abs, safeJson } from '@/services/seo.js';
+import { LIBRARY_QA, WHY_BOXES } from '@/lib/aeo.js';
 import { JsonLd } from './json-ld.jsx';
 import { Scripts } from './scripts.jsx';
 
@@ -26,12 +28,60 @@ export function libraryGroups(key) {
 }
 
 export async function generateLibraryMetadata(key) {
+  return toMetadata(libraryMetadata(key));
+}
+
+/**
+ * The library page schema, including a CollectionPage and one ItemList per
+ * category. These pages list hundreds or thousands of copyable characters, so
+ * describing them as a collection lets search engines understand what the page
+ * actually holds rather than seeing one undifferentiated list of buttons.
+ */
+export function libraryMetadata(key) {
   const meta = LIB_META[key];
-  return toMetadata(pageMeta({
+  const { groups, total } = libraryGroups(key);
+  const path = `/${key}`;
+  const faq = LIBRARY_QA[key] || [];
+
+  // Built through pageMeta first, so this keeps the full buildMeta shape that
+  // toMetadata() consumes (canonical, robots, og, twitter) rather than the raw
+  // LIB_META entry.
+  const built = pageMeta({
     ...meta,
-    path: `/${key}`,
-    breadcrumbs: [{ name: 'Home', path: '/' }, { name: meta.title, path: `/${key}` }],
+    path,
+    breadcrumbs: [{ name: 'Home', path: '/' }, { name: meta.title, path }],
+    faq,
+  });
+
+  const collection = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${abs(path)}#collection`,
+    name: meta.title,
+    description: meta.description,
+    url: abs(path),
+    isPartOf: { '@id': `${abs('/')}#website` },
+    numberOfItems: total,
+  };
+
+  // One list per category rather than a single thousand-item list: a carousel
+  // that long is truncated by Google, and per-category lists describe what each
+  // section of the page really contains.
+  const lists = groups.map((g) => ({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${abs(`${path}#${g.key}`)}`,
+    name: g.name,
+    numberOfItems: g.count,
+    itemListElement: g.items.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: it.name,
+      url: abs(`${path}#${g.key}`),
+    })),
   }));
+
+  return { ...built, jsonLd: [...built.jsonLd, safeJson(collection), ...lists.map(safeJson)] };
 }
 
 export function LibraryPage({ libraryKey }) {
@@ -41,11 +91,7 @@ export function LibraryPage({ libraryKey }) {
 
   return (
     <>
-      <JsonLd items={pageMeta({
-        ...meta,
-        path: `/${key}`,
-        breadcrumbs: [{ name: 'Home', path: '/' }, { name: meta.title, path: `/${key}` }],
-      }).jsonLd} />
+      <JsonLd items={libraryMetadata(key).jsonLd} />
       <Scripts pageKey={key} scripts={['/js/library.js']} />
 
       <nav className="crumbs" aria-label="Breadcrumb">
@@ -65,6 +111,25 @@ export function LibraryPage({ libraryKey }) {
           />
         </div>
       </section>
+
+      {/* The single most common question about any copied character library,
+          answered before the long list. */}
+      <section className="quick-answer" aria-labelledby="quick-answer-heading">
+        <h2 id="quick-answer-heading">Why do copied items sometimes appear as empty boxes?</h2>
+        <p>{WHY_BOXES}</p>
+      </section>
+
+      {(LIBRARY_QA[key] || []).length ? (
+        <section aria-labelledby="faq-heading">
+          <h2 id="faq-heading">Common questions</h2>
+          {(LIBRARY_QA[key] || []).map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
+        </section>
+      ) : null}
 
       <nav className="chips" aria-label="Jump to category">
         <a href="#top" data-lib-all>All ({total})</a>

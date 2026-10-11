@@ -49,9 +49,29 @@ const stages = {
     const rng = seededRng(s.seed ?? 'flair');
     const parts = text.split(/(\s+)/u);
     let out = '';
+    let placed = 0;
     for (const part of parts) {
       out += part;
-      if (part && !SPACE_RE.test(part) && rng() < ratio) out += symbols[Math.floor(rng() * symbols.length)];
+      if (part && !SPACE_RE.test(part) && rng() < ratio) {
+        out += symbols[Math.floor(rng() * symbols.length)];
+        placed += 1;
+      }
+    }
+    // The RNG is seeded per style, so for a given style it replays the same
+    // sequence on every call. With some seeds the first several draws all land
+    // above the density, and a short name or a single word then came back with
+    // no symbol at all — the style silently did nothing. If the density asked
+    // for decoration and none was placed, force one on the first word so the
+    // result always matches what the style promises.
+    if (!placed) {
+      const firstWord = parts.findIndex((part) => part && !SPACE_RE.test(part));
+      if (firstWord === -1) return text;
+      let at = 0;
+      for (let i = 0; i < firstWord; i += 1) at += parts[i].length;
+      const word = parts[firstWord];
+      return out.slice(0, at + word.length)
+        + symbols[Math.floor(rng() * symbols.length)]
+        + out.slice(at + word.length);
     }
     return out;
   },

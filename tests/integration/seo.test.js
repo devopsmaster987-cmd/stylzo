@@ -159,9 +159,9 @@ describe('sitemap', () => {
     assert.ok(sm.includes('/fonts/bold</loc>'));
   });
 
-  test('never lists admin, studio or the dashboard', async () => {
+  test('never lists admin or the dashboard', async () => {
     const sm = await (await get(server.base, '/sitemap.xml')).text();
-    for (const p of ['/studio', '/admin', '/admin/seo']) {
+    for (const p of ['/admin', '/admin/seo']) {
       assert.ok(!sm.includes(`${p}</loc>`), `sitemap must not list ${p}`);
     }
   });

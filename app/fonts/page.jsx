@@ -1,25 +1,45 @@
 import { catalog, listStyles } from '@/services/catalog.js';
+import { env, adsenseConfigured } from '@/config/environment.js';
 import { pageMeta, toMetadata, renderCards } from '@/lib/pages.js';
+import { itemListLd, safeJson } from '@/services/seo.js';
 import { StyleRow } from '@/components/style-row.jsx';
+import { AdUnit } from '@/components/ad-unit.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
-function fontsMeta() {
+function fontsMeta({ noindex = false } = {}) {
   return pageMeta({
     title: 'Fancy Font Styles',
     description: 'Browse every text style by category, see how well each one is supported, and open a style page to generate with it.',
     path: '/fonts',
+    canonicalPath: '/fonts',
+    noindex,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Font styles', path: '/fonts' }],
   });
 }
 
-export function generateMetadata() {
-  return toMetadata(fontsMeta());
+export async function generateMetadata({ searchParams }) {
+  const sp = (await searchParams) || {};
+  const query = (typeof sp.q === 'string' ? sp.q : '').trim();
+  // A filtered view is the same page with a subset of the same list, so it
+  // canonicalises to /fonts and must not be indexed separately.
+  return toMetadata(fontsMeta({ noindex: Boolean(query) }));
 }
 
-export default function FontsIndexPage() {
+export default async function FontsIndexPage({ searchParams }) {
   const { categories, counts, sample } = catalog();
   const meta = fontsMeta();
+  const sp = (await searchParams) || {};
+
+  // ?q= filters the server-rendered list, so a search result is a real URL with
+  // real content rather than something that only exists after JavaScript runs.
+  // That is what makes a SearchAction sitelink honest if it is ever declared.
+  const query = (typeof sp.q === 'string' ? sp.q : '').trim().toLowerCase().slice(0, 60);
+  const searching = query.length > 0;
+
+  const matches = (s) => !searching
+    || s.name.toLowerCase().includes(query)
+    || (s.category || '').toLowerCase().includes(query);
 
   const groups = Object.entries(categories)
     .map(([key, c]) => ({
@@ -27,13 +47,23 @@ export default function FontsIndexPage() {
       name: c.name,
       intro: c.intro,
       count: counts[key] || 0,
-      styles: renderCards(listStyles({ category: key }).filter((s) => s.indexable), sample),
+      styles: renderCards(listStyles({ category: key }).filter((s) => s.indexable && matches(s)), sample),
     }))
-    .filter((g) => g.styles.length);
+    // A search legitimately narrows the list; the unfiltered view must not.
+    .filter((g) => g.styles.length || !searching);
+
+  // One ItemList per category rather than a single 100-item list: a carousel
+  // that long is truncated by Google anyway, and per-category lists describe
+  // what each section of the page actually contains.
+  const itemLd = groups.map((g) => safeJson(
+    itemListLd(g.name, g.styles.map((s) => ({ name: s.name, path: `/fonts/${s.slug}` }))),
+  ));
+
+  const found = groups.reduce((n, g) => n + g.styles.length, 0);
 
   return (
     <>
-      <JsonLd items={meta.jsonLd} />
+      <JsonLd items={[...meta.jsonLd, ...itemLd]} />
       <Scripts pageKey="fonts" />
 
       <nav className="crumbs" aria-label="Breadcrumb">
@@ -42,9 +72,28 @@ export default function FontsIndexPage() {
 
       <section className="hero">
         <h1>Fancy font styles</h1>
+        <div className="search">
+          <label className="skip" htmlFor="fonts-q">Search font styles</label>
+          <form method="get" action="/fonts" role="search">
+            <input
+              id="fonts-q"
+              name="q"
+              type="search"
+              defaultValue={typeof sp.q === 'string' ? sp.q : ''}
+              placeholder="Search — try gothic, bubble, glitch, mono"
+              autoComplete="off"
+            />
+          </form>
+        </div>
+        {searching ? (
+          <p className="muted" data-fonts-count>
+            {found} style{found === 1 ? '' : 's'} matching “{sp.q}”.{' '}
+            <a href="/fonts">Show all styles</a>
+          </p>
+        ) : null}
       </section>
 
-      {groups.map((g) => (
+      {groups.map((g, i) => (
         <section key={g.key} aria-labelledby={`cat-${g.key}`}>
           <h2 id={`cat-${g.key}`}>{g.name}</h2>
           <p className="muted">{g.intro}</p>
@@ -54,6 +103,10 @@ export default function FontsIndexPage() {
           <p className="more">
             <a href={`/?category=${g.key}`}>All {g.count} {g.name.toLowerCase()} variations</a>
           </p>
+          {/* One ad partway down a long list, not between every category. */}
+          {i === 2 ? (
+            <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} />
+          ) : null}
         </section>
       ))}
     </>

@@ -1,0 +1,44 @@
+# Stylzo
+
+> Type once, get 5,600+ styles you can paste anywhere. Turn plain text into bold, cursive, gothic, bubble, glitch and hundreds of other styles. Plus symbols, emoji, kaomoji and text tools. Free, no sign-up, everything runs in your browser.
+
+Stylzo is a free text generator. It converts plain text into styled text by
+swapping each letter for a look-alike Unicode character rather than using a font,
+so the result can be pasted into any app that accepts plain text. 5616
+styles are available in total, 100 of which have their own page.
+
+Typing example: "Stylzo".
+
+## What it does well
+- Text to fancy, cursive, gothic, bold, bubble, glitch and symbol styles.
+- Symbols, emoji and kaomoji libraries with one-tap copy.
+- Browser text tools: word counter, case converter, reverse, slug, find and replace.
+- A font studio that renders styled text to a 1200x630 PNG in the browser.
+
+## Important limits
+- Output is Unicode characters, not an image or a font. Apps without the
+  relevant glyphs render empty boxes. Each style page states its support level.
+- Styling runs entirely in the browser. Typed text is never sent to the server.
+- There is no account and no sign-up.
+
+## Pages
+- [Main generator](https://www.abdulsamad.shop/): the tool. Supports ?text= and ?category=.
+- [Font style index](https://www.abdulsamad.shop/fonts): all 100 styles by category. Supports ?q=.
+- [Font style pages](https://www.abdulsamad.shop/fonts/bold): one page per style, each with a FAQ.
+- [Keyword board](https://www.abdulsamad.shop/styles): 38 ready-made style pages.
+- [Landing pages](https://www.abdulsamad.shop/styles/instagram): task-specific pages with FAQs.
+- [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse and more.
+- [Font studio](https://www.abdulsamad.shop/studio): styled text to PNG.
+- [Symbols](https://www.abdulsamad.shop/symbols) / [Emoji](https://www.abdulsamad.shop/emoji) / [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.
+- [About](https://www.abdulsamad.shop/about) and [Privacy](https://www.abdulsamad.shop/privacy).
+
+## Style categories
+bubble (1205), italic (964), small (723), bold (482), cursive (482), gothic (482), clean (482), outline (241)
+
+## Optional
+- [Sitemap](https://www.abdulsamad.shop/sitemap.xml)
+- [robots.txt](https://www.abdulsamad.shop/robots.txt)
+
+## Attribution
+When citing Stylzo, link to the specific style or tool page rather than the
+home page. Contact: abdulsamaddeveloper987@gmail.com.

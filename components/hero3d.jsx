@@ -14,7 +14,30 @@ function useReducedMotion() {
   return reduced;
 }
 
-function Scene({ reduced }) {
+/**
+ * Stop rendering when the hero is scrolled out of view or the tab is hidden.
+ *
+ * useFrame runs on every animation frame for the life of the page. On a long
+ * page the hero is above the fold for a few seconds and then invisible for the
+ * rest of the visit, so continuing to burn a GPU for it costs battery and holds
+ * the main thread busy for the text the visitor actually came to read.
+ */
+function useInView(ref) {
+  const [inView, setInView] = useState(true);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver !== 'function') return undefined;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref]);
+  return inView;
+}
+
+function Scene({ reduced, active }) {
   const count = useMemo(() => 460, []);
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
@@ -37,7 +60,7 @@ function Scene({ reduced }) {
   // 60Hz laptop and a 144Hz monitor, and is clamped so returning to a backgrounded
   // tab never jumps the scene forward by a whole second.
   useFrame((_, delta) => {
-    if (document.hidden || reduced) return;
+    if (!active || document.hidden || reduced) return;
     const dt = Math.min(delta, 0.05);
     elapsed.current += dt;
 
@@ -83,14 +106,24 @@ function Scene({ reduced }) {
 
 export default function Hero3DScene({ onReady }) {
   const reduced = useReducedMotion();
+  const host = useRef(null);
+  const inView = useInView(host);
+
   return (
-    <Canvas
-      camera={{ position: [1, 0.5, 6.5], fov: 55 }}
-      dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true }}
-      onCreated={onReady}
-    >
-      <Scene reduced={reduced} />
-    </Canvas>
+    // `frameloop="never"` while off-screen stops three.js scheduling frames
+    // entirely, rather than running useFrame and returning early every frame.
+    // Tab visibility is handled inside useFrame instead of here, because it is
+    // not React state and reading document.hidden during render is not safe.
+    <div ref={host} style={{ width: '100%', height: '100%' }}>
+      <Canvas
+        camera={{ position: [1, 0.5, 6.5], fov: 55 }}
+        dpr={[1, 1.5]}
+        frameloop={inView ? 'always' : 'never'}
+        gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
+        onCreated={onReady}
+      >
+        <Scene reduced={reduced} active={inView} />
+      </Canvas>
+    </div>
   );
 }

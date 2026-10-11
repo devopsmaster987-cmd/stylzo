@@ -82,9 +82,15 @@ function renderPanel(data) {
   }
   if (progressLabel) progressLabel.textContent = `Keyword ${pad(data.position)} / ${data.total}`;
   if (progressFill) progressFill.style.width = `${(data.position / data.total) * 100}%`;
-  document.title = `${data.heading} — 25 Styled Words With Colour Emoji | ${document.title.split(' | ').at(-1)}`;
-  const canonical = document.querySelector('link[rel="canonical"]');
-  if (canonical) canonical.setAttribute('href', `${location.origin}/styles/${data.slug}`);
+  // Must stay in step with the BOARD_TITLE_TAIL in lib/keyword-board.js. The
+  // in-page panel has no <title> of its own, so it is rewritten to match the
+  // standalone page it is standing in for.
+  document.title = `${data.heading} — 25 Styled Words | ${document.title.split(' | ').at(-1)}`;
+  // The canonical is deliberately NOT rewritten here. Swapping /styles for
+  // /styles/<slug> would make the canonical depend on whether JS ran, so the
+  // same URL would report two different canonical targets to crawlers. The
+  // in-panel links are real hrefs to the standalone pages, which is where the
+  // crawl equity should flow.
 }
 
 function setActive(slug) {

@@ -1,14 +1,17 @@
 import { notFound } from 'next/navigation';
 import { catalog, getCategory, listStyles } from '@/services/catalog.js';
+import { env, adsenseConfigured } from '@/config/environment.js';
 import { pageMeta, toMetadata, renderCards, PAGE_SIZE, inputFromQuery } from '@/lib/pages.js';
 import {
   HOME_META, HOME_COLLECTIONS, HOME_SIZES, HOME_LIBRARIES, HOME_DESTINATIONS,
   HOME_HOW, HOME_LINKS,
 } from '@/lib/home-content.js';
+import { HOME_QA, WHAT_IT_IS } from '@/lib/aeo.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { StylePreviewGrid, stylePreviews } from '@/components/style-preview-grid.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
+import { AdUnit } from '@/components/ad-unit.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 import { Hero3D } from '@/components/hero-3d.jsx';
 
@@ -22,7 +25,7 @@ function homeMeta(params) {
     canonicalPath: '/',
     noindex: hasQuery,
     breadcrumbs: [],
-    faq: [],
+    faq: hasQuery ? [] : HOME_QA,
     app: !hasQuery,
     home: true,
   });
@@ -150,6 +153,30 @@ export default async function HomePage({ searchParams }) {
           </div>
         )}
       </section>
+
+      {/* Placed after the results list rather than above the generator: an ad in
+          the first viewport competes with the only thing the visitor came for.
+          Renders nothing when ads are not configured. */}
+      <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} />
+
+      {showContent ? (
+        <section className="quick-answer" aria-labelledby="quick-answer-heading">
+          <h2 id="quick-answer-heading">What is this site and what does it do?</h2>
+          <p>{WHAT_IT_IS}</p>
+        </section>
+      ) : null}
+
+      {showContent ? (
+        <section aria-labelledby="faq-heading">
+          <h2 id="faq-heading">Common questions</h2>
+          {HOME_QA.map((f) => (
+            <div key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </div>
+          ))}
+        </section>
+      ) : null}
 
       {showContent && (
         <>

@@ -1,13 +1,15 @@
 import { pageMeta, toMetadata } from '@/lib/pages.js';
+import { TOOLS_QA } from '@/lib/aeo.js';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
 function toolsMeta() {
   return pageMeta({
-    title: 'Text Tools',
-    description: 'Free browser-based text tools: case converter, word counter, reverse text, slug generator, find and replace, line sorter and more.',
+    title: 'Free Text Tools — Count, Convert & Clean Text',
+    description: 'Free browser-based text tools: word counter, case converter, reverse text, slug generator, find and replace, line sorter and deduper. Nothing is uploaded.',
     path: '/tools',
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Tools', path: '/tools' }],
+    faq: TOOLS_QA,
   });
 }
 
@@ -127,6 +129,87 @@ export default function ToolsPage() {
           <div className="gen-tools"><button type="button" className="btn" data-tool-copy hidden>Copy result</button></div>
         </div>
       </div>
+
+      {/* Answer-first copy. The tool panels above are the product; this is the
+          text an assistant can quote when asked what this page does. */}
+      <section className="quick-answer" aria-labelledby="tools-answer">
+        <h2 id="tools-answer">What text tools does this page include?</h2>
+        <p>
+          A word and character counter, a case converter (upper, lower, title, sentence, camel,
+          snake, kebab), a reverse tool for characters, words or both, a slug generator, a find
+          and replace with optional case matching, and line tools that sort, deduplicate, trim,
+          drop blanks or shuffle a list. Everything runs in your browser, so long text is never
+          uploaded.
+        </p>
+      </section>
+
+      <section className="prose" aria-labelledby="tools-what">
+        <h2 id="tools-what">How to use these tools</h2>
+        <p>
+          Pick a tab, paste or type into the box, and the result appears underneath as you type.
+          Use the copy button to take the result with you. Your input is never modified, so the
+          same text can be run through several tools in a row.
+        </p>
+
+        <h3>Word and character counter</h3>
+        <p>
+          Counts words, characters with spaces, characters without spaces, sentences and reading
+          time. Useful for anything with a length limit, such as a meta description or a meta
+          title, where the limit is a character count rather than a word count.
+        </p>
+
+        <h3>Case converter</h3>
+        <p>
+          Converts between upper case, lower case, title case, sentence case, camelCase,
+          snake_case and kebab-case. Title case capitalises each word; sentence case capitalises
+          only the first. Kebab-case and snake_case are the two conventions used for URLs and
+          filenames.
+        </p>
+
+        <h3>Reverse text</h3>
+        <p>
+          Reverses the characters, the words, or both. Reversing characters is the form used for
+          decorative text; reversing word order is the form used for puzzles and for reading text
+          upside down.
+        </p>
+
+        <h3>Slug generator</h3>
+        <p>
+          Turns a title into a URL-safe slug: lowercase, hyphen-separated, with spaces and
+          punctuation removed. Use it when you need a matching URL segment for a page you are
+          writing.
+        </p>
+
+        <h3>Find and replace</h3>
+        <p>
+          Replaces every instance of one string with another. The case-matching toggle decides
+          whether a lowercase search also matches the capitalised form, which matters when
+          cleaning up inconsistent text.
+        </p>
+
+        <h3>Line tools</h3>
+        <p>
+          Operates on one item per line. Sort alphabetically, sort by length, remove duplicate
+          lines, trim trailing spaces from each line, drop empty lines, or shuffle the order.
+          Useful for cleaning lists before pasting them somewhere.
+        </p>
+
+        <h3>Text cleaner</h3>
+        <p>
+          Removes extra spaces, converts fancy dashes to plain ones, and strips zero-width and
+          other invisible characters that cause text to look identical but behave differently.
+        </p>
+      </section>
+
+      <section aria-labelledby="faq-heading">
+        <h2 id="faq-heading">Common questions</h2>
+        {TOOLS_QA.map((f) => (
+          <div key={f.q}>
+            <h3>{f.q}</h3>
+            <p>{f.a}</p>
+          </div>
+        ))}
+      </section>
     </>
   );
 }

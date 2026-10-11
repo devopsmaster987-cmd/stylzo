@@ -197,7 +197,10 @@ describe('keyword board pages', () => {
       }
 
       assert.equal((doc.match(/<h1[ >]/g) || []).length, 1, 'expected exactly one h1');
-      assert.match(doc, new RegExp(`<h1[^>]*>${entry.heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
+      // Compare the h1's visible text, not its markup: a heading whose language
+      // name is written in native script is wrapped in <span lang="...">.
+      const h1 = (doc.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] || '';
+      assert.equal(h1.replace(/<[^>]*>/g, ''), entry.heading);
       assert.match(doc, new RegExp(`<link rel="canonical" href="[^"]*${entry.slug}"`));
       assert.match(doc, /<meta name="robots" content="index,follow"/);
     });

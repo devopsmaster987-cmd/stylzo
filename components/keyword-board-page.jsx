@@ -8,15 +8,17 @@
 // and the copy handler in /js/ui.js copies the whole decorated line.
 
 import { pageMeta, toMetadata } from '@/lib/pages.js';
-import { cleanText } from '@/lib/validation.js';
-import { env } from '@/config/environment.js';
+import { clampText } from '@/lib/validation.js';
+import { env, adsenseConfigured } from '@/config/environment.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
+import { AdUnit } from '@/components/ad-unit.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 import { Hero3D } from '@/components/hero-3d.jsx';
 import {
-  keywordBoard, boardEntry, boardRows, slugify, boardSlugs, emojiFor,
+  keywordBoard, boardEntry, boardNeighbours, boardRows, slugify, boardSlugs,
+  emojiFor, headingParts,
   BOARD_SIZE, WORDS_PER_KEYWORD, EMOJI_MIN, EMOJI_MAX,
 } from '@/lib/keyword-board.js';
 
@@ -160,7 +162,32 @@ export async function generateKeywordMetadata({ params, searchParams }) {
   const entry = boardEntry(key);
   if (!entry) return { robots: { index: false, follow: false } };
   const sp = (await searchParams) || {};
-  return toMetadata(keywordMeta(entry, cleanText(sp.text, { max: env.maxInputLength })));
+  return toMetadata(keywordMeta(entry, clampText(sp.text, { max: env.maxInputLength })));
+}
+
+/**
+ * A keyword heading may contain its language name in that language's own script
+ * (हिंदी, اردو, தமிழ்). The document is lang="en", so those runs get their own
+ * lang attribute rather than being read as English by assistive tech and
+ * mis-classified by search engines.
+ */
+function KeywordHeading({ heading }) {
+  const parts = headingParts(heading);
+  const simple = parts.every((p) => !p.lang);
+  if (simple) return heading;
+  // Mixed content needs an array, but splitting on whitespace would otherwise
+  // wrap every single space in its own <span>. Group the plain runs instead.
+  return parts.reduce((nodes, part, i) => {
+    const last = nodes[nodes.length - 1];
+    if (!part.lang && last && !last.lang) {
+      nodes[nodes.length - 1] = { ...last, text: last.text + part.text };
+      return nodes;
+    }
+    nodes.push({ key: i, text: part.text, lang: part.lang });
+    return nodes;
+  }, []).map((part) => (part.lang
+    ? <span key={part.key} lang={part.lang}>{part.text}</span>
+    : <span key={part.key}>{part.text}</span>));
 }
 
 /** One keyword page: the text box, then the 25 styled, emoji-decorated words. */
@@ -170,10 +197,11 @@ export async function renderKeywordPage({ slug, searchParams }) {
   // ?text= lets a visitor share a URL that already shows their own text, and is
   // noindex so every rendering of a keyword page is not a duplicate of another.
   const sp = (await searchParams) || {};
-  const text = cleanText(sp.text, { max: env.maxInputLength });
+  const text = clampText(sp.text, { max: env.maxInputLength });
   const hasText = Boolean(text.trim());
   const meta = keywordMeta(entry, text);
   const rows = boardRows(entry.position, hasText ? text : null, entry.slug);
+  const { prev, next, around } = boardNeighbours(entry.slug);
 
   return (
     <>
@@ -182,12 +210,12 @@ export async function renderKeywordPage({ slug, searchParams }) {
 
       <nav className="crumbs" aria-label="Breadcrumb">
         <a href="/">Home</a> / <a href="/styles">Styles</a>{' '}
-        / <span aria-current="page">{entry.heading}</span>
+        / <span aria-current="page"><KeywordHeading heading={entry.heading} /></span>
       </nav>
 
       <section className="hero">
         <Hero3D />
-        <h1>{entry.heading}</h1>
+        <h1><KeywordHeading heading={entry.heading} /></h1>
         <p className="lede">{entry.intro}</p>
         <GeneratorInput formAction={`/styles/${entry.slug}`} text={text} />
       </section>
@@ -221,10 +249,22 @@ export async function renderKeywordPage({ slug, searchParams }) {
         </ul>
       </section>
 
+      <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} />
+
+      {prev && next ? (
+        <nav className="crumbs kw-pager" aria-label="Keyword pagination">
+          <a rel="prev" href={prev.path}>← {prev.heading}</a>
+          <a rel="next" href={next.path}>{next.heading} →</a>
+        </nav>
+      ) : null}
+
       <nav className="crumbs" aria-label="Related pages">
         <h2>Related pages</h2>
         <ul className="chip-list">
           <li><a href="/styles">All {BOARD_SIZE} keywords</a></li>
+          {around.map((n) => (
+            <li key={n.slug}><a href={n.path}>{n.heading}</a></li>
+          ))}
           <li><a href="/">Main text generator</a></li>
           <li><a href="/fonts">Every font style</a></li>
           <li><a href="/symbols">Symbols library</a></li>
@@ -244,5 +284,3 @@ export async function renderKeywordPage({ slug, searchParams }) {
 export function generateStaticParams() {
   return [...boardSlugs()].map((key) => ({ key }));
 }
-
-export { BOARD_SIZE, WORDS_PER_KEYWORD, slugify };

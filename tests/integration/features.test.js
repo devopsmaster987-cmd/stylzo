@@ -113,7 +113,8 @@ describe('features', () => {
     for (const p of ['/symbols', '/emoji', '/kaomoji', '/tools']) {
       assert.ok(sm.includes(`${p}</loc>`), `sitemap misses ${p}`);
     }
-    assert.ok(!sm.includes('/studio</loc>'));
+    // /studio is indexable now that it carries its own explainer.
+    assert.ok(sm.includes('/studio</loc>'));
     assert.ok(!sm.includes('/admin</loc>'));
   });
 });
