@@ -56,6 +56,17 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="stylesheet" href="/css/main.css" />
+        {adsenseConfigured ? (
+          <>
+            <meta name="google-adsense-account" content={env.adsense.client} />
+            <script
+              async
+              data-adsense="1"
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${env.adsense.client}`}
+              crossOrigin="anonymous"
+            />
+          </>
+        ) : null}
       </head>
       <body>
         <Scripts />

@@ -1,13 +1,13 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { readConsent, loadAdsense, pushAdUnit } from '@/lib/consent.js';
+import { readConsent, pushAdUnit } from '@/lib/consent.js';
 
 /**
  * One AdSense unit.
  *
  * Renders nothing at all when ads are not configured, so an unconfigured build
  * has no empty ad-shaped holes in the layout. The unit is only pushed to
- * adsbygoogle once the tag has loaded, which only happens after consent.
+ * adsbygoogle once consent is granted.
  */
 export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' }) {
   const ref = useRef(null);
@@ -27,9 +27,8 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
       clearInterval(poll);
     };
 
-    // The tag is only injected once consent exists, and it may already be in the
-    // document because of a sibling unit, so both paths are covered.
-    if (readConsent() === 'granted') loadAdsense(client);
+    // The tag is static markup in the document head and may not have run yet,
+    // so either the load event or the poll below can be the one that finds it.
     tryPush();
 
     document.querySelector('script[data-adsense]')

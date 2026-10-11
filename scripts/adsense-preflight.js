@@ -270,9 +270,21 @@ if (!adsLive) {
     check(`No ad unit on ${p}`, n === 0, n ? `${n} unit(s)` : '');
   }
 
-  const beforeConsent = home.includes('pagead2.googlesyndication.com');
-  check('Ad tag waits for consent', !beforeConsent,
-    beforeConsent ? 'the tag is in the HTML before consent' : '');
+  // The tag is static markup in the head, because AdSense verifies a site by
+  // reading it out of the served HTML rather than running the page. Consent
+  // still gates the ad itself: no unit is requested from the server-rendered
+  // HTML, and the push happens in the browser once an answer is recorded.
+  const head = home.slice(0, (home.indexOf('</head>') + 7));
+  check('Ad tag is in the head, for verification',
+    head.includes('pagead2.googlesyndication.com'),
+    head.includes('pagead2.googlesyndication.com') ? '' : 'AdSense cannot verify a site whose tag is not in the HTML');
+  check('google-adsense-account is in the head',
+    /<meta name="google-adsense-account" content="ca-pub-\d+"/.test(head));
+  const tagCount = (home.match(/<script[^>]+pagead\/js\/adsbygoogle\.js/g) || []).length;
+  check('Ad tag loads exactly once', tagCount === 1, `${tagCount} tag(s)`);
+  const filledBeforeConsent = [...home.matchAll(/<ins class="adsbygoogle"[^>]*>\s*[^<\s]/g)];
+  check('No ad requested before consent', filledBeforeConsent.length === 0,
+    filledBeforeConsent.length ? 'an ad unit is already filled in the server HTML' : '');
 
   const banner = home.includes('data-consent="granted"') && home.includes('data-consent="denied"');
   check('Consent banner offered', banner, banner ? '' : 'required before loading ads in the EEA/UK');

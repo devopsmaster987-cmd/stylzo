@@ -141,10 +141,19 @@ describe('advertising with a configured publisher', () => {
     assert.match(html, /data-consent="granted"/);
     assert.match(html, /data-consent="denied"/);
 
-    // Ad slots exist on the content pages, but the tag is NOT in the server
-    // HTML: it must only be injected after consent is recorded.
+    // Ad slots exist on the content pages. The tag itself IS in the server
+    // HTML: AdSense verifies a site by reading it out of the head, so it is
+    // static markup rather than something injected later.
     assert.ok(count(html, /class="adsbygoogle"/g) > 0, 'no ad unit was rendered');
-    assert.equal(count(html, /pagead2\.googlesyndication\.com/g), 0, 'the ad tag must not load before consent');
+    const head = html.slice(0, html.indexOf('</head>'));
+    assert.ok(head.includes('pagead2.googlesyndication.com'), 'the ad tag must be in the head');
+    assert.match(head, /<meta name="google-adsense-account" content="ca-pub-\d+"/,
+      'the verification meta tag must be in the head');
+    assert.equal((html.match(/<script[^>]+pagead\/js\/adsbygoogle\.js/g) || []).length, 1,
+      'the ad tag must load exactly once');
+    // Consent still gates the request for an ad: nothing is filled in server-side.
+    assert.equal(count(html, /<ins class="adsbygoogle"[^>]*>\s*[^<\s]/g), 0,
+      'an ad must not be requested before consent is recorded');
 
     // A visitor can change their mind later.
     assert.match(html, /href="\/privacy"[^>]*>cookie policy</);
