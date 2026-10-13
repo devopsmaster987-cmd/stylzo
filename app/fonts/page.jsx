@@ -1,6 +1,8 @@
 import { catalog, listStyles } from '@/services/catalog.js';
 import { env, adsenseConfigured } from '@/config/environment.js';
 import { pageMeta, toMetadata, renderCards } from '@/lib/pages.js';
+import { FONTS_ANSWER, FONTS_QA } from '@/lib/aeo.js';
+import { RelatedSearches } from '@/components/related-searches.jsx';
 import { itemListLd, safeJson } from '@/services/seo.js';
 import { StyleRow } from '@/components/style-row.jsx';
 import { AdUnit } from '@/components/ad-unit.jsx';
@@ -14,6 +16,11 @@ function fontsMeta({ noindex = false } = {}) {
     path: '/fonts',
     canonicalPath: '/fonts',
     noindex,
+    // A filtered view is the same page with a subset of the same list. It is
+    // noindex and canonicalises to /fonts, so it must not also claim the
+    // unfiltered page's questions as its own.
+    faq: noindex ? [] : FONTS_QA,
+    quickAnswer: FONTS_ANSWER,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Font styles', path: '/fonts' }],
   });
 }
@@ -28,7 +35,6 @@ export async function generateMetadata({ searchParams }) {
 
 export default async function FontsIndexPage({ searchParams }) {
   const { categories, counts, sample } = catalog();
-  const meta = fontsMeta();
   const sp = (await searchParams) || {};
 
   // ?q= filters the server-rendered list, so a search result is a real URL with
@@ -36,6 +42,11 @@ export default async function FontsIndexPage({ searchParams }) {
   // That is what makes a SearchAction sitelink honest if it is ever declared.
   const query = (typeof sp.q === 'string' ? sp.q : '').trim().toLowerCase().slice(0, 60);
   const searching = query.length > 0;
+
+  // The JSON-LD rendered below has to be the same variant generateMetadata()
+  // describes. Calling fontsMeta() with no argument here made a filtered render
+  // advertise the unfiltered page's FAQ while its robots tag said noindex.
+  const meta = fontsMeta({ noindex: searching });
 
   const matches = (s) => !searching
     || s.name.toLowerCase().includes(query)
@@ -92,6 +103,30 @@ export default async function FontsIndexPage({ searchParams }) {
           </p>
         ) : null}
       </section>
+
+      {/* The list above is the product. This is the short passage an assistant
+          can quote when asked what the page lists and how to search it. Hidden
+          from a filtered view, which is noindex and does not claim it. */}
+      {!searching ? (
+        <>
+          <section className="quick-answer" aria-labelledby="fonts-answer">
+            <h2 id="fonts-answer">{FONTS_ANSWER.q}</h2>
+            <p>{FONTS_ANSWER.a}</p>
+          </section>
+
+          <section aria-labelledby="fonts-faq">
+            <h2 id="fonts-faq">Common questions</h2>
+            {FONTS_QA.map((f) => (
+              <div key={f.q}>
+                <h3>{f.q}</h3>
+                <p>{f.a}</p>
+              </div>
+            ))}
+          </section>
+
+          <RelatedSearches path="/fonts" />
+        </>
+      ) : null}
 
       {groups.map((g, i) => (
         <section key={g.key} aria-labelledby={`cat-${g.key}`}>

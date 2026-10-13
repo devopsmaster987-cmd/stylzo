@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import { env } from '@/config/environment.js';
+import { isAdminAuthorized, pickAdminKey } from '@/lib/admin-auth.js';
 import { keywordMap, KEYWORD_CATEGORIES } from '@/services/keyword-map.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { JsonLd } from '@/components/json-ld.jsx';
@@ -29,11 +30,7 @@ const STATUS_FILTERS = [
 
 export default async function SeoAdminPage({ searchParams }) {
   const sp = (await searchParams) || {};
-  const headerKey = (await headers()).get('x-admin-key') || '';
-  const key = typeof sp.key === 'string' ? sp.key : headerKey;
-
-  const configured = Boolean(env.adminKey);
-  const authorized = configured && key.length > 0 && key === env.adminKey;
+  const authorized = isAdminAuthorized(pickAdminKey((await headers()).get('x-admin-key'), sp));
   const data = keywordMap();
   const { summary } = data;
 
@@ -51,7 +48,7 @@ export default async function SeoAdminPage({ searchParams }) {
         </p>
       </section>
 
-      {!configured ? (
+      {!env.adminKey ? (
         <div className="panel">
           <h2>Set up access</h2>
           <p className="auth-note">

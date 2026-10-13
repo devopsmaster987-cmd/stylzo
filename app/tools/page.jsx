@@ -1,5 +1,6 @@
 import { pageMeta, toMetadata } from '@/lib/pages.js';
-import { TOOLS_QA } from '@/lib/aeo.js';
+import { TOOLS_QA, TOOLS_ANSWER } from '@/lib/aeo.js';
+import { RelatedSearches } from '@/components/related-searches.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
@@ -12,6 +13,7 @@ function toolsMeta() {
     path: '/tools',
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Tools', path: '/tools' }],
     faq: TOOLS_QA,
+    quickAnswer: TOOLS_ANSWER,
   });
 }
 
@@ -140,15 +142,11 @@ export default function ToolsPage() {
       {/* Answer-first copy. The tool panels above are the product; this is the
           text an assistant can quote when asked what this page does. */}
       <section className="quick-answer" aria-labelledby="tools-answer">
-        <h2 id="tools-answer">What text tools does this page include?</h2>
-        <p>
-          A word and character counter, a case converter (upper, lower, title, sentence, camel,
-          snake, kebab), a reverse tool for characters, words or both, a slug generator, a find
-          and replace with optional case matching, and line tools that sort, deduplicate, trim,
-          drop blanks or shuffle a list. Everything runs in your browser, so long text is never
-          uploaded.
-        </p>
+        <h2 id="tools-answer">{TOOLS_ANSWER.q}</h2>
+        <p>{TOOLS_ANSWER.a}</p>
       </section>
+
+      <RelatedSearches path="/tools" />
 
       <section className="prose" aria-labelledby="tools-what">
         <h2 id="tools-what">How to use these tools</h2>

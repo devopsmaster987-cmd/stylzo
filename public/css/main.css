@@ -369,6 +369,17 @@ textarea:focus-visible { border-color: var(--accent); outline-offset: 0; }
 .table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .93rem; }
 .table th, .table td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); }
 .table th { color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; }
+.table caption { text-align: left; color: var(--muted); font-size: .85rem; padding-bottom: .5rem; }
+.table tbody th { text-transform: none; letter-spacing: 0; font-size: .95rem; color: var(--ink); }
+
+/* Key facts. A definition list rather than cards, because the point of the
+   block is that each label and value stay paired when the text is extracted
+   out of its visual container by a reader or a model. */
+.facts { margin: 1rem 0; display: grid; gap: .85rem; }
+.facts > div { display: grid; gap: .15rem; border-left: 3px solid var(--line); padding-left: .9rem; }
+.facts dt { color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; }
+.facts dd { margin: 0; line-height: 1.55; }
+.facts dd b { font-family: var(--display); }
 .key-form { display: flex; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
 .key-form input {
   font: 500 .95rem var(--body); color: var(--ink); background: var(--paper); border: 1px solid var(--line);

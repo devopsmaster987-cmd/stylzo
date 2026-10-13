@@ -1,7 +1,8 @@
 import { library } from '@/services/catalog.js';
 import { LIB_META, pageMeta, toMetadata } from '@/lib/pages.js';
 import { abs, safeJson } from '@/services/seo.js';
-import { LIBRARY_QA, WHY_BOXES } from '@/lib/aeo.js';
+import { LIBRARY_QA, LIBRARY_ANSWER } from '@/lib/aeo.js';
+import { RelatedSearches } from './related-searches.jsx';
 import { JsonLd } from './json-ld.jsx';
 import { Scripts } from './scripts.jsx';
 
@@ -69,6 +70,7 @@ export function libraryMetadata(key) {
     path,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: meta.title, path }],
     faq,
+    quickAnswer: LIBRARY_ANSWER,
   });
 
   const collection = {
@@ -136,8 +138,8 @@ export function LibraryPage({ libraryKey }) {
       {/* The single most common question about any copied character library,
           answered before the long list. */}
       <section className="quick-answer" aria-labelledby="quick-answer-heading">
-        <h2 id="quick-answer-heading">Why do copied items sometimes appear as empty boxes?</h2>
-        <p>{WHY_BOXES}</p>
+        <h2 id="quick-answer-heading">{LIBRARY_ANSWER.q}</h2>
+        <p>{LIBRARY_ANSWER.a}</p>
       </section>
 
       {(LIBRARY_QA[key] || []).length ? (
@@ -151,6 +153,8 @@ export function LibraryPage({ libraryKey }) {
           ))}
         </section>
       ) : null}
+
+      <RelatedSearches path={`/${key}`} />
 
       <nav className="chips" aria-label="Jump to category">
         <a href="#top" data-lib-all>All ({total})</a>

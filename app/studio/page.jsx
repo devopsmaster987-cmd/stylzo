@@ -1,7 +1,22 @@
 import { catalog } from '@/services/catalog.js';
+import { STUDIO_QA } from '@/lib/aeo.js';
 import { pageMeta, toMetadata, composerStyles } from '@/lib/pages.js';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
+
+// The steps below are the same four the page's own how-to section shows, in the
+// same order, so the HowTo schema cannot describe steps the page does not have.
+const HOW_TO = {
+  name: 'How to make a text image',
+  description: 'Turn styled text into a 1200 by 630 PNG you can download, using a style, '
+    + 'colours and a background you choose.',
+  steps: [
+    { name: 'Type your text', text: 'Enter up to 120 characters. Shorter phrases read better at image sizes.' },
+    { name: 'Pick a style', text: 'Search the style list or browse it. Each style shows the support warning the generator uses, so you can tell in advance whether it will survive being pasted elsewhere.' },
+    { name: 'Set the colours', text: 'Choose a text colour and a background. The background options include gradients rather than flat fills, which usually separates better from a busy feed.' },
+    { name: 'Download the PNG', text: 'The image is drawn locally, so the download is immediate. If you only want the characters rather than the picture, use the copy button instead.' },
+  ],
+};
 
 function studioMeta() {
   return pageMeta({
@@ -14,6 +29,8 @@ function studioMeta() {
     // to index, so the link is worth keeping.
     noindex: false,
     app: true,
+    faq: STUDIO_QA,
+    howTo: HOW_TO,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Studio', path: '/studio' }],
   });
 }
@@ -180,6 +197,43 @@ export default function StudioPage() {
         </ol>
 
         <h3>When to use an image instead of styled text</h3>
+        {/* A real table with real headers. Generative engines are markedly
+            better at extracting a comparison from a table than from prose, and
+            this is the page's main "which should I use" decision. */}
+        <table className="table">
+          <caption>
+            Styled text against a text image: which one to use, and when.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Use this</th>
+              <th scope="col">Choose it when</th>
+              <th scope="col">You give up</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Styled text</th>
+              <td>
+                The destination accepts plain text, so the characters survive being pasted.
+              </td>
+              <td>
+                Nothing much: the text stays editable, selectable and searchable.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Text image</th>
+              <td>
+                The destination strips or flattens unusual characters, which is common in
+                image-based messaging, some profile fields and most comment sections.
+              </td>
+              <td>
+                Selectability and accessibility: the words are pixels, so they cannot be
+                read aloud or searched.
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <p>
           Styled text is the better choice when the destination accepts plain text, because it
           stays editable and searchable. An image is better when the destination flattens or
@@ -192,6 +246,16 @@ export default function StudioPage() {
           styles</a>, or try a <a href="/styles/fancy-text-generator">ready-made keyword
           board</a>.
         </p>
+      </section>
+
+      <section className="prose" aria-labelledby="studio-faq">
+        <h2 id="studio-faq">Common questions</h2>
+        {STUDIO_QA.map((f) => (
+          <div key={f.q}>
+            <h3>{f.q}</h3>
+            <p>{f.a}</p>
+          </div>
+        ))}
       </section>
     </>
   );

@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { catalog } from '@/services/catalog.js';
 import { snapshot } from '@/services/analytics.js';
 import { env, firebaseConfigured } from '@/config/environment.js';
+import { isAdminAuthorized, pickAdminKey } from '@/lib/admin-auth.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
@@ -21,11 +22,8 @@ export function generateMetadata() {
 
 export default async function AdminPage({ searchParams }) {
   const sp = (await searchParams) || {};
-  const headerKey = (await headers()).get('x-admin-key') || '';
-  const key = typeof sp.key === 'string' ? sp.key : headerKey;
-
-  const configured = Boolean(env.adminKey);
-  const authorized = configured && key.length > 0 && key === env.adminKey;
+  const key = pickAdminKey((await headers()).get('x-admin-key'), sp);
+  const authorized = isAdminAuthorized(key);
 
   const { styles, counts, categories } = catalog();
   const stats = authorized
@@ -54,7 +52,7 @@ export default async function AdminPage({ searchParams }) {
         <p className="lede">Catalog health, traffic counters and feature flags for this deployment.</p>
       </section>
 
-      {!configured ? (
+      {!env.adminKey ? (
         <div className="panel">
           <h2>Set up access</h2>
           <p className="auth-note">

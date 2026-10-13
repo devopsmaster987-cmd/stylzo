@@ -4,6 +4,43 @@ import { get, json, post, startServer } from '../helpers/server.js';
 
 const pages = ['/', '/fancy-text-generator', '/fonts', '/fonts/bold', '/fonts/fraktur', '/about', '/privacy', '/terms', '/contact'];
 
+const markup = (html) => html.replace(/<script[\s\S]*?<\/script>/g, '');
+
+describe('related searches', () => {
+  let server;
+  before(async () => { server = await startServer(3221); });
+  after(() => server?.stop());
+
+  test('the block is visible text on the pages that show it', async () => {
+    for (const path of ['/', '/fonts', '/tools', '/styles', '/symbols']) {
+      const doc = markup(await (await get(server.base, path)).text());
+      assert.match(doc, /<h2[^>]*>Related searches<\/h2>/, `${path} has no related-searches block`);
+      // Visible, not hidden: a block tucked away is keyword stuffing with extra steps.
+      assert.doesNotMatch(doc, /class="related-searches"[^>]*hidden/, `${path} hides its keywords`);
+      assert.doesNotMatch(doc, /related-searches[^"]*"[^>]*style="display:\s*none/, `${path} hides its keywords`);
+    }
+  });
+
+  test('no page ships a meta keywords tag', async () => {
+    for (const path of ['/', '/fonts', '/tools', '/styles']) {
+      const html = await (await get(server.base, path)).text();
+      assert.doesNotMatch(html, /<meta[^>]+name="keywords"/i, `${path} has a meta keywords tag`);
+    }
+  });
+
+  test('every internal link in the block resolves', async () => {
+    const html = await (await get(server.base, '/')).text();
+    const block = (html.match(/<section class="related-searches"[\s\S]*?<\/section>/) || [])[0];
+    assert.ok(block, 'no related-searches block to check');
+    const hrefs = [...block.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+    assert.ok(hrefs.length >= 5, `only ${hrefs.length} linked terms`);
+    for (const href of hrefs) {
+      const res = await get(server.base, href);
+      assert.ok(res.status < 400, `${href} from the related-searches block returned ${res.status}`);
+    }
+  });
+});
+
 describe('pages', () => {
   let server;
   before(async () => { server = await startServer(3211); });

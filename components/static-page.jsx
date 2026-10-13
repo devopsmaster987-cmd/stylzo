@@ -2,6 +2,7 @@ import { pageContent } from '@/services/catalog.js';
 import { env } from '@/config/environment.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { ABOUT_QA, WHAT_IT_IS } from '@/lib/aeo.js';
+import { keyFacts } from '@/lib/facts.js';
 import { JsonLd } from './json-ld.jsx';
 import { Scripts } from './scripts.jsx';
 
@@ -102,6 +103,23 @@ export function StaticPage({ pageKey }) {
             ) : null}
           </section>
         ))}
+
+        {/* Only on /about. These are the numbers a generated answer is most
+            likely to quote, each stated on its own line so a model lifting one
+            of them gets a complete, correct claim rather than a fragment. */}
+        {pageKey === 'about' ? (
+          <section aria-labelledby="facts-heading">
+            <h2 id="facts-heading">Key facts</h2>
+            <dl className="facts">
+              {keyFacts().map((f) => (
+                <div key={f.id}>
+                  <dt>{f.label}</dt>
+                  <dd><b>{f.value}</b> &mdash; {f.detail}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ) : null}
 
         {PAGE_FAQ[pageKey] ? (
           <section aria-labelledby="faq-heading">

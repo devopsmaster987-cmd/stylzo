@@ -1,0 +1,43 @@
+{
+  "name": "@stylzo/unicode",
+  "version": "1.0.0",
+  "description": "Turn plain text into fancy Unicode styles in JavaScript. Pure, dependency-free, 14 KB. Works in the browser, Node and any framework.",
+  "keywords": [
+    "unicode", "fancy-text", "text-generator", "font-styles", "biolerplate",
+    "instagram-bio", "whatsapp", "discord", "zalgo", "kaomoji", "aesthetic-text",
+    "text-decoration", "lettering", "grapheme", "combining-marks"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./engine.js",
+  "module": "./engine.js",
+  "exports": {
+    ".": "./engine.js",
+    "./mappings": "./mappings.js",
+    "./decorators": "./decorators.js"
+  },
+  "files": [
+    "engine.js",
+    "mappings.js",
+    "decorators.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devopsmaster987-cmd/stylzo.git",
+    "directory": "services/unicode"
+  },
+  "homepage": "https://www.abdulsamad.shop/fonts",
+  "bugs": {
+    "url": "https://www.abdulsamad.shop/contact"
+  },
+  "author": "Stylzo",
+  "publishConfig": {
+    "access": "public"
+  }
+}

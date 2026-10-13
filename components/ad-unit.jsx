@@ -2,6 +2,12 @@
 import { useEffect, useRef } from 'react';
 import { readConsent, pushAdUnit } from '@/lib/consent.js';
 
+/* adsbygoogle.js rewrites the <ins> in place: it adds data-adsbygoogle-status
+   and replaces the contents with an <iframe> ad frame. Both happen before React
+   hydrates, so the node is handed to React already different from the server
+   HTML. Hoisted so the value is stable across re-renders. */
+const GOOGLE_OWNS_CHILDREN = { __html: '' };
+
 /**
  * One AdSense unit.
  *
@@ -54,6 +60,11 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
           distinguishable from the surrounding site. aria-hidden because the
           <aside> already carries the label for assistive tech. */}
       <span className="ad-label" aria-hidden="true">{label}</span>
+      {/* Google owns every child of this node from the moment it fills the slot,
+          so React must never try to diff them. suppressHydrationWarning covers
+          the attributes Google adds before hydration; the empty
+          dangerouslySetInnerHTML stops React re-diffing the injected iframe on
+          any later re-render. */}
       <ins
         className="adsbygoogle"
         data-ad-client={client}
@@ -61,6 +72,8 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
         data-ad-format={format}
         data-full-width-responsive="true"
         ref={ref}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={GOOGLE_OWNS_CHILDREN}
       />
     </aside>
   );

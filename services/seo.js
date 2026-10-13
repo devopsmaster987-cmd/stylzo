@@ -1,5 +1,6 @@
 import { env } from '../config/environment.js';
 import { site } from '../config/site.js';
+import { appFeatures } from '../lib/facts.js';
 
 /** Serialize JSON-LD safely for embedding in a <script> tag. */
 export function safeJson(obj) {
@@ -37,6 +38,10 @@ export function organizationLd() {
     url: abs('/'),
     logo: { '@type': 'ImageObject', url: abs('/icon-512.png'), width: 512, height: 512 },
     description: site.defaultDescription,
+    // Only ever the profiles the operator configured. Never guessed: a sameAs
+    // pointing at an account the brand does not own is a claim about someone
+    // else's identity.
+    ...(env.sameAs.length ? { sameAs: env.sameAs } : {}),
     contactPoint: env.contactEmail
       ? { '@type': 'ContactPoint', contactType: 'customer support', email: env.contactEmail, availableLanguage: 'English' }
       : undefined,
@@ -82,8 +87,14 @@ export function quickAnswerLd(question, answer) {
 }
 
 /**
- * A comparison table, which assistants prefer over prose when asked which
- * option to pick. Rows are plain objects rendered by the caller.
+ * A page's questions and answers as one FAQPage.
+ *
+ * Note on comparison tables, which generative engines prefer over prose when
+ * asked which option to pick: schema.org has no type for one. The honest form
+ * is a real semantic `<table>` with headers, which models read directly, and
+ * inventing a wrapper type to label it would be schema the standard does not
+ * define. The studio's text-vs-image comparison is therefore rendered as a
+ * table and left unmarked rather than given a made-up `@type`.
  */
 export function faqLd(faq) {
   return {
@@ -93,8 +104,30 @@ export function faqLd(faq) {
   };
 }
 
+/**
+ * A step-by-step instruction set. Assistants answering "how do I make a text
+ * image" prefer this over prose, and the steps must be the ones the page really
+ * shows — the studio's own how-to list is the source of the wording here.
+ */
+export function howToLd(name, description, path, steps) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    // The instructions belong to the page, not to a separate tutorial URL.
+    ...(path ? { url: abs(path) } : {}),
+    step: steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  };
+}
+
 /** One builder for title, description, canonical, social tags, breadcrumbs and JSON-LD. */
-export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], faq = [], quickAnswer = null, noindex = false, app = false, home = false }) {
+export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], faq = [], quickAnswer = null, howTo = null, noindex = false, app = false, home = false }) {
   const fullTitle = home ? `${site.name}: ${title}` : `${title} | ${site.name}`;
   const desc = (description || site.defaultDescription).slice(0, 300);
   const canonical = abs(canonicalPath || path);
@@ -116,10 +149,12 @@ export function buildMeta({ title, description, path = '/', canonicalPath, bread
       mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
     });
   }
+  if (howTo && !noindex) ld.push(howToLd(howTo.name, howTo.description, canonical, howTo.steps));
   if (app) {
     ld.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': `${canonical}#app`,
       name: site.name, url: canonical, image: OG_IMAGE.url, applicationCategory: 'UtilitiesApplication',
       applicationSubCategory: 'Text generator', operatingSystem: 'Any', browserRequirements: 'Requires JavaScript',
+      featureList: appFeatures(),
       isAccessibleForFree: true, publisher: { '@id': ids.organization },
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } });
   }

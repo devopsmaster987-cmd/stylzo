@@ -8,6 +8,8 @@
 // and the copy handler in /js/ui.js copies the whole decorated line.
 
 import { pageMeta, toMetadata } from '@/lib/pages.js';
+import { BOARD_ANSWER, BOARD_QA } from '@/lib/aeo.js';
+import { RelatedSearches } from './related-searches.jsx';
 import { clampText } from '@/lib/validation.js';
 import { env, adsenseConfigured } from '@/config/environment.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
@@ -27,6 +29,8 @@ function boardMeta() {
     title: 'Fancy Text Keyword Board — 25 Styled Words',
     description: `Pick any of ${BOARD_SIZE} searches. Each one opens ${WORDS_PER_KEYWORD} words in ${WORDS_PER_KEYWORD} different styles, every word decorated with ${EMOJI_MIN} to ${EMOJI_MAX} colour emoji you can copy in one tap.`,
     path: '/styles',
+    faq: BOARD_QA,
+    quickAnswer: BOARD_ANSWER,
     breadcrumbs: [
       { name: 'Home', path: '/' },
       { name: 'Styles', path: '/styles' },
@@ -58,6 +62,25 @@ export function renderKeywordBoard() {
         <Hero3D />
         <h1>Fancy text keyword board</h1>
       </section>
+
+      {/* The dashboard below is the product. These are the passages an assistant
+          can quote when asked what the board is and how the copied text behaves. */}
+      <section className="quick-answer" aria-labelledby="board-answer">
+        <h2 id="board-answer">{BOARD_ANSWER.q}</h2>
+        <p>{BOARD_ANSWER.a}</p>
+      </section>
+
+      <section aria-labelledby="board-faq">
+        <h2 id="board-faq">Common questions</h2>
+        {BOARD_QA.map((f) => (
+          <div key={f.q}>
+            <h3>{f.q}</h3>
+            <p>{f.a}</p>
+          </div>
+        ))}
+      </section>
+
+      <RelatedSearches path="/styles" />
 
       <div className="kw-dash">
         {/* In-page panel first in the DOM (primary content for no-JS and screen

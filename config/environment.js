@@ -48,6 +48,23 @@ export const env = {
   rateLimitPerMinute: num(process.env.RATE_LIMIT_PER_MINUTE, 60),
   contactEmail: process.env.CONTACT_EMAIL || 'mastersamaddevops@gmail.com',
 
+  /**
+   * Official profile URLs for this brand, as a comma-separated list.
+   *
+   * Generative engines are much better at attributing a claim to a site they
+   * can tie to known accounts. `sameAs` is that link, and it is the one piece
+   * of identity the site cannot derive for itself.
+   *
+   * It is deliberately opt-in and never guessed. A `sameAs` pointing at a
+   * profile the brand does not own is an identity-claim about someone else's
+   * account, which is a manual-action risk, so an unset value simply omits the
+   * property rather than emitting a plausible-looking guess.
+   */
+  sameAs: str(process.env.SAME_AS)
+    .split(',')
+    .map((u) => u.trim())
+    .filter((u) => /^https:\/\//i.test(u)),
+
   // M6 - Firebase configuration.
   firebase: {
     apiKey: str(process.env.FIREBASE_API_KEY),

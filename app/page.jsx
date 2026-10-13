@@ -6,7 +6,8 @@ import {
   HOME_META, HOME_COLLECTIONS, HOME_SIZES, HOME_LIBRARIES, HOME_DESTINATIONS,
   HOME_HOW, HOME_LINKS,
 } from '@/lib/home-content.js';
-import { HOME_QA, WHAT_IT_IS } from '@/lib/aeo.js';
+import { HOME_QA, HOME_ANSWER } from '@/lib/aeo.js';
+import { RelatedSearches } from '@/components/related-searches.jsx';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { StylePreviewGrid, stylePreviews } from '@/components/style-preview-grid.jsx';
@@ -26,6 +27,7 @@ function homeMeta(params) {
     noindex: hasQuery,
     breadcrumbs: [],
     faq: hasQuery ? [] : HOME_QA,
+    quickAnswer: HOME_ANSWER,
     app: !hasQuery,
     home: true,
   });
@@ -161,8 +163,8 @@ export default async function HomePage({ searchParams }) {
 
       {showContent ? (
         <section className="quick-answer" aria-labelledby="quick-answer-heading">
-          <h2 id="quick-answer-heading">What is this site and what does it do?</h2>
-          <p>{WHAT_IT_IS}</p>
+          <h2 id="quick-answer-heading">{HOME_ANSWER.q}</h2>
+          <p>{HOME_ANSWER.a}</p>
         </section>
       ) : null}
 
@@ -177,6 +179,8 @@ export default async function HomePage({ searchParams }) {
           ))}
         </section>
       ) : null}
+
+      {showContent ? <RelatedSearches path="/" /> : null}
 
       {showContent && (
         <>
