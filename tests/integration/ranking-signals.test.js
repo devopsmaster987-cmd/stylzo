@@ -2,7 +2,6 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
-import { keywordBoard } from '../../lib/keyword-board.js';
 
 const title = (html) => (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
 const desc = (html) => (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
@@ -16,12 +15,12 @@ describe('search appearance budgets', () => {
   after(() => server?.stop());
 
   test('no indexable page has a title past the SERP cut', async () => {
-    // Regression: board pages reached 79 characters, so roughly half of every
-    // one of those titles was truncated away in the results.
+    // Regression: the old board pages reached 79 characters, so roughly half of
+    // every one of those titles was truncated away in the results.
     const long = [];
-    for (const entry of keywordBoard()) {
-      const t = title(await (await get(server.base, `/styles/${entry.slug}`)).text());
-      if (t.length > 62) long.push(`${entry.slug}: ${t.length}`);
+    for (const path of ['/', '/fonts', '/styles', '/tools', '/about', '/studio', '/symbols']) {
+      const t = title(await (await get(server.base, path)).text());
+      if (t.length > 62) long.push(`${path}: ${t.length}`);
     }
     assert.deepEqual(long, [], `titles too long:\n  ${long.join('\n  ')}`);
   });
@@ -44,16 +43,6 @@ describe('search appearance budgets', () => {
       const d = desc(await (await get(server.base, path)).text());
       assert.ok(d.length >= floor, `${path} description is only ${d.length} chars`);
     }
-  });
-
-  test('the board title suffix matches what the dashboard writes client-side', async () => {
-    // The in-page panel rewrites document.title by hand, so the two can drift.
-    const js = readFileSync(new URL('../../public/js/keyword-dashboard.js', import.meta.url), 'utf8');
-    const tail = title(await (await get(server.base, '/styles/fancy-text-generator')).text())
-      .replace(/^Fancy Text Generator/, '')
-      .replace(' | Stylzo', '');
-    assert.ok(js.includes(`— 25 Styled Words |`), 'the client-side title no longer matches the server template');
-    assert.ok(tail.includes('25 Styled Words'));
   });
 });
 
@@ -93,6 +82,60 @@ describe('link equity is not spent on unindexable pages', () => {
     const doc = markup(await (await get(server.base, '/')).text());
     assert.ok(doc.includes('id="home-destinations"'));
     assert.ok(doc.includes('id="home-libraries"'));
+  });
+});
+
+// The links a visitor can follow out of a page, ignoring the chrome that every
+// page carries. Header, footer, breadcrumbs and the related-searches chips are
+// navigation rather than editorial links, so they do not count here: a page can
+// have a hundred of them and still be a dead end.
+function contextualLinks(html) {
+  const body = markup(html.slice(html.indexOf('<main'), html.indexOf('</main>')))
+    .replace(/<nav class="crumbs"[\s\S]*?<\/nav>/g, '')
+    .replace(/<section class="related-searches"[\s\S]*?<\/section>/g, '');
+  return [...body.matchAll(/<a href="(\/[^"]*)"[^>]*>([^<]*)<\/a>/g)]
+    .map((m) => ({ href: m[1], anchor: m[2].trim() }))
+    .filter((l) => l.anchor);
+}
+
+describe('every page links onward, not just around itself', () => {
+  let server;
+  before(async () => { server = await startServer(3284); });
+  after(() => server?.stop());
+
+  // Regression: /tools, /symbols, /emoji, /kaomoji, /about and /contact had no
+  // editorial link at all. Each one answered its own question and then stopped,
+  // so the pages a visitor most likely lands on could not pass a reader on to
+  // the pages that do the styling.
+  const OUTBOUND = {
+    '/tools': ['/', '/fonts', '/styles', '/studio'],
+    '/symbols': ['/', '/fonts', '/styles'],
+    '/emoji': ['/tools'],
+    '/kaomoji': ['/', '/fonts', '/styles'],
+    '/about': ['/', '/fonts', '/styles', '/styles/instagram', '/symbols', '/emoji', '/kaomoji', '/tools', '/studio'],
+    '/contact': ['/fonts', '/about', '/styles/instagram'],
+  };
+
+  for (const [path, destinations] of Object.entries(OUTBOUND)) {
+    test(`${path} links onward to ${destinations.join(', ')}`, async () => {
+      const links = contextualLinks(await (await get(server.base, path)).text());
+      const hrefs = new Set(links.map((l) => l.href));
+      for (const destination of destinations) {
+        assert.ok(hrefs.has(destination), `${path} has no contextual link to ${destination}`);
+      }
+    });
+  }
+
+  test('the anchors describe the destination rather than the act of clicking', async () => {
+    // "click here" and "read more" pass a link check and help nobody, a reader
+    // or a crawler. The anchor has to carry what is on the other side.
+    const junk = /^(click here|here|read more|more|link|this|learn more|see more)$/i;
+    for (const path of Object.keys(OUTBOUND)) {
+      for (const { href, anchor } of contextualLinks(await (await get(server.base, path)).text())) {
+        assert.ok(!junk.test(anchor), `${path} links to ${href} with the anchor "${anchor}"`);
+        assert.ok(anchor.length > 1, `${path} links to ${href} with an empty anchor`);
+      }
+    }
   });
 });
 

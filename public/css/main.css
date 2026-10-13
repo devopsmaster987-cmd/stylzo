@@ -102,6 +102,9 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); margin-top: 2.75rem; }
 h3 { font-size: 1.1rem; }
 .lede { font-size: 1.15rem; color: var(--muted); max-width: 62ch; margin: 0 0 1.5rem; }
 .muted { color: var(--muted); }
+/* The next step after a library page: a sentence that links onward to the tool
+   that does the next job. Sits between the answer block and the long list. */
+.next-step { color: var(--muted); max-width: 62ch; margin: -1rem 0 2rem; }
 .accent-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 /* Hero -------------------------------------------------------------------- */
@@ -519,7 +522,7 @@ pre code { display: block; padding: .8rem; overflow: auto; }
 .chip-list a:hover { border-color: var(--accent); color: var(--accent); }
 .variations { margin-top: 2.5rem; }
 
-/* Keyword board (/styles) — vertical sticky dashboard ---------------------- */
+/* /styles dashboard rules ------------------------------------------------ */
 /* Sticky keyword dashboard on the left, in-page material panel on the right.
    The panel holds the same rows as /styles/<slug>, so copy and live typing
    work identically; the sidebar only swaps which keyword the panel shows. */

@@ -1,7 +1,6 @@
 import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { get, startServer } from '../helpers/server.js';
-import { keywordBoard } from '../../lib/keyword-board.js';
 
 const meta = (html, name) => (html.match(new RegExp(`<meta name="${name}" content="([^"]*)"`)) || [])[1] || '';
 const prop = (html, p) => (html.match(new RegExp(`<meta property="${p}" content="([^"]*)"`)) || [])[1] || '';
@@ -19,7 +18,7 @@ describe('technical seo', () => {
 
   describe('social metadata', () => {
     test('every page carries a complete og and twitter card', async () => {
-      for (const path of ['/', '/fonts', '/fonts/bold', '/styles/fancy-text-generator', '/tools', '/about']) {
+      for (const path of ['/', '/fonts', '/fonts/bold', '/styles', '/tools', '/about']) {
         const html = await (await get(server.base, path)).text();
         for (const [label, value] of [
           ['og:title', prop(html, 'og:title')],
@@ -64,7 +63,7 @@ describe('technical seo', () => {
 
   describe('structured data', () => {
     test('every page names the Organization that publishes it', async () => {
-      for (const path of ['/', '/fonts', '/fonts/bold', '/styles/fancy-text-generator']) {
+      for (const path of ['/', '/fonts', '/fonts/bold', '/styles']) {
         const org = jsonLd(await (await get(server.base, path)).text(), 'Organization');
         assert.ok(org, `${path} is missing the Organization node`);
         assert.equal(org.name, 'Stylzo');
@@ -128,37 +127,32 @@ describe('technical seo', () => {
   });
 
   describe('internal linking', () => {
-    test('every board page links to its neighbours instead of dead-ending', async () => {
-      // Regression: all 32 board pages previously linked only to hub pages, so
-      // none of them passed authority to another.
-      for (const entry of keywordBoard()) {
-        const doc = await (await get(server.base, `/styles/${entry.slug}`)).text();
-        assert.match(doc, /rel="prev" href="\/styles\//, `${entry.slug} has no prev link`);
-        assert.match(doc, /rel="next" href="\/styles\//, `${entry.slug} has no next link`);
-      }
-    });
-
-    test('the neighbour links resolve to real pages', async () => {
-      for (const entry of keywordBoard()) {
-        const doc = await (await get(server.base, `/styles/${entry.slug}`)).text();
-        const hrefs = [...doc.matchAll(/rel="(?:prev|next)" href="([^"]+)"/g)].map((m) => m[1]);
-        assert.equal(hrefs.length, 2);
-        for (const href of hrefs) {
-          assert.equal((await get(server.base, href)).status, 200, `${entry.slug} links to ${href}`);
+    test('no page links to a retired /styles/* slug', async () => {
+      // The 32 keyword-board pages are permanently redirected. A live internal
+      // link to one is worse than no link: it spends crawl budget and passes
+      // authority into a redirect hop on every visit.
+      const hrefRe = /href="(\/styles\/[^"]+)"/g;
+      const checked = ['/', '/fonts', '/fonts/bold', '/styles', '/tools', '/studio', '/symbols',
+        '/styles/instagram', '/styles/whatsapp', '/styles/discord', '/styles/gaming',
+        '/styles/languages', '/styles/colours'];
+      const dead = [];
+      for (const path of checked) {
+        const doc = await (await get(server.base, path)).text();
+        for (const [, href] of doc.matchAll(hrefRe)) {
+          const res = await get(server.base, href, { redirect: 'manual' });
+          if (res.status !== 200) dead.push(`${path} -> ${href} (${res.status})`);
         }
       }
+      assert.deepEqual(dead, [], 'internal links that do not land on a 200');
     });
 
-    test('a native-script heading declares its language', async () => {
-      const doc = await (await get(server.base, '/styles/hindi-fancy-text-generator')).text();
-      assert.match(doc, /<h1><span lang="hi">/, 'the Hindi heading needs a lang attribute');
-      const urdu = await (await get(server.base, '/styles/urdu-fancy-text-generator')).text();
-      assert.match(urdu, /<h1><span lang="ur">/, 'the Urdu heading needs a lang attribute');
-    });
-
-    test('an English heading is not wrapped in a lang span', async () => {
-      const doc = await (await get(server.base, '/styles/fancy-text-generator')).text();
-      assert.match(doc, /<h1>Fancy Text Generator<\/h1>/);
+    test('the header and footer link only to the six real style pages', async () => {
+      const doc = await (await get(server.base, '/')).text();
+      const stylesHrefs = [...doc.matchAll(/href="(\/styles(?:\/[^"]*)?)"/g)].map((m) => m[1]);
+      for (const href of stylesHrefs) {
+        const res = await get(server.base, href, { redirect: 'manual' });
+        assert.equal(res.status, 200, `the site chrome links to ${href}, which returns ${res.status}`);
+      }
     });
   });
 
@@ -198,13 +192,11 @@ describe('technical seo', () => {
     });
 
     test('production CSP permits the inline style attributes the pages actually emit', async () => {
-      // The keyword board sizes its progress bar with style="width:..%". Under a
-      // strict style-src that attribute is dropped in production and the bar
-      // renders at zero width.
+      // style-src does not govern style="" attributes. The pages that need one
+      // would silently render unstyled without this directive in production,
+      // while looking correct in dev.
       const res = await get(server.base, '/styles');
       assert.match(res.headers.get('content-security-policy') || '', /style-src-attr 'unsafe-inline'/);
-      const doc = await res.text();
-      assert.match(doc, /data-kw-progress-fill="true" style="width:/, 'expected an inline width on the progress bar');
     });
 
     test('the prefetched response still carries a usable CSP', async () => {

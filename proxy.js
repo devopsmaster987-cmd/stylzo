@@ -4,8 +4,13 @@ import { env, firebaseConfigured, adsenseConfigured } from './config/environment
 // /fonts/Bold and /styles/Instagram are how third-party links and hand-typed
 // URLs actually arrive. Both routes match lowercase slugs only, so today they
 // 404 where a 301 is what preserves the link equity. Next's path-to-regexp
-// cannot lowercase a captured param (it would redirect /fonts/Bold to itself),
-// so the rewrite is done here on the real pathname.
+// cannot lowercase a captured param (it would redirect /fonts/Bold to itself), so
+// the rewrite is done here on the real pathname.
+//
+// Case normalisation is matched case-insensitively in the next.config redirects,
+// so an uppercase kept style slug reaches this handler rather than being
+// swallowed by the /styles catch-all. Both layers agreeing on that is what stops
+// the two rules from fighting each other.
 function caseNormalizedRedirect(request) {
   const { pathname } = request.nextUrl;
   for (const segment of ['fonts', 'styles']) {
@@ -23,15 +28,17 @@ function caseNormalizedRedirect(request) {
   return null;
 }
 
-// A fresh nonce per request. Next.js reads the CSP header while rendering a
-// dynamically rendered page and copies the nonce onto its own <script> tags,
-// so no 'unsafe-inline' is needed anywhere.
-export function proxy(request) {
-  const redirect = caseNormalizedRedirect(request);
-  if (redirect) return redirect;
+// The policy itself is identical on every request but the nonce, and everything
+// it branches on (production flag, AdSense, Firebase) is fixed for the life of
+// the process. So it is assembled once and the nonce is substituted per request,
+// rather than rebuilding six arrays and joining them on every hit.
+const NONCE_SLOT = '__STYLZO_NONCE__';
+const isProd = env.isProd;
 
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-  const isProd = env.isProd;
+let cachedTemplate = null;
+
+function cspTemplate() {
+  if (cachedTemplate) return cachedTemplate;
 
   // Firebase only widens connect-src when it is actually configured.
   const firebaseConnect = firebaseConfigured
@@ -54,28 +61,28 @@ export function proxy(request) {
 
   const scriptSrc = [
     "'self'",
-    `'nonce-${nonce}'`,
+    `'nonce-${NONCE_SLOT}'`,
     ...(adsEnabled ? ['https://pagead2.googlesyndication.com'] : []),
     ...(isProd ? [] : ["'unsafe-eval'"]),
   ].join(' ');
 
   // Ad creatives ship inline <style> inside their own iframe, so style-src has
   // to allow 'unsafe-inline' once ads are on. It is deliberately NOT allowed
-  // otherwise, and style-src-attr below is the one always permitted because the
-  // keyword board's progress bar is sized inline.
+  // otherwise, and style-src-attr below is the one always permitted because
+  // several components size an element with a style="" attribute.
   const styleSrc = [
     "'self'",
-    `'nonce-${nonce}'`,
+    `'nonce-${NONCE_SLOT}'`,
     ...(adsEnabled ? ["'unsafe-inline'", 'https://fonts.googleapis.com'] : (isProd ? [] : ["'unsafe-inline'"])),
   ].join(' ');
 
-  const csp = [
+  cachedTemplate = [
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
     `style-src ${styleSrc}`,
-    // style-src does not govern style="" attributes. The keyword board's
-    // progress bar is sized inline, so without this directive it renders at
-    // zero width in production even though the same markup passes in dev.
+    // style-src does not govern style="" attributes. Without this directive an
+    // inline width or offset renders as nothing in production, while the same
+    // markup passes in dev.
     `style-src-attr 'unsafe-inline'`,
     `img-src 'self' data: blob: https:`,
     `connect-src 'self' ${[...firebaseConnect, ...adsConnect].join(' ')}`.trim(),
@@ -95,6 +102,21 @@ export function proxy(request) {
       : []),
     ...(isProd ? ['upgrade-insecure-requests'] : []),
   ].join('; ');
+
+  return cachedTemplate;
+}
+
+// A fresh nonce per request. Next.js reads the CSP header while rendering a
+// dynamically rendered page and copies the nonce onto its own <script> tags,
+// so no 'unsafe-inline' is needed anywhere.
+export function proxy(request) {
+  const redirect = caseNormalizedRedirect(request);
+  if (redirect) return redirect;
+
+  // Edge runtime: `crypto` here is WebCrypto, so the random bytes come from
+  // randomUUID and are base64'd rather than read from node:crypto.
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const csp = cspTemplate().replaceAll(NONCE_SLOT, nonce);
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);

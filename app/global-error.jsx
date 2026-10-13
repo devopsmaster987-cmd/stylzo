@@ -29,7 +29,7 @@ export default function GlobalError({ error, reset }) {
           </p>
           <p className="more">
             Or go back to <a href="/">the generator</a>, browse <a href="/fonts">font styles</a>,
-            or open <a href="/styles">the keyword board</a>.
+            or open <a href="/styles">the style guides</a>.
           </p>
           {error?.digest ? <p className="muted">Reference: {error.digest}</p> : null}
         </main>

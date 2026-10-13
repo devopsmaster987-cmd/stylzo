@@ -4,7 +4,6 @@ import { isAdminAuthorized, pickAdminKey } from '@/lib/admin-auth.js';
 import { keywordMap, KEYWORD_CATEGORIES } from '@/services/keyword-map.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { JsonLd } from '@/components/json-ld.jsx';
-import { Scripts } from '@/components/scripts.jsx';
 
 function seoAdminMeta() {
   return pageMeta({
@@ -37,7 +36,10 @@ export default async function SeoAdminPage({ searchParams }) {
   return (
     <>
       <JsonLd items={seoAdminMeta().jsonLd} />
-      <Scripts pageKey="seo-admin" scripts={['/js/keyword-dashboard.js']} />
+      {/* No client script: this page used to load the /styles board dashboard,
+          which was a copy-paste leftover — it drove keyword filtering on a page
+          whose filters are server-side query parameters. Filtering still works
+          through the GET form; only the instant client-side narrowing is gone. */}
 
       <section className="hero">
         <p className="eyebrow">admin</p>

@@ -25,8 +25,9 @@ Typing example: "Stylzo".
 - [Main generator](https://www.abdulsamad.shop/): the tool. Supports ?text= and ?category=.
 - [Font style index](https://www.abdulsamad.shop/fonts): all 100 styles by category. Supports ?q=.
 - [Font style pages](https://www.abdulsamad.shop/fonts/bold): one page per style, each with a FAQ.
-- [Keyword board](https://www.abdulsamad.shop/styles): 38 ready-made style pages.
-- [Landing pages](https://www.abdulsamad.shop/styles/instagram): task-specific pages with FAQs.
+- [Style guides](https://www.abdulsamad.shop/styles): one page showing 25 words in 25 styles, plus
+  6 guides covering where the finished text goes.
+- [Instagram guide](https://www.abdulsamad.shop/styles/instagram): field limits and bios, with FAQs.
 - [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse and more.
 - [Font studio](https://www.abdulsamad.shop/studio): styled text to PNG.
 - [Symbols](https://www.abdulsamad.shop/symbols) / [Emoji](https://www.abdulsamad.shop/emoji) / [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.

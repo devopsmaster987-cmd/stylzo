@@ -9,7 +9,7 @@ import { env } from '../config/environment.js';
 import { site } from '../config/site.js';
 import { catalog } from '../services/catalog.js';
 import { LANDING_PAGES } from '../lib/landing-pages.js';
-import { boardSlugs } from '../lib/keyword-board.js';
+import { styleSlugs } from '../lib/styles-material.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const file = path.join(root, 'public', 'llms.txt');
@@ -52,8 +52,9 @@ Typing example: "${sample}".
 - [Main generator](${base}/): the tool. Supports ?text= and ?category=.
 - [Font style index](${base}/fonts): all ${indexable.length} styles by category. Supports ?q=.
 - [Font style pages](${base}/fonts/bold): one page per style, each with a FAQ.
-- [Keyword board](${base}/styles): ${boardSlugs().length} ready-made style pages.
-- [Landing pages](${base}/styles/${LANDING_PAGES[0].key}): task-specific pages with FAQs.
+- [Style guides](${base}/styles): one page showing 25 words in 25 styles, plus
+  ${styleSlugs().length} guides covering where the finished text goes.
+- [Instagram guide](${base}/styles/${LANDING_PAGES[0].key}): field limits and bios, with FAQs.
 - [Text tools](${base}/tools): word counter, case converter, reverse and more.
 - [Font studio](${base}/studio): styled text to PNG.
 - [Symbols](${base}/symbols) / [Emoji](${base}/emoji) / [Kaomoji](${base}/kaomoji): copyable libraries.

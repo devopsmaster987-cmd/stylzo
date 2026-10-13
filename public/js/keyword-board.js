@@ -1,4 +1,4 @@
-// Keyword board: live typing.
+// /styles: live typing.
 //
 // Each row is a word rendered in a different style, wrapped in 6 to 8 colour emoji.
 // Typing in the box re-styles whatever is typed in every row at once and keeps the
@@ -16,9 +16,8 @@ let rows = Array.from(document.querySelectorAll('[data-style-id]'));
 const count = document.querySelector('[data-count]');
 const pipelines = new Map();
 
-// The /styles dashboard swaps the panel's rows for another keyword. The 25
-// style ids are identical across keywords, so the pipelines already fetched
-// still apply; only the row nodes need re-querying.
+// Re-query rather than caching the list: anything that replaces the rows
+// wholesale has to be able to hand the live typing back a fresh node list.
 document.addEventListener('stylix:rows-changed', () => {
   rows = Array.from(document.querySelectorAll('[data-style-id]'));
   render();

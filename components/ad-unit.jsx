@@ -2,11 +2,38 @@
 import { useEffect, useRef } from 'react';
 import { readConsent, pushAdUnit } from '@/lib/consent.js';
 
-/* adsbygoogle.js rewrites the <ins> in place: it adds data-adsbygoogle-status
-   and replaces the contents with an <iframe> ad frame. Both happen before React
-   hydrates, so the node is handed to React already different from the server
-   HTML. Hoisted so the value is stable across re-renders. */
-const GOOGLE_OWNS_CHILDREN = { __html: '' };
+/* Everything inside the slot belongs to Google, not to React.
+   adsbygoogle.js rewrites the <ins> in place: it adds data-adsbygoogle-status
+   and data-ad-status, sets a style, and replaces the contents with the ad's
+   <iframe>. It can also do all of that before React hydrates - the tag is a
+   plain script in <head>, so it runs as soon as it has loaded - and a unit that
+   is rewritten, or removed by an ad blocker or an extension, leaves React
+   looking for markup that is no longer there. That is not a warning: React
+   discards the server HTML for the whole page and rebuilds it on the client.
+
+   So the slot is rendered as one opaque HTML string rather than as React
+   children. React diffs the <aside>'s own attributes and nothing inside it,
+   before hydration or on any later re-render, and the ad markup it wrote is
+   never re-examined. Label included, because a React child inside the slot
+   would put React back in the business of matching nodes it does not own. */
+const escapeHtml = (value) =>
+  String(value).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  })[c]);
+
+/* The label is visible rather than screen-reader only, because Google requires
+   ads to be distinguishable from the surrounding site; aria-hidden because the
+   <aside> already carries the label for assistive tech. The unit starts empty:
+   nothing is requested before consent is recorded. */
+const slotHtml = ({ client, slot, format, label }) =>
+  `<span class="ad-label" aria-hidden="true">${escapeHtml(label)}</span>`
+  + `<ins class="adsbygoogle" data-ad-client="${escapeHtml(client)}"`
+  + ` data-ad-slot="${escapeHtml(slot)}" data-ad-format="${escapeHtml(format)}"`
+  + ' data-full-width-responsive="true"></ins>';
 
 /**
  * One AdSense unit.
@@ -28,7 +55,7 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
 
     const tryPush = () => {
       if (cancelled || filled.current || readConsent() !== 'granted') return;
-      if (!ref.current || !pushAdUnit()) return;
+      if (!ref.current?.querySelector('ins.adsbygoogle') || !pushAdUnit()) return;
       filled.current = true;
       clearInterval(poll);
     };
@@ -55,26 +82,15 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
   if (!client || !slot) return null;
 
   return (
-    <aside className="ad-slot" aria-label={label}>
-      {/* Visible, not screen-reader only: Google requires ads to be labelled and
-          distinguishable from the surrounding site. aria-hidden because the
-          <aside> already carries the label for assistive tech. */}
-      <span className="ad-label" aria-hidden="true">{label}</span>
-      {/* Google owns every child of this node from the moment it fills the slot,
-          so React must never try to diff them. suppressHydrationWarning covers
-          the attributes Google adds before hydration; the empty
-          dangerouslySetInnerHTML stops React re-diffing the injected iframe on
-          any later re-render. */}
-      <ins
-        className="adsbygoogle"
-        data-ad-client={client}
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
-        ref={ref}
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={GOOGLE_OWNS_CHILDREN}
-      />
-    </aside>
+    <aside
+      className="ad-slot"
+      aria-label={label}
+      ref={ref}
+      // The string is written once and never rewritten, so the only thing React
+      // would ever compare is markup Google has since changed: that is the one
+      // comparison in here worth silencing.
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: slotHtml({ client, slot, format, label }) }}
+    />
   );
 }

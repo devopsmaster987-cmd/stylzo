@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { catalog } from '../../services/catalog.js';
 import { KEYWORD_MAP, normaliseTerm } from '../../lib/seo-keywords.js';
-import { boardSlugs } from '../../lib/keyword-board.js';
+import { styleSlugs } from '../../lib/styles-material.js';
 import {
   semanticKeywordsFor, semanticGroups, semanticKeywordString, RELATION,
 } from '../../lib/semantic-keywords.js';
@@ -16,7 +16,7 @@ const PATHS = KEYWORD_MAP.map((e) => e.path);
 /** Routes the site actually serves, derived rather than hand-listed. */
 function realRoutes() {
   const routes = new Set(PATHS);
-  boardSlugs().forEach((s) => routes.add(`/styles/${s}`));
+  styleSlugs().forEach((s) => routes.add(`/styles/${s}`));
   catalog().styles.filter((s) => s.indexable).forEach((s) => routes.add(`/fonts/${s.slug}`));
   Object.keys(catalog().categories).forEach((k) => routes.add(`/?category=${k}`));
   ['/privacy', '/terms', '/contact', '/styles'].forEach((r) => routes.add(r));
@@ -49,12 +49,12 @@ describe('semantic keywords', () => {
     }
   });
 
-  test('every platform term has a real board page behind it', () => {
-    const slugs = new Set(boardSlugs());
+  test('every platform term has a real page behind it', () => {
+    const slugs = new Set(styleSlugs());
     for (const t of semanticKeywordsFor('/')) {
       if (t.relation !== RELATION.PLATFORM) continue;
       const slug = t.href.split('/').pop();
-      assert.ok(slugs.has(slug), `platform term ${t.term} points at missing board page ${slug}`);
+      assert.ok(slugs.has(slug), `platform term ${t.term} points at missing page ${slug}`);
     }
   });
 

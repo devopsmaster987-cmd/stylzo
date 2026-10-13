@@ -1,7 +1,7 @@
-import { renderKeywordBoard, generateMetadata } from '@/components/keyword-board-page.jsx';
+import { renderStylesHub, generateMetadata } from '@/components/styles-hub.jsx';
 
 export { generateMetadata };
 
-export default function StylesIndexPage() {
-  return renderKeywordBoard();
+export default async function StylesIndexPage({ searchParams }) {
+  return renderStylesHub(await searchParams);
 }

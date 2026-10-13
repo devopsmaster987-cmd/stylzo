@@ -4,9 +4,7 @@ import { catalog } from '../../services/catalog.js';
 import { env } from '../../config/environment.js';
 import { keyFacts, appFeatures } from '../../lib/facts.js';
 import { organizationLd } from '../../services/seo.js';
-import {
-  BOARD_SIZE, WORDS_PER_KEYWORD, EMOJI_MIN, EMOJI_MAX,
-} from '../../lib/keyword-board.js';
+import { KEPT_STYLE_SLUGS } from '../../lib/styles-routing.js';
 
 // Generative engines quote short, standalone claims. These tests protect the
 // property that makes a quote safe: every number is real and every number is
@@ -54,15 +52,16 @@ describe('quotable facts', () => {
     );
   });
 
-  test('the board fact uses the real board constants', () => {
-    const board = facts.find((f) => f.id === 'board');
+  test('the guide fact quotes the number of guides that actually exist', () => {
+    const guides = facts.find((f) => f.id === 'guides');
+    assert.ok(guides, 'the guides fact is missing');
     assert.ok(
-      board.value.includes(String(BOARD_SIZE)) && board.value.includes(String(WORDS_PER_KEYWORD)),
-      `the quoted board size is not ${BOARD_SIZE} keywords of ${WORDS_PER_KEYWORD} words`,
+      guides.value.includes(String(KEPT_STYLE_SLUGS.length)),
+      `the quoted guide count is not ${KEPT_STYLE_SLUGS.length}`,
     );
     assert.ok(
-      board.detail.includes(String(EMOJI_MIN)) && board.detail.includes(String(EMOJI_MAX)),
-      'the quoted emoji range has drifted from EMOJI_MIN/EMOJI_MAX',
+      guides.detail.includes(String(KEPT_STYLE_SLUGS.length)),
+      'the guide count is not restated in its detail',
     );
   });
 

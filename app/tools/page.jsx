@@ -204,6 +204,17 @@ export default function ToolsPage() {
           Removes extra spaces, converts fancy dashes to plain ones, and strips zero-width and
           other invisible characters that cause text to look identical but behave differently.
         </p>
+
+        {/* These tools change the words, not the way they look. Saying so is the
+            honest use of this space, and it is the one place on the page a reader
+            can get from counting text to the tools that style it. */}
+        <p>
+          Everything above works on plain text and leaves the words alone. To change how the words
+          look, use the <a href="/">fancy text generator</a>, browse the{' '}
+          <a href="/fonts">font styles by category</a>, or compare 25 words in 25 styles at once on
+          the <a href="/styles">style guides</a>. A finished line of styled text can then be turned
+          into an image with the <a href="/studio">font studio</a>.
+        </p>
       </section>
 
       <section aria-labelledby="faq-heading">

@@ -97,7 +97,7 @@ describe('advertising with ads unconfigured', () => {
   after(() => server?.stop());
 
   test('no ad markup, no consent banner, no ad-shaped gaps', onlyWith(!ADS_ON), async () => {
-    for (const path of ['/', '/fonts', '/styles/instagram', '/tools']) {
+    for (const path of ['/', '/fonts', '/styles', '/styles/instagram', '/tools']) {
       const html = await (await get(server.base, path)).text();
       assert.equal(count(html, /class="adsbygoogle"/g), 0, `${path} renders an ad slot while ads are off`);
       assert.equal(count(html, /class="consent"/g), 0, `${path} shows a consent banner while ads are off`);
@@ -166,14 +166,16 @@ describe('advertising with a configured publisher', () => {
     assert.match(unit, /data-full-width-responsive="true"/);
   });
 
-  test('ads appear only on pages with real content, at most one each', onlyWith(enabled), async () => {
-    for (const p of ['/', '/fonts', '/styles/instagram', '/styles/gaming']) {
+  test('ads appear only on real-content pages, at most one each', onlyWith(enabled), async () => {
+    // The allowlist is the whole point: an ad on a page that is only a list of
+    // links, or that exists because a keyword matched, is a policy problem
+    // rather than a layout detail.
+    for (const p of ['/', '/styles', '/styles/instagram', '/styles/gaming']) {
       const html = await (await get(server.base, p)).text();
       const n = count(html, /class="adsbygoogle"/g);
       assert.equal(n, 1, `${p} should carry exactly one ad, found ${n}`);
     }
-    // Thin and policy pages never carry one.
-    for (const p of ['/about', '/contact', '/privacy', '/terms', '/tools']) {
+    for (const p of ['/fonts', '/tools', '/symbols', '/emoji', '/kaomoji', '/about', '/contact', '/privacy', '/terms']) {
       const html = await (await get(server.base, p)).text();
       assert.equal(count(html, /class="adsbygoogle"/g), 0, `${p} must not render an ad`);
     }

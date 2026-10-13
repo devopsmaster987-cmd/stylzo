@@ -8,7 +8,7 @@ export const site = {
   themeColor: '#4b2fe0',
   nav: [
     { href: '/', label: 'Generator' },
-    { href: '/styles', label: 'Fancy Keyword board', className: 'nav-board' },
+    { href: '/styles', label: 'Style guides', className: 'nav-board' },
     { href: '/studio', label: 'Studio' },
     { href: '/tools', label: 'Tools' },
     {

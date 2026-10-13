@@ -49,6 +49,10 @@ function link(raw) {
       .toLowerCase()
   );
 
+  // The indexable styles as records, resolved once. Every caller that wanted
+  // "the indexable ones" rebuilt this array from the position list per request.
+  const indexableStyles = raw.indexable.map((index) => styles[index]);
+
   const apiPayload = JSON.stringify({
     styles: styles.map((style) => ({
       id: style.id,
@@ -61,6 +65,7 @@ function link(raw) {
     bySlug,
     byCategory,
     haystack,
+    indexableStyles,
     apiPayload,
     loadedAt: Date.now(),
   };
@@ -187,34 +192,16 @@ export function searchStyles(query, n = 24) {
 }
 
 /**
- * Return popular styles first, followed by other indexable styles.
- */
-export function featuredStyles(n = 24) {
-  const current = catalog();
-  const popular = new Set(current.popularIndexable);
-  const rest = current.indexable.filter(
-    (index) => !popular.has(index)
-  );
-
-  return [...current.popularIndexable, ...rest]
-    .map((index) => current.styles[index])
-    .slice(0, n);
-}
-
-/**
  * Return related styles from the same category and parent.
  */
 export function relatedStyles(style, n = 6) {
-  const current = catalog();
   const root = style.parent || style.slug;
 
-  const pool = current.indexable
-    .map((index) => current.styles[index])
-    .filter(
-      (item) =>
-        item.slug !== style.slug &&
-        (item.category === style.category || item.slug === root)
-    );
+  const pool = catalog().indexableStyles.filter(
+    (item) =>
+      item.slug !== style.slug &&
+      (item.category === style.category || item.slug === root)
+  );
 
   pool.sort((a, b) => (b.slug === root) - (a.slug === root));
 

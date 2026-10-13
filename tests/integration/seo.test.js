@@ -110,15 +110,19 @@ describe('landing pages', () => {
     assert.ok(html.includes('data-sample="Hi"'));
   });
 
-  test('unknown landing pages 404', async () => {
-    assert.equal((await get(server.base, '/styles/not-a-page')).status, 404);
+  test('an unknown /styles/<slug> redirects instead of rendering a page', async () => {
+    // The route 404s, but the redirect fires first, so a visitor never lands on
+    // an error page and any accumulated link equity is passed on rather than lost.
+    const res = await get(server.base, '/styles/not-a-page', { redirect: 'manual' });
+    assert.equal(res.status, 301);
+    assert.equal(new URL(res.headers.get('location'), 'http://x.test').pathname, '/');
   });
 
-  test('the styles index is the keyword board, not a redirect', async () => {
+  test('the styles index is the hub, not a redirect', async () => {
     const res = await get(server.base, '/styles', { redirect: 'manual' });
     assert.equal(res.status, 200);
     const html = await res.text();
-    assert.match(html, /Fancy text keyword board/);
+    assert.match(html, /Fancy text styles, side by side/);
   });
 
   test('titles are unique across landing pages and never double-suffix the site name', async () => {

@@ -28,8 +28,19 @@
         "heading": "What is on the site",
         "body": [
           "The text generator holds more than 5,600 generated styles across eighteen categories, a hundred of which have their own page explaining what the style is, what it looks like and which apps it works in.",
-          "The keyword board turns common searches such as a language or a platform into ready-made pages, so you can see a batch of styled words without typing anything first.",
+          "Six style guides cover where the finished text actually goes, covering Instagram, WhatsApp, Discord, gaming, languages and colours, so you can see a batch of styled words without typing anything first.",
           "There are three copyable libraries for symbols, emoji and kaomoji, a set of browser-based text tools for counting, converting and cleaning text, and a font studio that renders styled text to a PNG image."
+        ],
+        "links": [
+          { "href": "/", "label": "The fancy text generator itself", "external": false },
+          { "href": "/fonts", "label": "Every font style, listed by category", "external": false },
+          { "href": "/styles", "label": "Style guides for each destination", "external": false },
+          { "href": "/styles/instagram", "label": "What fits in an Instagram bio or caption", "external": false },
+          { "href": "/symbols", "label": "The copyable symbol library", "external": false },
+          { "href": "/emoji", "label": "The copyable emoji library", "external": false },
+          { "href": "/kaomoji", "label": "The copyable kaomoji library", "external": false },
+          { "href": "/tools", "label": "The word counter and text tools", "external": false },
+          { "href": "/studio", "label": "The font studio, for styled text as a PNG", "external": false }
         ]
       },
       {
@@ -175,6 +186,11 @@
           "Support problems are almost always about a specific character missing from a specific app, so three details let us fix it in minutes instead of guessing:",
           "The style name, and what you typed. The app or website where it did not display correctly. Your device and operating system, if you know it.",
           "If you can, say whether the same text worked in another app. That single fact usually identifies the cause immediately, because it separates a broken style from an app that cannot draw it."
+        ],
+        "links": [
+          { "href": "/fonts", "label": "The style list, to look up the exact style name", "external": false },
+          { "href": "/about", "label": "Why an app can fail to draw a character", "external": false },
+          { "href": "/styles/instagram", "label": "A style guide, as an example of a finished result", "external": false }
         ]
       },
       {

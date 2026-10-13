@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { env, adsenseConfigured } from '../config/environment.js';
+import { KEPT_STYLE_SLUGS, STYLES_HUB_AD_MIN_WORDS } from '../lib/styles-routing.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Accepts both "--url https://x" and "--url=https://x". Only the space form was
@@ -64,7 +65,11 @@ async function startLocal() {
   }
 }
 
-const get = (base, p) => fetch(`${base}${p}`);
+// `init` is forwarded on purpose. fetch follows redirects by default, so
+// checking that a URL is *retired* means asking for the redirect itself —
+// without this the probe silently followed the hop and reported the destination
+// as if it were the source.
+const get = (base, p, init) => fetch(`${base}${p}`, init);
 const text = async (base, p) => (await (await get(base, p)).text());
 const words = (html) => {
   const m = html.replace(/<script[\s\S]*?<\/script>/g, '').match(/<main[\s\S]*?<\/main>/);
@@ -142,10 +147,27 @@ for (const p of REQUIRED) {
 
 // Thin and policy pages. Google expects ads only where there is content to
 // scroll past, so a unit on any of these is a policy problem, not just clutter.
-const NO_AD_PAGES = ['/about', '/contact', '/privacy', '/terms', '/tools'];
+const NO_AD_PAGES = ['/about', '/contact', '/privacy', '/terms', '/tools', '/fonts', '/symbols', '/emoji', '/kaomoji', '/studio'];
 
-// One representative guide page under /styles/*, which must carry an ad.
-const STYLE_GUIDES = ['/styles/instagram', '/styles/gaming'];
+// The real guide pages under /styles/*, each of which must carry exactly one ad.
+const STYLE_GUIDES = KEPT_STYLE_SLUGS.map((slug) => `/styles/${slug}`);
+
+// The thin doorway pages the site used to publish under /styles/*. They must
+// never come back as live pages, and an ad on any of them is the exact failure
+// that got the site into trouble: inventory on a page with nothing to read.
+const RETIRED_STYLE_SLUGS = [
+  'fancy-text-generator', 'fancy-text-generator-online', 'free-fancy-text-generator',
+  'best-fancy-text-generator', 'fancy-text', 'copy-and-paste-fancy-text',
+  'fancy-text-generator-2024', 'fancy-text-generator-app', 'fancy-text-generator-download',
+  'hindi-fancy-text-generator', 'urdu-fancy-text-generator', 'arabic-fancy-text-generator',
+  'tamil-fancy-text-generator', 'marathi-fancy-text-generator', 'coolsymbol-fancy-text-generator',
+  'facebook-fancy-text-generator', 'heart-fancy-text-generator', 'www-fancy-text-generator',
+  'font-fancy-text-generator', 'ai-fancy-text-generator', 'fancy-text-generator-blue-colour',
+  'cool-fancy-text-generator', 'online-fancy-text-generator', 'instagram-fancy-text-generator',
+  'fancy-text-generator-for-instagram', 'instagram-bio-fonts', 'instagram-font-generator',
+  'instagram-username-fonts', 'instagram-name-fonts', 'instagram-caption-fonts',
+  'fancy-text-for-instagram-bio', 'instagram-aesthetic-fonts',
+];
 
 const privacy = await text(base, '/privacy');
 check('Privacy policy is substantial', words(privacy) >= 300, `${words(privacy)} words`,
@@ -251,8 +273,9 @@ if (!adsLive) {
 
   check('Ad unit rendered on the home page', liveUnits > 0, `${liveUnits} unit(s)`);
 
-  const fontsUnits = ((await text(base, '/fonts')).match(/class="adsbygoogle"/g) || []).length;
-  check('Ad unit rendered on /fonts', fontsUnits > 0);
+  // /fonts is an index of links rather than prose, so it is on NO_AD_PAGES. The
+  // /fonts/<slug> style pages are real content and may carry one unit, but they
+  // are not required to: an ad on a page without one is not a policy problem.
 
   // A guide page under /styles/* is the other money page, so it carries an ad too.
   for (const g of STYLE_GUIDES) {
@@ -263,12 +286,53 @@ if (!adsLive) {
     check(`At most one ad on ${g}`, n <= 1, `${n} unit(s)`);
   }
 
+  // /styles is the one page allowed an ad only because it earns one. The app
+  // gates the unit on its own prose clearing this floor; this check measures the
+  // whole rendered page, which is the looser of the two, so a page that renders
+  // a unit at all has necessarily passed the tighter one.
+  const hubWords = words(await text(base, '/styles'));
+  check(`/styles clears the ${STYLES_HUB_AD_MIN_WORDS}-word floor`, hubWords >= STYLES_HUB_AD_MIN_WORDS,
+    `${hubWords} words`, 'below the floor the hub stops rendering an ad unit at all');
+  const hubUnits = ((await text(base, '/styles')).match(/class="adsbygoogle"/g) || []).length;
+  check('Ad unit rendered on /styles', hubUnits > 0, `${hubUnits} unit(s)`);
+  check('At most one ad on /styles', hubUnits <= 1, `${hubUnits} unit(s)`);
+
   // Rule: thin and policy pages never carry ads. A unit here is a policy
   // violation, not just a layout annoyance, so this fails rather than warns.
   for (const p of NO_AD_PAGES) {
     const n = ((await text(base, p)).match(/class="adsbygoogle"/g) || []).length;
     check(`No ad unit on ${p}`, n === 0, n ? `${n} unit(s)` : '');
   }
+
+  // Rule: a retired /styles/<slug> must redirect, never render. Anything else is
+  // either a live thin page or a soft 404, and either one is a live ad slot on
+  // a page with no content behind it.
+  const resurrected = [];
+  const wrongTarget = [];
+  for (const slug of RETIRED_STYLE_SLUGS) {
+    const res = await get(base, `/styles/${slug}`, { redirect: 'manual' });
+    if (res.status !== 301) {
+      resurrected.push(`${slug} (${res.status})`);
+      continue;
+    }
+    const to = new URL(res.headers.get('location'), base).pathname;
+    const wanted = slug.includes('instagram')
+      ? '/styles/instagram'
+      : /^(hindi|urdu|arabic|tamil|marathi)-fancy-text-generator$/.test(slug)
+        ? '/styles/languages'
+        : slug === 'fancy-text-generator-blue-colour' ? '/styles/colours' : '/';
+    if (to !== wanted) wrongTarget.push(`${slug} -> ${to} (wanted ${wanted})`);
+  }
+  check(`Every retired /styles/* slug 301s away`, resurrected.length === 0,
+    resurrected.length ? `${resurrected.length} still live, e.g. ${resurrected.slice(0, 3).join(', ')}`
+      : `${RETIRED_STYLE_SLUGS.length} checked`);
+  check('Every retired /styles/* slug redirects to the right page', wrongTarget.length === 0,
+    wrongTarget.slice(0, 3).join(', '));
+
+  // And the sitemap must not advertise any of them.
+  const retiredInSitemap = RETIRED_STYLE_SLUGS.filter((s) => sm.includes(`/styles/${s}</loc>`));
+  check('The sitemap lists no retired /styles/* slug', retiredInSitemap.length === 0,
+    retiredInSitemap.slice(0, 5).join(', '));
 
   // The tag is static markup in the head, because AdSense verifies a site by
   // reading it out of the served HTML rather than running the page. Consent

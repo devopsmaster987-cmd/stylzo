@@ -1,3 +1,5 @@
+import { styleRedirects } from './lib/styles-routing.js';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
@@ -13,6 +15,27 @@ const nextConfig = {
       // real page. A 301 passes any accumulated equity instead. Query strings
       // are carried across by Next, so ?text=/?category= keep working.
       { source: '/fancy-text-generator', destination: '/', permanent: true },
+
+      // Thin doorway pages under /styles/*.
+      //
+      // The site published one near-identical page per search phrase (32 of
+      // them: /styles/fancy-text-generator-2024, /styles/hindi-fancy-text-generator,
+      // /styles/copy-and-paste-fancy-text and so on). Each rendered the same 25
+      // words in the same 25 styles and each carried an ad. They are gone, and
+      // a redirect is what converts the traffic and link equity they already
+      // hold into something that helps instead of compounding the problem.
+      //
+      // 301 rather than 404 because these URLs are indexed and linked from
+      // outside. 301 rather than 308 because the point is to retire them for
+      // good, not to keep serving the same thing at a new address.
+      //
+      // Rules run in order, so the two narrow ones come before the catch-all and
+      // can never be shadowed by it. The catch-all excludes the six real landing
+      // pages, which is what makes a slug invented tomorrow a redirect instead of
+      // a new thin page. The list is generated in lib/styles-routing.js so the
+      // redirects the server runs, the route, the sitemap and the tests cannot
+      // disagree about which slugs are real.
+      ...styleRedirects(),
 
       // NOTE: case normalisation for /fonts/[slug] and /styles/[key] lives in
       // proxy.js, not here: a path-to-regexp param captures the matched text

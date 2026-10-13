@@ -243,8 +243,7 @@ export default function StudioPage() {
         <p>
           If you need the characters themselves, start with the{' '}
           <a href="/">main text generator</a>, browse the <a href="/fonts">full list of font
-          styles</a>, or try a <a href="/styles/fancy-text-generator">ready-made keyword
-          board</a>.
+          styles</a>, or compare <a href="/styles">25 words in 25 styles at once</a>.
         </p>
       </section>
 

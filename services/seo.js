@@ -11,8 +11,19 @@ export function safeJson(obj) {
  * Absolute URL for a site path. Normalises through the URL parser rather than
  * concatenating, so a trailing slash, an uppercase segment or a stray query
  * string can never produce a malformed canonical or `og:url`.
+ *
+ * The parser is only reached for paths that can actually need it. `abs()` runs
+ * inside the ItemList builders, so a page with a hundred styles asked for a
+ * hundred URLs; those are all plain `/segment` or `/segment#fragment` paths,
+ * where concatenating against the already-normalised site URL is identical to
+ * what the parser returns. Anything else — a dot segment, a query string, a
+ * percent-encoded byte, a protocol-relative `//` — falls through to the parser.
  */
-export const abs = (p = '/') => new URL(p, `${env.siteUrl}/`).toString();
+const PLAIN_PATH = /^\/[A-Za-z0-9_-]+(?:\/[A-Za-z0-9_-]+)*(?:#[A-Za-z0-9_-]+)?$/;
+
+export function abs(p = '/') {
+  return PLAIN_PATH.test(p) ? `${env.siteUrl}${p}` : new URL(p, `${env.siteUrl}/`).toString();
+}
 
 export const OG_IMAGE = {
   url: abs('/og-default.png'),
@@ -126,6 +137,31 @@ export function howToLd(name, description, path, steps) {
   };
 }
 
+/**
+ * Attach a page's JSON-LD, serialized only if something actually reads it.
+ *
+ * Every page calls its meta builder twice: once in generateMetadata(), where
+ * `toMetadata()` discards the JSON-LD, and once in the component, where it is
+ * rendered. Serializing up front meant every request paid for the whole block
+ * once to throw it away — 219 KB of string on /emoji, for a value nothing read.
+ *
+ * `ld` stays on the object unserialized so a caller that wants to extend the
+ * block set can, and `jsonLd` is a lazy getter so `buildMeta()` itself stays
+ * cheap. It is deliberately non-enumerable: spreading a meta object must not
+ * quietly materialize the JSON-LD, which is exactly what made the double build
+ * invisible.
+ */
+export function attachJsonLd(meta, ld) {
+  let jsonLd = null;
+  Object.defineProperty(meta, 'jsonLd', {
+    enumerable: false,
+    get() {
+      return jsonLd ?? (jsonLd = ld.map(safeJson));
+    },
+  });
+  return meta;
+}
+
 /** One builder for title, description, canonical, social tags, breadcrumbs and JSON-LD. */
 export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], faq = [], quickAnswer = null, howTo = null, noindex = false, app = false, home = false }) {
   const fullTitle = home ? `${site.name}: ${title}` : `${title} | ${site.name}`;
@@ -158,8 +194,9 @@ export function buildMeta({ title, description, path = '/', canonicalPath, bread
       isAccessibleForFree: true, publisher: { '@id': ids.organization },
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } });
   }
-  return {
+  return attachJsonLd({
     title: fullTitle, description: desc, canonical, noindex, breadcrumbs,
+    ld,
     robots: noindex ? 'noindex,follow' : 'index,follow',
     og: { title: fullTitle, description: desc, url: canonical, type: 'website', siteName: site.name, images: [OG_IMAGE] },
     twitter: {
@@ -169,6 +206,5 @@ export function buildMeta({ title, description, path = '/', canonicalPath, bread
       images: [OG_IMAGE.url],
       ...(site.twitter ? { site: site.twitter } : {}),
     },
-    jsonLd: ld.map(safeJson),
-  };
+  }, ld);
 }

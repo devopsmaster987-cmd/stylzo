@@ -1,11 +1,9 @@
 import { catalog, listStyles } from '@/services/catalog.js';
-import { env, adsenseConfigured } from '@/config/environment.js';
 import { pageMeta, toMetadata, renderCards } from '@/lib/pages.js';
 import { FONTS_ANSWER, FONTS_QA } from '@/lib/aeo.js';
 import { RelatedSearches } from '@/components/related-searches.jsx';
 import { itemListLd, safeJson } from '@/services/seo.js';
 import { StyleRow } from '@/components/style-row.jsx';
-import { AdUnit } from '@/components/ad-unit.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
@@ -128,7 +126,7 @@ export default async function FontsIndexPage({ searchParams }) {
         </>
       ) : null}
 
-      {groups.map((g, i) => (
+      {groups.map((g) => (
         <section key={g.key} aria-labelledby={`cat-${g.key}`}>
           <h2 id={`cat-${g.key}`}>{g.name}</h2>
           <p className="muted">{g.intro}</p>
@@ -138,10 +136,6 @@ export default async function FontsIndexPage({ searchParams }) {
           <p className="more">
             <a href={`/?category=${g.key}`}>All {g.count} {g.name.toLowerCase()} variations</a>
           </p>
-          {/* One ad partway down a long list, not between every category. */}
-          {i === 2 ? (
-            <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} />
-          ) : null}
         </section>
       ))}
     </>

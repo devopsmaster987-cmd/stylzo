@@ -1,5 +1,5 @@
 export function StyleRow({ s }) {
-  // The keyword board renders the same row in 25 styles. `word` is the sample the row
+  // The /styles page renders the same row in 25 styles. `word` is the sample the row
   // falls back to and `emojiBefore`/`emojiAfter` is the decoration split around it, so
   // the live script can wrap typed text without re-deriving which emoji goes where.
   const before = s.emojiBefore;

@@ -66,7 +66,7 @@ describe('answer engine optimisation', () => {
     test('llms.txt is generated, so it cannot drift from the catalog', () => {
       const build = readFileSync(new URL('../../scripts/build-llms-txt.js', import.meta.url), 'utf8');
       assert.match(build, /catalog\(\)/);
-      assert.match(build, /boardSlugs\(\)/);
+      assert.match(build, /styleSlugs\(\)/);
     });
   });
 

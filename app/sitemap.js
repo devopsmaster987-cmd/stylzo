@@ -1,6 +1,6 @@
 import { env } from '@/config/environment.js';
 import { catalog } from '@/services/catalog.js';
-import { boardSlugs } from '@/lib/keyword-board.js';
+import { styleSlugs } from '@/lib/styles-material.js';
 
 // Only active, indexable pages. Composed combinations stay out of the sitemap.
 
@@ -35,7 +35,10 @@ export default function sitemap() {
   const entries = [
     ...STATIC_PAGES,
     { path: '/styles', changeFrequency: 'weekly', priority: 0.9 },
-    ...boardSlugs().map((key) => ({ path: `/styles/${key}`, changeFrequency: 'weekly', priority: 0.8 })),
+    // Exactly the six real landing pages. The 32 keyword-board slugs that used to
+    // be here are permanently redirected now, and a redirect in a sitemap is a
+    // contradiction: it asks a crawler to fetch a URL we have retired.
+    ...styleSlugs().map((key) => ({ path: `/styles/${key}`, changeFrequency: 'monthly', priority: 0.7 })),
     ...catalog()
       .styles
       .filter((style) => style.indexable)
