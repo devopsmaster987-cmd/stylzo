@@ -59,6 +59,28 @@ export default function ToolsPage() {
         </p>
       </section>
 
+      {/* The image compressor is a whole page rather than an eighth tab here.
+          /tools targets "word counter", and putting a second tool's copy on this
+          page would split its signals across two URLs — the one thing
+          lib/seo-keywords.js exists to prevent. A panel that points at its own
+          page keeps one tool per page while still putting it where someone
+          looking for tools will actually see it. */}
+      <section className="tool-hub" aria-labelledby="tools-images">
+        <span className="tool-hub-icon" aria-hidden="true">🖼️</span>
+        <div>
+          <h2 id="tools-images">
+            <a href="/image-compression">Image compressor</a>
+          </h2>
+          <p>
+            Shrink JPG, PNG and WebP images and see the real file size before and after. Add a
+            whole batch, set a quality level, resize, convert the format, then download one at a
+            time or as a ZIP. Your images are decoded and re-encoded on your own device, so
+            nothing is uploaded.
+          </p>
+        </div>
+        <a className="btn" href="/image-compression">Open the image compressor</a>
+      </section>
+
       <div className="tool-layout">
         <nav className="tool-nav" role="tablist" aria-label="Tools">
           <button type="button" role="tab" aria-selected="true" aria-controls="tool-case" id="tab-case">Case converter</button>
@@ -209,8 +231,10 @@ export default function ToolsPage() {
             honest use of this space, and it is the one place on the page a reader
             can get from counting text to the tools that style it. */}
         <p>
-          Everything above works on plain text and leaves the words alone. To change how the words
-          look, use the <a href="/">fancy text generator</a>, browse the{' '}
+          Everything above works on plain text and leaves the words alone. For pictures rather
+          than text, the <a href="/image-compression">image compressor</a> shrinks JPG, PNG and
+          WebP files in your browser. To change how the words look, use the{' '}
+          <a href="/">fancy text generator</a>, browse the{' '}
           <a href="/fonts">font styles by category</a>, or compare 25 words in 25 styles at once on
           the <a href="/styles">style guides</a>. A finished line of styled text can then be turned
           into an image with the <a href="/studio">font studio</a>.

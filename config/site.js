@@ -10,7 +10,10 @@ export const site = {
     { href: '/', label: 'Generator' },
     { href: '/styles', label: 'Style guides', className: 'nav-board' },
     { href: '/studio', label: 'Studio' },
-    { href: '/tools', label: 'Tools' },
+    { href: '/tools', label: 'Tools', children: [
+      { href: '/tools', label: 'Text tools' },
+      { href: '/image-compression', label: 'Image compressor' },
+    ] },
     {
       href: '/symbols', label: 'Libraries',
       children: [

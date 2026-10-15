@@ -1,5 +1,6 @@
 import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
 
 const meta = (html, name) => (html.match(new RegExp(`<meta name="${name}" content="([^"]*)"`)) || [])[1] || '';
@@ -184,11 +185,43 @@ describe('technical seo', () => {
   });
 
   describe('delivery', () => {
-    test('static assets are cached so they are not re-fetched on every navigation', async () => {
-      const css = await get(server.base, '/css/main.css');
-      assert.match(css.headers.get('cache-control') || '', /max-age=\d{6,}/, 'the stylesheet must be cacheable');
+    test('static assets revalidate, because their filenames are not content-addressed', async () => {
+      // These were served `max-age=31536000, immutable`. Nothing under /public
+      // is hashed — main.css is not main.<hash>.css — so a stylesheet change
+      // could never reach a returning visitor, including during local
+      // development. Revalidation costs a 304 and no body; correctness wins.
+      for (const asset of ['/css/main.css', '/js/image-compressor.js', '/js/zip.js']) {
+        const res = await get(server.base, asset);
+        const cache = res.headers.get('cache-control') || '';
+        assert.doesNotMatch(cache, /immutable/, `${asset} is still marked immutable`);
+        assert.match(cache, /max-age=0|must-revalidate|no-cache/, `${asset} does not revalidate: ${cache}`);
+      }
       const sw = await get(server.base, '/sw.js');
-      assert.match(sw.headers.get('cache-control') || '', /no-cache|must-revalidate|max-age=0/, 'the service worker must not be cached');
+      assert.match(sw.headers.get('cache-control') || '', /no-cache|must-revalidate|max-age=0/);
+    });
+
+    test('the service worker is not registered on localhost', async () => {
+      // A worker on the machine you are editing from serves the old files you
+      // just changed, behind a hard reload, and fights HMR. Production is the
+      // only place it should install.
+      const src = readFileSync(new URL('../../public/js/ui.js', import.meta.url), 'utf8');
+      const condition = src.match(/if \('serviceWorker' in navigator[^)]*\)/g) || [];
+
+      const registering = condition.filter((c) => /serviceWorker\.register/.test(
+        src.slice(src.indexOf(c) + c.length, src.indexOf(c) + c.length + 400),
+      ));
+      assert.equal(registering.length, 1, 'expected exactly one registering branch');
+
+      // The condition itself, not the file: prose about localhost is fine, a
+      // hostname check in the guard is not.
+      assert.match(registering[0], /location\.protocol === 'https:'/, 'registration is not gated on https');
+      assert.doesNotMatch(registering[0], /localhost|127\.0\.0\.1|hostname/, 'the registering branch still checks the hostname');
+
+      // And there has to be something that retires a worker installed before the
+      // rule changed, or the stale one keeps controlling the origin.
+      assert.match(src, /getRegistrations\(\)/, 'stale workers are never unregistered');
+      assert.match(src, /unregister\(\)/, 'stale workers are never unregistered');
+      assert.match(src, /startsWith\('stylix-'\)/, 'cache cleanup is not scoped to this site');
     });
 
     test('production CSP permits the inline style attributes the pages actually emit', async () => {

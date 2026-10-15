@@ -852,3 +852,256 @@ pre code { display: block; padding: .8rem; overflow: auto; }
   background: none; border: 0; padding: 0; font: inherit; color: inherit;
   text-decoration: underline; cursor: pointer;
 }
+
+/* A tool that lives on its own page, surfaced from the tools hub. Same tokens as
+   everything else; only the three-column arrangement is new. The accent bar is
+   the gradient rather than a flat colour so it reads as part of the family. */
+.tool-hub {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .5rem 1.25rem;
+  align-items: center; margin: 1.5rem 0;
+  padding: 1.1rem 1.25rem; background: var(--surface);
+  border: 1px solid var(--line); border-left: 3px solid var(--accent-2);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.tool-hub-icon { font: 2rem/1 var(--glyphs); }
+.tool-hub h2 { margin: 0 0 .25rem; font-size: 1.15rem; }
+.tool-hub h2 a { color: var(--ink); text-decoration: none; }
+.tool-hub h2 a:hover { color: var(--accent); text-decoration: underline; }
+.tool-hub p { margin: 0; font-size: .93rem; color: var(--muted); max-width: 64ch; }
+.tool-hub .btn { flex: none; }
+@media (max-width: 720px) {
+  .tool-hub { grid-template-columns: auto minmax(0, 1fr); }
+  .tool-hub .btn { grid-column: 1 / -1; }
+}
+
+/* Image compression tool (/image-compression) -------------------------------- */
+/* Built from the same tokens, radius and shadow language as the rest of the site.
+   Reuses .panel, .btn, .badge and .field-input rather than introducing a second
+   set of controls; only the layout that has no equivalent elsewhere is new. */
+.cz-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: 1.25rem; margin-top: 1.25rem; align-items: start;
+}
+.cz-main { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+
+.cz-controls {
+  display: flex; flex-direction: column; gap: .9rem;
+  position: sticky; top: 5rem;
+  /* Two panels of settings are taller than a laptop viewport. Without this the
+     last control — the resize percentage — is unreachable until you scroll the
+     page, and scrolling it moves the sticky column out from under the pointer. */
+  max-height: calc(100vh - 6.5rem); overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.cz-controls::-webkit-scrollbar { width: .4rem; }
+.cz-controls::-webkit-scrollbar-thumb { background: var(--line); border-radius: var(--radius-pill); }
+.cz-controls .panel { padding: 1rem; }
+
+/* Dropzone. A <label> wrapping a visually hidden file input, so it opens the
+   picker with no JavaScript at all and keeps a real focus stop for the keyboard.
+   The dashed "before it loads" look is deliberate: this is the one control that
+   is obviously interactive before anything else has happened. */
+.cz-dropzone {
+  position: relative;
+  display: grid; place-items: center; align-content: center; gap: .3rem;
+  text-align: center; min-height: 16rem; padding: 2.25rem 1.25rem; cursor: pointer;
+  border: 2px dashed var(--line); border-radius: var(--radius);
+  background:
+    radial-gradient(55% 70% at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 72%),
+    var(--surface-2);
+  color: var(--muted);
+  transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.cz-dropzone:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+/* A file is over the zone. Solid rather than dashed, and lifted: this is the one
+   state where the visitor needs to know the drop will work before they let go. */
+.cz-dropzone.is-over {
+  border-color: var(--accent); border-style: solid;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+/* Focus lands on the hidden input, so the ring has to be drawn on the wrapper
+   or keyboard users get no visible focus at all. */
+.cz-dropzone:focus-within { outline: 3px solid var(--accent); outline-offset: 2px; }
+.cz-drop-icon { color: var(--accent); opacity: .85; margin-bottom: .35rem; }
+.cz-dropzone h2 { margin: 0; font-size: 1.25rem; color: var(--ink); }
+.cz-dropzone p { margin: 0; font-size: .93rem; max-width: 46ch; }
+.cz-dropzone .cz-browse { color: var(--accent); font-weight: 600; text-decoration: underline; }
+
+.cz-privacy {
+  display: flex; align-items: flex-start; gap: .55rem;
+  margin: .9rem 0 0; padding: .75rem .9rem; font-size: .87rem; color: var(--muted);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+}
+.cz-privacy b { color: var(--ink); }
+.cz-privacy svg { flex: none; width: 1.05rem; height: 1.05rem; color: var(--ok); margin-top: .2rem; }
+
+.cz-errors {
+  margin: 0; padding: .85rem 1.05rem; font-size: .92rem;
+  background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--bad) 35%, var(--line));
+  border-left: 3px solid var(--bad); border-radius: var(--radius-sm); color: var(--ink);
+}
+.cz-errors p { margin: 0 0 .35rem; }
+.cz-errors p:last-child { margin-bottom: 0; }
+
+.cz-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.cz-summary { margin: 0 0 0 auto; font-size: .92rem; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+@media (max-width: 560px) { .cz-summary { margin-left: 0; width: 100%; text-align: left; } }
+
+.cz-progress { display: grid; gap: .45rem; }
+.cz-progress-track { display: block; height: .45rem; border-radius: var(--radius-pill); background: var(--surface-2); overflow: hidden; }
+.cz-progress-fill {
+  display: block; height: 100%; width: 0; border-radius: inherit; background: var(--grad);
+  transition: width .3s cubic-bezier(.22,.68,.32,1);
+}
+.cz-progress p { margin: 0; font-size: .88rem; color: var(--muted); }
+
+.cz-empty {
+  display: grid; place-items: center; gap: .35rem; text-align: center;
+  color: var(--muted); padding: 2.25rem 1rem;
+  border: 1px dashed var(--line); border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.cz-empty b { display: block; color: var(--ink); font: 600 1rem var(--body); }
+
+/* Cards. minmax(20rem) rather than 19rem so a 1600x900 preview and its
+   side-by-side result both have room to be legible before wrapping to one
+   column. */
+.cz-list {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+.cz-card {
+  display: flex; flex-direction: column; gap: .7rem; min-width: 0;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .9rem; box-shadow: var(--shadow);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.cz-card:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); box-shadow: var(--shadow-lg); }
+
+.cz-card-head { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.cz-card-name {
+  margin: 0; min-width: 0; flex: 1 1 8rem; font: 600 .93rem var(--body);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* The headline result. Colour-coded to match the stats table so a scan across a
+   batch of twenty is accurate: green saved, amber/red grew, grey unchanged. */
+.cz-chip {
+  display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.2;
+  padding: .2rem .5rem; border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--muted);
+}
+.cz-chip b { font: 700 .82rem var(--body); font-variant-numeric: tabular-nums; }
+.cz-chip span { font-size: .68rem; font-variant-numeric: tabular-nums; opacity: .85; }
+.cz-chip.is-good { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.cz-chip.is-bad { background: color-mix(in srgb, var(--bad) 13%, transparent); color: var(--bad); }
+
+.cz-frames { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.cz-frame { margin: 0; min-width: 0; }
+.cz-frame img {
+  display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain;
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 2px;
+}
+.cz-frame figcaption { margin-top: .35rem; font-size: .76rem; color: var(--muted); line-height: 1.35; }
+.cz-frame figcaption b {
+  display: block; font: 600 .68rem var(--body); text-transform: uppercase;
+  letter-spacing: .07em; color: var(--muted);
+}
+.cz-frame figcaption span { font-variant-numeric: tabular-nums; }
+
+.cz-frame.is-empty { display: grid; }
+.cz-frame.is-empty .cz-frame-note {
+  display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; margin: 0;
+  border: 1px dashed var(--line); border-radius: var(--radius-sm);
+  font-size: .8rem; color: var(--muted); background: var(--surface-2);
+  /* A slow pulse while the encode runs, so a long batch shows it is alive.
+     Suppressed under prefers-reduced-motion like every other motion here. */
+  animation: cz-breathe 1.4s ease-in-out infinite;
+}
+@keyframes cz-breathe { 50% { opacity: .45; } }
+
+/* A checkerboard, so a transparent image reads as transparent rather than as a
+   rendering failure. Applied only to frames whose source was measured to have
+   alpha — putting it under every thumbnail would make an opaque JPEG look like
+   a broken one. */
+.cz-frame.has-alpha img {
+  background-color: var(--surface-2);
+  background-image:
+    linear-gradient(45deg, var(--line) 25%, transparent 25%, transparent 75%, var(--line) 75%),
+    linear-gradient(45deg, var(--line) 25%, transparent 25%, transparent 75%, var(--line) 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 7px 7px;
+}
+
+/* Stats. Labels left, values right, on a shared baseline — the point is to be
+   scanned vertically, so the numbers line up in a column. */
+.cz-stats {
+  display: grid; grid-template-columns: 1fr auto; gap: .3rem .75rem; margin: 0;
+  padding: .6rem .7rem; font-size: .84rem;
+  background: var(--surface-2); border-radius: var(--radius-sm);
+}
+.cz-stats dt { color: var(--muted); }
+.cz-stats dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.cz-stats dd.is-good { color: var(--ok); }
+.cz-stats dd.is-bad { color: var(--bad); }
+
+.cz-warn {
+  margin: 0; padding: .6rem .75rem; font-size: .82rem; line-height: 1.5;
+  background: color-mix(in srgb, var(--warn) 12%, var(--surface));
+  border-left: 3px solid var(--warn); border-radius: var(--radius-sm); color: var(--ink);
+}
+.cz-warn .linkish { color: var(--accent); font-weight: 600; }
+.cz-card-error {
+  margin: 0; padding: .6rem .75rem; font-size: .85rem;
+  background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+  border-left: 3px solid var(--bad); border-radius: var(--radius-sm);
+}
+.cz-card-actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; padding-top: .1rem; }
+
+/* Controls */
+.cz-presets { display: flex; flex-wrap: wrap; gap: .4rem; }
+.cz-presets button {
+  flex: 1 1 auto; font: 500 .82rem var(--body); background: var(--surface-2); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-pill); padding: .4rem .7rem; cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.cz-presets button:hover { border-color: var(--accent); color: var(--accent); }
+.cz-presets button[aria-pressed="true"] { background: var(--grad); color: #fff; border-color: transparent; }
+.cz-presets button .muted { color: inherit; opacity: .7; font-size: .95em; }
+
+.cz-field { margin-bottom: 1rem; }
+.cz-field:last-child { margin-bottom: 0; }
+.cz-field > label { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; font: 600 .85rem var(--body); margin-bottom: .35rem; }
+.cz-field .cz-value { color: var(--accent); font-variant-numeric: tabular-nums; }
+.cz-field input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; cursor: pointer; }
+.cz-field input[type="number"], .cz-field select {
+  width: 100%; font: 500 .92rem var(--body); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .5rem .6rem;
+}
+.cz-field input[type="number"]:focus-visible, .cz-field select:focus-visible { border-color: var(--accent); outline-offset: 0; }
+.cz-note { margin: .4rem 0 0; font-size: .78rem; line-height: 1.45; color: var(--muted); }
+.cz-lock {
+  font: 500 .82rem var(--body); background: var(--surface-2); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-pill); padding: .35rem .8rem; cursor: pointer;
+}
+.cz-lock:hover { border-color: var(--accent); }
+.cz-lock[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 1000px) {
+  .cz-layout { grid-template-columns: 1fr; }
+  .cz-controls { position: static; max-height: none; overflow: visible; }
+}
+/* Below this the two preview frames are too narrow for a 4:3 box to read as
+   anything, and the captions wrap onto three lines. One above the other keeps
+   both the image and its numbers legible. */
+@media (max-width: 460px) {
+  .cz-frames { grid-template-columns: 1fr; }
+  .cz-dropzone { min-height: 12rem; padding: 1.5rem 1rem; }
+  .cz-toolbar .btn { flex: 1 1 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cz-frame.is-empty .cz-frame-note { animation: none; }
+  .cz-dropzone, .cz-card, .cz-presets button, .cz-progress-fill { transition: none; }
+}

@@ -245,6 +245,11 @@ export default function StudioPage() {
           <a href="/">main text generator</a>, browse the <a href="/fonts">full list of font
           styles</a>, or compare <a href="/styles">25 words in 25 styles at once</a>.
         </p>
+        <p>
+          Working the other way round — you already have a picture and need it smaller — the{' '}
+          <a href="/image-compression">image compressor</a> shrinks JPG, PNG and WebP files on your
+          own device, and the <a href="/tools">text tools</a> handle the caption that goes with it.
+        </p>
       </section>
 
       <section className="prose" aria-labelledby="studio-faq">

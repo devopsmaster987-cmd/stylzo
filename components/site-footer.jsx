@@ -27,6 +27,7 @@ export function SiteFooter() {
             <li><a href="/fonts">Font styles</a></li>
             <li><a href="/studio">Font studio</a></li>
             <li><a href="/tools">Text tools</a></li>
+            <li><a href="/image-compression">Image compressor</a></li>
           </ul>
         </nav>
 

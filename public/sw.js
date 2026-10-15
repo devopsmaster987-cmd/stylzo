@@ -2,7 +2,7 @@
    Static assets: cache-first (they are hashed by deploy, refreshed on activate).
    Pages: network-first with a cache fallback, then the offline page.
    Text styling itself never needs the network — the engine is precached. */
-const VERSION = 'stylix-v5';
+const VERSION = 'stylix-v7';
 const PRECACHE = [
   '/offline.html',
   '/css/main.css',
@@ -13,6 +13,8 @@ const PRECACHE = [
   '/js/lib.js',
   '/js/generator.js',
   '/js/analytics.js',
+  '/js/image-compressor.js',
+  '/js/zip.js',
   '/js/engine/engine.js',
   '/js/engine/mappings.js',
   '/js/engine/decorators.js',
@@ -42,6 +44,18 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+
+  // blob: and data: are same-document resources, not network requests.
+  //
+  // A blob: URL inherits the page's origin, so the check below does not exclude
+  // it, and it carries no file extension, so it misses the static branch too. It
+  // therefore fell through to fetch() — which a service worker cannot do for a
+  // blob, because the blob lives in the document's realm and not the worker's.
+  // The catch answered with the precached offline page, so every object-URL
+  // image rendered as a broken image icon. Returning here lets the browser
+  // resolve it natively, which is the only thing that can.
+  if (url.protocol === 'blob:' || url.protocol === 'data:') return;
+
   if (url.origin !== self.location.origin) return;
   if (PRIVATE.test(url.pathname)) return;
 

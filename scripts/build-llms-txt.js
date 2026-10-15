@@ -41,11 +41,17 @@ Typing example: "${sample}".
 - Symbols, emoji and kaomoji libraries with one-tap copy.
 - Browser text tools: word counter, case converter, reverse, slug, find and replace.
 - A font studio that renders styled text to a 1200x630 PNG in the browser.
+- An image compressor for JPG, PNG and WebP that reports the real before-and-after size.
 
 ## Important limits
 - Output is Unicode characters, not an image or a font. Apps without the
   relevant glyphs render empty boxes. Each style page states its support level.
 - Styling runs entirely in the browser. Typed text is never sent to the server.
+- The image compressor decodes and re-encodes on the visitor's device too. No
+  image is uploaded, no image is sent to a third party, and none is stored.
+- A re-encode is not always smaller. PNG is lossless, so it usually needs a
+  resize or a format change to shrink, and the tool says so rather than
+  reporting a saving that did not happen.
 - There is no account and no sign-up.
 
 ## Pages
@@ -56,6 +62,8 @@ Typing example: "${sample}".
   ${styleSlugs().length} guides covering where the finished text goes.
 - [Instagram guide](${base}/styles/${LANDING_PAGES[0].key}): field limits and bios, with FAQs.
 - [Text tools](${base}/tools): word counter, case converter, reverse and more.
+- [Image compressor](${base}/image-compression): compress JPG, PNG and WebP in the
+  browser, with the real before-and-after size for every file.
 - [Font studio](${base}/studio): styled text to PNG.
 - [Symbols](${base}/symbols) / [Emoji](${base}/emoji) / [Kaomoji](${base}/kaomoji): copyable libraries.
 - [About](${base}/about) and [Privacy](${base}/privacy).

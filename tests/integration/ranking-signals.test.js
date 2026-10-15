@@ -108,12 +108,16 @@ describe('every page links onward, not just around itself', () => {
   // so the pages a visitor most likely lands on could not pass a reader on to
   // the pages that do the styling.
   const OUTBOUND = {
-    '/tools': ['/', '/fonts', '/styles', '/studio'],
+    '/tools': ['/', '/fonts', '/styles', '/studio', '/image-compression'],
     '/symbols': ['/', '/fonts', '/styles'],
     '/emoji': ['/tools'],
     '/kaomoji': ['/', '/fonts', '/styles'],
     '/about': ['/', '/fonts', '/styles', '/styles/instagram', '/symbols', '/emoji', '/kaomoji', '/tools', '/studio'],
     '/contact': ['/fonts', '/about', '/styles/instagram'],
+    // The compressor is the other image tool on the site, so the two have to
+    // point at each other rather than each claiming to be the only one.
+    '/image-compression': ['/', '/fonts', '/styles', '/tools', '/studio'],
+    '/studio': ['/', '/fonts', '/styles', '/image-compression'],
   };
 
   for (const [path, destinations] of Object.entries(OUTBOUND)) {

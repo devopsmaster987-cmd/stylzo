@@ -1,5 +1,9 @@
 import { styleRedirects } from './lib/styles-routing.js';
 
+// See the comment on `headers()` below for why nothing under /public may be
+// marked immutable.
+const REVALIDATE = 'public, max-age=0, must-revalidate';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
@@ -48,19 +52,30 @@ const nextConfig = {
     ];
   },
 
-  // /public assets are served with Next's default `max-age=0`, so the 45 KB
-  // stylesheet and every /js module are revalidated and re-downloaded on each
-  // full-page navigation. These filenames are content-stable, so cache hard.
+  // Files in /public are edited in place under a filename that never changes:
+  // main.css is not main.<hash>.css. They must therefore be revalidated, because
+  // `immutable` tells the browser not to re-check even on a normal reload, and a
+  // long max-age without it pins the file just as firmly for a year.
+  //
+  // This was originally `public, max-age=31536000, immutable` on the reasoning
+  // that the filenames are content-stable. They are not, and the cost was not
+  // theoretical: a stylesheet change shipped and every returning visitor kept
+  // the old one, including on localhost during development.
+  //
+  // max-age=0 + must-revalidate still avoids re-downloading. The server answers
+  // a conditional request with a 304 and no body, so an unchanged asset costs
+  // one round trip rather than the full file. Only genuinely hashed assets —
+  // everything under /_next/static — are worth marking immutable, and those are
+  // served by the framework, not from here.
   async headers() {
-    const immutable = 'public, max-age=31536000, immutable';
     return [
       {
         source: '/css/:file*',
-        headers: [{ key: 'Cache-Control', value: immutable }],
+        headers: [{ key: 'Cache-Control', value: REVALIDATE }],
       },
       {
         source: '/js/:file*',
-        headers: [{ key: 'Cache-Control', value: immutable }],
+        headers: [{ key: 'Cache-Control', value: REVALIDATE }],
       },
       {
         source: '/:icon(favicon\\.svg|icon-\\d+\\.png|apple-touch-icon\\.png|og-default\\.png)',

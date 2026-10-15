@@ -14,11 +14,17 @@ Typing example: "Stylzo".
 - Symbols, emoji and kaomoji libraries with one-tap copy.
 - Browser text tools: word counter, case converter, reverse, slug, find and replace.
 - A font studio that renders styled text to a 1200x630 PNG in the browser.
+- An image compressor for JPG, PNG and WebP that reports the real before-and-after size.
 
 ## Important limits
 - Output is Unicode characters, not an image or a font. Apps without the
   relevant glyphs render empty boxes. Each style page states its support level.
 - Styling runs entirely in the browser. Typed text is never sent to the server.
+- The image compressor decodes and re-encodes on the visitor's device too. No
+  image is uploaded, no image is sent to a third party, and none is stored.
+- A re-encode is not always smaller. PNG is lossless, so it usually needs a
+  resize or a format change to shrink, and the tool says so rather than
+  reporting a saving that did not happen.
 - There is no account and no sign-up.
 
 ## Pages
@@ -29,6 +35,8 @@ Typing example: "Stylzo".
   6 guides covering where the finished text goes.
 - [Instagram guide](https://www.abdulsamad.shop/styles/instagram): field limits and bios, with FAQs.
 - [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse and more.
+- [Image compressor](https://www.abdulsamad.shop/image-compression): compress JPG, PNG and WebP in the
+  browser, with the real before-and-after size for every file.
 - [Font studio](https://www.abdulsamad.shop/studio): styled text to PNG.
 - [Symbols](https://www.abdulsamad.shop/symbols) / [Emoji](https://www.abdulsamad.shop/emoji) / [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.
 - [About](https://www.abdulsamad.shop/about) and [Privacy](https://www.abdulsamad.shop/privacy).

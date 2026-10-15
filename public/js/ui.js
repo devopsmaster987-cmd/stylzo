@@ -51,7 +51,39 @@ document.addEventListener('click', async (e) => {
 
 // The 3D hero is a Next.js client component; nothing to lazy-load here.
 
-// M8 - offline support (never on http://localhost dev? it works fine there too).
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
-  window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); }, { once: true });
+// M8 - offline support.
+//
+// Not on http://localhost or 127.0.0.1. This used to register there too, on the
+// reasoning that "it works fine there as well" — which was true and useless. A
+// worker on the machine you are editing the site from caches the very files you
+// are changing and then serves the old ones, behind a hard-reload the developer
+// has to know to perform. That is the worst possible environment for it: the one
+// where you most need the newest CSS and JS, and the one where the cache is
+// hardest to reason about. It also fights HMR. Production is where offline
+// support matters, and that is the only place it is registered.
+if ('serviceWorker' in navigator && location.protocol === 'https:' && !window.__STYLZO_SW__) {
+  window.addEventListener('load', () => {
+    // Not swallowed silently. install() rejects atomically if any precache entry
+    // fails, and a worker that never activates leaves the previous one in
+    // charge — a state that is invisible from the page and very hard to debug.
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.warn('Service worker not registered:', err && err.message);
+    });
+  }, { once: true });
+}
+
+// Retire a worker that was installed while this page did register on localhost.
+// Stopping new registrations is not enough on its own: an already-installed
+// worker keeps controlling the origin and keeps answering from its own cache, so
+// the page still shows the old CSS with no visible reason why. Clearing it here
+// means a developer never has to know this rule exists.
+//
+// Only over http, only our own `stylix-` caches, and only the worker's
+// registrations — nothing outside this origin is touched.
+if ('serviceWorker' in navigator && location.protocol !== 'https:' && !window.__STYLZO_SW__) {
+  navigator.serviceWorker.getRegistrations()
+    .then((found) => Promise.all(found.map((r) => r.unregister())))
+    .then(() => (self.caches ? self.caches.keys() : []))
+    .then((keys) => Promise.all(keys.filter((k) => k.startsWith('stylix-')).map((k) => self.caches.delete(k))))
+    .catch(() => { /* nothing to clean up */ });
 }

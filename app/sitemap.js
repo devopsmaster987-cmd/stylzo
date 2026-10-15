@@ -21,6 +21,7 @@ const STATIC_PAGES = [
   { path: '/emoji', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/kaomoji', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/tools', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/image-compression', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/studio', changeFrequency: 'monthly', priority: 0.7 },
   // The embed page is how other sites link back here, so it is worth a reader
   // finding it rather than only finding it through this site's own nav.

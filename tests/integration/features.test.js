@@ -4,7 +4,11 @@ import { get, json, post, startServer } from '../helpers/server.js';
 
 process.env.ADMIN_KEY = 'test-admin-key-123';
 
-const pages = ['/symbols', '/emoji', '/kaomoji', '/tools', '/studio', '/admin'];
+const pages = ['/symbols', '/emoji', '/kaomoji', '/tools', '/image-compression', '/studio', '/admin'];
+
+// Next repeats rendered props inside its RSC flight payload, so counting a
+// class or a heading against the raw document counts it twice. Markup only.
+const markup = (html) => html.replace(/<script[\s\S]*?<\/script>/g, '');
 
 describe('features', () => {
   let server;
@@ -102,10 +106,72 @@ describe('features', () => {
   });
 
   test('no page leaks inline style attributes (CSP forbids them)', async () => {
-    for (const p of ['/', '/tools', '/studio', '/fancy-text-generator', '/symbols']) {
+    for (const p of ['/', '/tools', '/studio', '/image-compression', '/fancy-text-generator', '/symbols']) {
       const text = await (await get(server.base, p)).text();
       assert.ok(!/ style="/.test(text), `${p} contains a style attribute`);
     }
+  });
+
+  test('the image compressor ships its controls and its client modules', async () => {
+    const html = await (await get(server.base, '/image-compression')).text();
+    for (const hook of [
+      'data-cz-zone', 'data-cz-input', 'data-cz-compress-all', 'data-cz-download-all',
+      'data-cz-reset', 'data-cz-quality', 'data-cz-format', 'data-cz-scale',
+      'data-cz-width', 'data-cz-height', 'data-cz-lock', 'data-cz-list', 'data-cz-errors',
+    ]) {
+      assert.ok(html.includes(hook), `the tool is missing ${hook}`);
+    }
+    // The privacy claim has to be in the server HTML, not added by the script:
+    // a crawler and a reader with JavaScript disabled both need to see it.
+    assert.match(html, /Your images never leave this device/);
+
+    // The module the page injects has to actually be served, or the tool is an
+    // inert form.
+    for (const asset of ['/js/image-compressor.js', '/js/zip.js']) {
+      const res = await get(server.base, asset);
+      assert.equal(res.status, 200, `${asset} is referenced but not served`);
+    }
+  });
+
+  test('the image compressor accepts only image types and says what it is', async () => {
+    const html = await (await get(server.base, '/image-compression')).text();
+    const accept = html.match(/<input[^>]*data-cz-input[^>]*>/)[0];
+    assert.match(accept, /type="file"/);
+    assert.match(accept, /multiple/);
+    for (const type of ['image/jpeg', 'image/png', 'image/webp']) {
+      assert.ok(accept.includes(type), `the file input does not accept ${type}`);
+    }
+    // An accept list that omits image/* would be a lie about what is accepted.
+    assert.doesNotMatch(accept, /image\/\*/);
+  });
+
+  test('sitemap includes the image compressor', async () => {
+    const sm = await (await get(server.base, '/sitemap.xml')).text();
+    assert.ok(sm.includes('/image-compression</loc>'));
+  });
+
+  test('the tools hub surfaces the image compressor', async () => {
+    // A tool nobody can find is a tool nobody uses. This asserts the entry
+    // points exist rather than the wording, so editing the copy does not break
+    // it, but deleting the panel does.
+    const tools = markup(await (await get(server.base, '/tools')).text());
+    const panel = (tools.match(/<section class="tool-hub"[\s\S]*?<\/section>/) || [])[0];
+    assert.ok(panel, '/tools has no panel pointing at the image compressor');
+    assert.ok(panel.includes('href="/image-compression"'));
+    assert.ok(/<h2[^>]*>[\s\S]*Image compressor/.test(panel), 'the panel heading does not name the tool');
+
+    // And it has to be a real destination, not a link to nothing.
+    const res = await get(server.base, '/image-compression');
+    assert.equal(res.status, 200);
+  });
+
+  test('the header nav reaches the image compressor', async () => {
+    const home = markup(await (await get(server.base, '/')).text());
+    const nav = (home.match(/<nav aria-label="Main">[\s\S]*?<\/nav>/) || [])[0];
+    assert.ok(nav, 'no main nav in the document');
+    assert.ok(nav.includes('/image-compression'), 'the main nav does not link to the image compressor');
+    // The dropdown it sits in has to be labelled, not just present.
+    assert.match(nav, /has-sub/);
   });
 
   test('sitemap includes the new library pages', async () => {
