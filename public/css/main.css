@@ -1300,22 +1300,94 @@ fieldset.qr-field { border: 0; padding: 0; margin: 1.1rem 0 0; }
   white-space: pre-wrap; overflow-wrap: anywhere; max-height: 9rem; overflow: auto;
 }
 
-.qr-ecl { display: flex; flex-direction: column; gap: .35rem; }
-.qr-ecl button {
-  display: block; width: 100%; text-align: left; cursor: pointer;
-  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-sm);
-  padding: .45rem .6rem; color: var(--ink); font: 500 .88rem/1.3 var(--body);
+/* Settings column ---------------------------------------------------------
+   Only the right-hand column. The left-hand form uses sentence-case labels
+   because they introduce a field the reader fills in; these label switches
+   between states of the same code, so they are set small and in caps and read
+   as a group rather than as a fifth question. */
+.qr-controls .qr-field { margin-top: 1rem; }
+.qr-controls .qr-field:first-child { margin-top: .85rem; }
+.qr-controls .qr-field > label,
+.qr-controls .qr-field > legend {
+  margin-bottom: .4rem; padding: 0;
+  font: 600 .74rem/1.3 var(--body); text-transform: uppercase; letter-spacing: .1em;
+  color: var(--muted);
 }
-.qr-ecl button b { display: block; font-size: .9rem; }
-.qr-ecl button .muted { font-size: .78rem; }
-.qr-ecl button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
-.qr-ecl button[aria-pressed="true"] b { color: var(--accent); }
+/* Flex rather than the floated value the shared rule uses, so "12%" holds the
+   right edge of the label at any panel width instead of relying on the width
+   of the text next to it. */
+.qr-controls .qr-field > label { display: flex; align-items: center; gap: .5rem; }
+.qr-controls .qr-field > legend { width: 100%; }
+.qr-value {
+  float: none; margin-left: auto; flex: none;
+  font: 600 .78rem/1 var(--body); letter-spacing: 0; text-transform: none;
+  color: var(--ink); background: var(--surface-2);
+  padding: .25rem .55rem; border-radius: var(--radius-pill);
+  font-variant-numeric: tabular-nums;
+}
+.qr-controls .qr-note { line-height: 1.5; max-width: 34ch; }
 
-.qr-colour { display: flex; gap: .5rem; align-items: center; }
-.qr-colour input[type="color"] {
-  width: 2.9rem; height: 2.5rem; flex: none; padding: 2px; cursor: pointer;
-  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-sm);
+/* The native select arrow is drawn in the platform's own style and sits too
+   close to the text once a chevron is added, so it is replaced rather than
+   padded around. */
+.qr-controls .qr-field select {
+  -webkit-appearance: none; appearance: none; cursor: pointer;
+  min-height: 2.5rem; padding-right: 2.3rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%235d5678' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M1 1.6 6 6.4l5-4.8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .75rem center; background-size: .7rem auto;
 }
+
+/* Each panel in the column gets a title from the CSS so the two groups of
+   controls are named on the page. The first panel is the preview and stays
+   untitled, which is why this starts at the second child. */
+.qr-controls > .panel { padding: .9rem 1rem 1.1rem; }
+.qr-controls > .panel:nth-child(2)::before,
+.qr-controls > .panel:nth-child(3)::before {
+  display: block; margin-bottom: .2rem;
+  font: 600 .8rem/1.3 var(--body); text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink);
+}
+.qr-controls > .panel:nth-child(2)::before { content: "Appearance"; }
+.qr-controls > .panel:nth-child(3)::before { content: "Logo"; }
+.qr-controls .qr-field:first-child:has(> legend) { margin-top: .6rem; }
+.qr-controls .qr-field > .btn { width: 100%; }
+
+/* Error correction: four rows, each with the level letter in its own tile. The
+   letter is the only thing that transfers between tools and printers, so it is
+   the thing given the most visual weight, and the selected row is marked by a
+   left bar as well as by colour, so the choice is not carried by hue alone. */
+.qr-ecl { display: grid; gap: .35rem; }
+.qr-ecl button {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center;
+  gap: .05rem .6rem; width: 100%; text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .5rem .65rem; color: var(--ink); font: 500 .88rem/1.35 var(--body);
+  transition: border-color .15s ease, background .15s ease;
+}
+.qr-ecl button b { display: block; grid-column: 2; font-size: .9rem; }
+.qr-ecl button .muted { display: block; grid-column: 2; font-size: .78rem; }
+.qr-ecl button::before {
+  content: attr(data-qr-ecl); grid-column: 1; grid-row: 1 / span 2; align-self: center;
+  display: grid; place-items: center; width: 1.7rem; height: 1.7rem;
+  border-radius: var(--radius-sm); background: var(--surface-2); color: var(--muted);
+  font: 700 .8rem/1 var(--body);
+}
+.qr-ecl button[aria-pressed="true"] {
+  border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.qr-ecl button[aria-pressed="true"] b { color: var(--accent); }
+.qr-ecl button[aria-pressed="true"]::before { background: var(--accent); color: var(--on-accent); }
+@media (hover: hover) {
+  .qr-ecl button:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+}
+
+.qr-colour { display: flex; gap: .5rem; align-items: stretch; }
+.qr-colour input[type="color"] {
+  width: 2.9rem; height: auto; flex: none; padding: 2px; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+}
+.qr-colour input[type="color"]:hover { border-color: var(--accent); }
 .qr-colour input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .qr-colour input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 4px; }
 .qr-colour input[type="color"]::-moz-color-swatch { border: 0; border-radius: 4px; }
@@ -1324,6 +1396,7 @@ fieldset.qr-field { border: 0; padding: 0; margin: 1.1rem 0 0; }
 .qr-swatches button {
   width: 1.6rem; height: 1.6rem; border-radius: 50%; cursor: pointer; padding: 0;
   border: 2px solid var(--line); background: var(--surface-2);
+  transition: transform .15s ease, border-color .15s ease;
 }
 .qr-swatches button[data-colour="#1b1533"] { background: #1b1533; }
 .qr-swatches button[data-colour="#4b2fe0"] { background: #4b2fe0; }
@@ -1331,10 +1404,14 @@ fieldset.qr-field { border: 0; padding: 0; margin: 1.1rem 0 0; }
 .qr-swatches button[data-colour="#ffffff"] { background: #fff; }
 .qr-swatches button[data-colour="#f6f4fb"] { background: #f6f4fb; }
 .qr-swatches button[data-qr-reset-colors] {
-  width: auto; height: auto; border-radius: var(--radius-pill); padding: .2rem .7rem;
-  background: var(--surface-2); color: var(--ink); font: 600 .78rem var(--body);
+  width: auto; height: auto; margin-left: auto; border-radius: var(--radius-pill);
+  padding: .3rem .75rem; background: var(--surface-2); color: var(--ink);
+  border: 1px solid var(--line); font: 600 .78rem/1 var(--body);
 }
-@media (hover: hover) { .qr-swatches button:hover { border-color: var(--accent); } }
+@media (hover: hover) {
+  .qr-swatches button:hover { border-color: var(--accent); }
+  .qr-swatches button:not([data-qr-reset-colors]):hover { transform: translateY(-1px); }
+}
 
 .qr-contrast {
   margin: .5rem 0 0; padding: .4rem .6rem; font-size: .82rem;
@@ -1345,19 +1422,64 @@ fieldset.qr-field { border: 0; padding: 0; margin: 1.1rem 0 0; }
 .qr-contrast[data-level="bad"] { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
 .qr-contrast[hidden] { display: none; }
 
+/* The picker is a dashed target rather than a form control on a label, because
+   the file it opens is the thing the reader is aiming at. Dashed because it is
+   a drop zone, and the whole box is the hit area. */
 .qr-logo {
-  display: block; padding: .55rem .7rem; cursor: pointer;
-  background: var(--paper); border: 1px dashed var(--line); border-radius: var(--radius-sm);
-  font-size: .88rem;
+  display: flex; align-items: center; gap: .55rem;
+  padding: .7rem .75rem; cursor: pointer;
+  background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+  border: 1px dashed color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: var(--radius-sm); font-size: .88rem;
+  transition: border-color .15s ease, background .15s ease;
 }
-.qr-logo:hover { border-color: var(--accent); }
-.qr-logo input[type="file"] { width: 100%; font-size: .8rem; }
+.qr-logo:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+}
+.qr-logo:focus-within {
+  border-color: var(--accent); border-style: solid;
+}
+.qr-logo input[type="file"] {
+  flex: 1 1 auto; min-width: 0; width: auto; font-size: .8rem; color: var(--muted);
+}
 .qr-logo input[type="file"]::file-selector-button {
-  font: 600 .8rem var(--body); color: var(--ink); background: var(--surface-2);
-  border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .3rem .6rem;
-  cursor: pointer; margin-right: .6rem;
+  font: 600 .8rem/1 var(--body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius-pill); padding: .45rem .85rem;
+  cursor: pointer; margin-right: 0; transition: border-color .15s ease, color .15s ease;
 }
-.qr-field input[type="range"] { width: 100%; accent-color: var(--accent); }
+.qr-logo input[type="file"]::file-selector-button:hover { border-color: var(--accent); color: var(--accent); }
+.qr-field input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 1.5rem; margin: 0; background: transparent;
+  accent-color: var(--accent); cursor: pointer;
+}
+.qr-field input[type="range"]::-webkit-slider-runnable-track {
+  height: .4rem; border-radius: var(--radius-pill);
+  background: var(--surface-2); border: 1px solid var(--line);
+}
+.qr-field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 1.1rem; height: 1.1rem; margin-top: -.35rem; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--surface);
+  box-shadow: 0 2px 6px -1px rgb(27 21 51 / .4);
+}
+.qr-field input[type="range"]::-moz-range-track {
+  height: .4rem; border-radius: var(--radius-pill);
+  background: var(--surface-2); border: 1px solid var(--line);
+}
+.qr-field input[type="range"]::-moz-range-thumb {
+  width: 1.1rem; height: 1.1rem; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--surface);
+  box-shadow: 0 2px 6px -1px rgb(27 21 51 / .4);
+}
+.qr-field input[type="range"]:focus-visible { outline-offset: 6px; }
+.qr-field input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.qr-field input[type="range"]:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+}
 .qr-field > .btn { margin-top: .5rem; }
 
 /* Below 1000px the form and the preview stack, and the controls stop being
@@ -1370,4 +1492,6 @@ fieldset.qr-field { border: 0; padding: 0; margin: 1.1rem 0 0; }
   .qr-tabs { gap: .25rem; }
   .qr-tabs button { font-size: .8rem; padding: .3rem .5rem; }
   .qr-downloads .btn { flex: 1 1 45%; }
+  .qr-colour input[type="color"] { width: 2.6rem; }
+  .qr-logo { flex-wrap: wrap; }
 }
