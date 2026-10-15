@@ -1,8 +1,16 @@
 /* M8 - offline support.
-   Static assets: cache-first (they are hashed by deploy, refreshed on activate).
+   Static assets: stale-while-revalidate (cached copy paints immediately, a fresh
+   one is fetched behind it and stored for next time).
    Pages: network-first with a cache fallback, then the offline page.
-   Text styling itself never needs the network — the engine is precached. */
-const VERSION = 'stylix-v8';
+   Text styling itself never needs the network — the engine is precached.
+
+   VERSION is not a formality. It is the only thing that rebuilds PRECACHE, and
+   PRECACHE holds /css/main.css. Nothing under /public is content-hashed — the
+   filename is edited in place, which is why next.config.mjs refuses to mark it
+   immutable — so a stylesheet change is invisible to this worker unless the
+   worker itself changes. Bump this in the same commit as any edit to a file
+   listed in PRECACHE, or returning visitors keep painting the old CSS. */
+const VERSION = 'stylix-v9';
 const PRECACHE = [
   '/offline.html',
   '/css/main.css',
@@ -68,7 +76,15 @@ self.addEventListener('fetch', (event) => {
           .then((res) => {
             if (res.ok) {
               const copy = res.clone();
-              caches.open(VERSION).then((cache) => cache.put(request, copy));
+              // waitUntil, not a bare .then(): a floating promise is not awaited
+              // by anything, and the browser is free to terminate an idle worker
+              // before cache.put settles. When that happened the fresh copy was
+              // simply dropped and the visitor went on being served the stale
+              // stylesheet — indefinitely, because nothing else rewrites that
+              // entry. waitUntil keeps the worker alive until the write lands.
+              event.waitUntil(
+                caches.open(VERSION).then((cache) => cache.put(request, copy)),
+              );
             }
             return res;
           })
