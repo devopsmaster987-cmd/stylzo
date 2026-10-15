@@ -975,7 +975,7 @@ pre code { display: block; padding: .8rem; overflow: auto; }
   display: flex; flex-direction: column; gap: .7rem; min-width: 0;
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); padding: .9rem; box-shadow: var(--shadow);
-  transition: border-color .15s ease, box-shadow .15s ease;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .2s cubic-bezier(.22,.68,.32,1);
 }
 .cz-card:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); box-shadow: var(--shadow-lg); }
 
@@ -1104,4 +1104,90 @@ pre code { display: block; padding: .8rem; overflow: auto; }
 @media (prefers-reduced-motion: reduce) {
   .cz-frame.is-empty .cz-frame-note { animation: none; }
   .cz-dropzone, .cz-card, .cz-presets button, .cz-progress-fill { transition: none; }
+}
+
+/* Image compression tool — motion and hover polish -------------------------- */
+/* One constraint shapes everything below: render() rebuilds every card, chip,
+   warning and frame from scratch on each encode step of a batch. An entry
+   animation on any of those would restart on every tick and read as a flicker,
+   so nothing here animates on arrival. What animates is either driven by a
+   state that means "the tool is working" (progress, drop-over, encoding frame)
+   or is pure hover and focus feedback, which cannot retrigger itself.
+   Hover rules sit behind @media (hover: hover) so a touch tap does not leave a
+   card stranded mid-lift. */
+.cz-controls { scrollbar-gutter: stable; scroll-padding-block: .75rem; }
+
+/* Dropzone: the icon is the only thing on the page that says "put something
+   here", so it answers both a hover and a file actually arriving over the zone. */
+.cz-drop-icon { transition: transform .25s cubic-bezier(.22,.68,.32,1), opacity .2s ease; }
+.cz-dropzone.is-over .cz-drop-icon { animation: cz-drop-pop .5s cubic-bezier(.22,.68,.32,1); }
+.cz-dropzone.is-over { background-color: color-mix(in srgb, var(--accent) 6%, var(--surface-2)); }
+@keyframes cz-drop-pop { 40% { transform: translateY(-6px) scale(1.06); } 100% { transform: none; } }
+@media (hover: hover) { .cz-dropzone:hover .cz-drop-icon { transform: translateY(-3px); opacity: 1; } }
+
+/* Cards lift a pixel rather than jumping. The frame holds the overflow so a
+   hovered preview can scale inside its box instead of spilling over the card. */
+.cz-frame { overflow: clip; }
+.cz-frame img { transition: transform .35s cubic-bezier(.22,.68,.32,1), border-color .2s ease; }
+.cz-card:hover .cz-frame img { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+@media (hover: hover) {
+  .cz-card:hover { transform: translateY(-2px); }
+  .cz-frame:hover img { transform: scale(1.025); }
+}
+
+/* A sheen travels the track while a batch runs. The progress row itself is only
+   visible during and just after a batch, so the animation needs no busy class. */
+.cz-progress-track { position: relative; }
+.cz-progress-track::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 38%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .5), transparent);
+  animation: cz-sheen 1.6s ease-in-out infinite;
+}
+@keyframes cz-sheen { from { transform: translateX(-110%); } to { transform: translateX(370%); } }
+
+/* Errors are appended only when a file is rejected, never per render tick, so
+   sliding them in is safe and tells the visitor something changed above. */
+.cz-errors p { animation: cz-slide-in .28s cubic-bezier(.22,.68,.32,1) backwards; }
+@keyframes cz-slide-in { from { opacity: 0; transform: translateY(-4px); } }
+
+/* The empty state is in the server HTML, so this runs once on load. */
+.cz-empty { animation: cz-fade-in .5s ease backwards; }
+@keyframes cz-fade-in { from { opacity: 0; transform: translateY(4px); } }
+
+/* The saving chip is a static badge for CSS purposes, so an inset ring in its
+   own colour is what gives it weight against the muted default. */
+.cz-chip { box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 16%, transparent); }
+
+/* Controls: press feedback on every toggle, and the quality slider answering
+   the pointer. The native track is left alone — accent-color already themes
+   it, and restyling appearance here would break it in engines that ignore the
+   pseudo-elements. */
+.cz-presets button, .cz-lock {
+  transition: border-color .15s ease, background .15s ease, color .15s ease, box-shadow .15s ease, transform .12s ease;
+}
+.cz-presets button:active, .cz-lock:active { transform: scale(.97); }
+.cz-lock[aria-pressed="false"] { color: var(--muted); }
+@media (hover: hover) { .cz-presets button:hover { box-shadow: 0 6px 14px -10px var(--accent); } }
+.cz-field input[type="number"]:hover, .cz-field select:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.cz-field input[type="range"]:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: var(--radius-pill); }
+.cz-field input[type="range"]::-webkit-slider-thumb,
+.cz-field input[type="range"]::-moz-range-thumb { transition: transform .15s ease; }
+.cz-field input[type="range"]:hover::-webkit-slider-thumb,
+.cz-field input[type="range"]:active::-webkit-slider-thumb,
+.cz-field input[type="range"]:hover::-moz-range-thumb,
+.cz-field input[type="range"]:active::-moz-range-thumb { transform: scale(1.15); }
+
+/* While a batch is in flight the primary action's gradient drifts. Keyed off the
+   progress row rather than a JS-set class, so there is nothing to keep in sync. */
+.cz-main:has(.cz-progress:not([hidden])) .cz-toolbar .btn.grad {
+  background-size: 220% 100%; animation: cz-grad-flow 3.4s ease-in-out infinite;
+}
+@keyframes cz-grad-flow { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cz-progress-track::after, .cz-main:has(.cz-progress:not([hidden])) .cz-toolbar .btn.grad { animation: none; }
+  .cz-dropzone.is-over .cz-drop-icon, .cz-errors p, .cz-empty { animation: none; }
+  .cz-frame img, .cz-drop-icon, .cz-chip, .cz-presets button, .cz-lock,
+  .cz-field input[type="range"]::-webkit-slider-thumb,
+  .cz-field input[type="range"]::-moz-range-thumb { transition: none; }
 }

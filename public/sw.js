@@ -2,7 +2,7 @@
    Static assets: cache-first (they are hashed by deploy, refreshed on activate).
    Pages: network-first with a cache fallback, then the offline page.
    Text styling itself never needs the network — the engine is precached. */
-const VERSION = 'stylix-v7';
+const VERSION = 'stylix-v8';
 const PRECACHE = [
   '/offline.html',
   '/css/main.css',
