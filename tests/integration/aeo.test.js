@@ -71,7 +71,7 @@ describe('answer engine optimisation', () => {
   });
 
   describe('answer-first content', () => {
-    const PAGES = ['/', '/tools', '/image-compression', '/about', '/privacy', '/terms', '/contact', '/symbols', '/emoji', '/kaomoji', '/fonts', '/styles'];
+    const PAGES = ['/', '/tools', '/image-compression', '/qr-code-generator', '/about', '/privacy', '/terms', '/contact', '/symbols', '/emoji', '/kaomoji', '/fonts', '/styles'];
 
     test('every page answers its core question before the long prose', async () => {
       for (const path of PAGES) {
@@ -127,7 +127,7 @@ describe('answer engine optimisation', () => {
     test('every FAQ question in schema is also a visible heading', async () => {
       // Schema the page does not show is a manual-action risk, and it is the
       // most common way structured data goes wrong.
-      for (const path of ['/tools', '/image-compression', '/about', '/symbols', '/studio', '/fonts', '/styles']) {
+      for (const path of ['/tools', '/image-compression', '/qr-code-generator', '/about', '/symbols', '/studio', '/fonts', '/styles']) {
         const html = await (await get(server.base, path)).text();
         const faq = jsonLd(html, 'FAQPage');
         assert.ok(faq, `${path} has no FAQPage`);
@@ -243,7 +243,7 @@ describe('answer engine optimisation', () => {
     });
 
     test('no page emits JSON-LD that is not valid JSON', async () => {
-      for (const path of ['/', '/tools', '/about', '/fonts/bold', '/symbols', '/styles/instagram', '/image-compression']) {
+      for (const path of ['/', '/tools', '/about', '/fonts/bold', '/symbols', '/styles/instagram', '/image-compression', '/qr-code-generator']) {
         const html = await (await get(server.base, path)).text();
         // ldBlocks() JSON.parses every block; reaching here without a throw is
         // the assertion.

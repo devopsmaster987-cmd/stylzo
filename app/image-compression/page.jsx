@@ -392,8 +392,14 @@ export default function ImageCompressionPage() {
           file bigger without adding information.
         </p>
 
+        {/* The rest of this site works on text rather than images. Say so, and
+            point at the tools that do the next job: a QR code to put the
+            compressed image in front of people, and the styling tools for the
+            words on it. */}
         <p>
-          The rest of this site works on text rather than images. Count and convert words on the{' '}
+          The rest of this site works on text rather than images. To put a picture in front of
+          people, the <a href="/qr-code-generator">QR code generator</a> builds a code you can print
+          beside it. Count and convert words on the{' '}
           <a href="/tools">text tools page</a>, turn styled text into a{' '}
           <a href="/studio">1200 by 630 PNG in the font studio</a>, or change how text looks with
           the <a href="/">fancy text generator</a>. If you want to see a lot of styles side by side

@@ -5,7 +5,7 @@ Components that stream complete HTML; interactivity is progressive enhancement f
 modules in `public/js/`, with a React Three Fiber hero as the only client-rendered island.
 
 Type text once, get 5,600+ Unicode styles you can paste anywhere — plus symbol, emoji and kaomoji
-libraries, browser-based text tools, and a font studio for shareable images.
+libraries, browser-based text tools, a QR code generator and a font studio for shareable images.
 
 ## Run it
 
@@ -126,15 +126,90 @@ is a content decision rather than a code one.
 - Titles are budgeted to roughly 60 characters and descriptions to roughly 160, because
   anything longer is truncated in the results.
 - `/studio` is indexable: it carries its own explainer rather than being an app shell.
+- Every tool that produces a downloadable file has its own page and a panel on `/tools` pointing
+  at it. `/tools` targets "word counter"; giving the QR generator its own URL is what stops two
+  pages competing for one term.
 
 ## Routes
 
 `/`, `/fancy-text-generator` (308 to `/`), `/fonts` (`?q=`), `/fonts/[slug]`,
 `/styles` (the hub) and `/styles/[key]`, `/symbols`, `/emoji`, `/kaomoji`, `/tools`,
-`/studio`, `/admin` (`noindex`), `/admin/seo` (`noindex`),
-`/about`, `/privacy`, `/terms`, `/contact`, `/robots.txt`, `/sitemap.xml`, plus `GET /api/styles`,
-`/api/search`, `/api/ai/suggest`, `/api/health`, `/api/config`, `/api/beat`,
+`/qr-code-generator`, `/image-compression`, `/studio`, `/admin` (`noindex`), `/admin/seo`
+(`noindex`), `/about`, `/privacy`, `/terms`, `/contact`, `/robots.txt`, `/sitemap.xml`, plus
+`GET /api/styles`, `/api/search`, `/api/ai/suggest`, `/api/health`, `/api/config`, `/api/beat`,
 `POST /api/generate`.
+
+## The QR code generator
+
+`/qr-code-generator` is the one page whose job is producing a file rather than styling text, so it
+has its own directory of browser modules:
+
+- `public/js/qr.js` is a **QR Code Model 2 encoder** — byte mode, Reed-Solomon error correction
+  over GF(256), all 40 versions at all four levels, mask selection by the standard's penalty
+  rules, and an SVG writer that merges horizontal module runs so a symbol is a few kilobytes
+  rather than 40 KB of `<rect>` elements.
+- `public/js/qr-payloads.js` builds the text a scanner actually reads for the ten types, and
+  validates each field before it can reach the encoder.
+- `public/js/qr-code-generator.js` is the interface: tabs, live preview, colours with a measured
+  contrast ratio, size, error correction, logo, and PNG/SVG/JPG download.
+
+### Why the encoder is not a package
+
+The obvious answer is `qrcode` or `qrjs`, and both are real, maintained libraries. Neither is
+reachable from here. This project's client code is plain ES modules served out of `/public` under a
+CSP of `script-src 'self'`: there is no bundler to pull a package through and no CDN the policy
+allows, so the only options were a build step or the ~500-line algorithm. The same reasoning
+applies to `zip.js` next door, and `image-compressor.js` uses platform APIs rather than a wrapper
+around the platform's compressor. Nothing is generated at build time and nothing is fetched at run
+time — the visitor's browser gets the same file the test suite runs against.
+
+### Why it is trustworthy
+
+A QR encoder that is confidently wrong produces a symbol that looks perfect, passes a round-trip
+test against its own decoder, and is unreadable by any phone. Three of those failure modes are
+real and all three bit during development:
+
+- **The mask formulas** for the alignment pattern centres. Version 32 and 40 are where a rounded
+  ratio and the specified integer division disagree, and a mis-spaced alignment pattern is an
+  unscannable symbol that still renders correctly.
+- **The interleave order.** The final message is *all the data codewords across the blocks, then
+  all the parity codewords across the blocks* — not each block's data and parity woven together.
+  The wrong version still passes a Reed-Solomon syndrome check, because the blocks are the same
+  blocks in a different order, and it still survives a round trip, because a decoder inverting the
+  same wrong permutation reads the payload back perfectly. It only fails against a real scanner,
+  and only for versions that have both short and long blocks.
+- **The pad codewords.** Every generator fills the unused capacity with an alternating filler.
+  Different implementations fill it differently, so two correct encoders produce different bytes
+  for the same input. That difference is why an exact byte comparison against another library
+  proves less here than it appears to.
+
+So the encoder is verified three ways rather than one. `tests/unit/qr.test.js` writes its own
+decoder from the standard — its own function-module map, its own zigzag walk, its own de-interleave
+— and takes 215 symbols apart across every version and level, checking the payload survives.
+Reed-Solomon syndromes are checked against the Galois field itself rather than against this
+file's own opinion of it, including a deliberately corrupted code word, so the check is known to be
+able to fail. And during development every symbol was decoded by **OpenCV's `QRCodeDetector`**, an
+unrelated production decoder, for all ten payload types at all four levels, and cross-checked
+module-for-module against **segno**. That last step needs Python and is not part of `npm test`; it
+is the reason the portable assertions are shaped the way they are.
+
+### Privacy
+
+This page asks for Wi-Fi passwords, phone numbers and contact details, so its privacy claim is
+structural rather than a promise: `public/js/qr.js` and `qr-payloads.js` touch nothing but the
+DOM, and an integration test asserts the interface module never calls `fetch`,
+`XMLHttpRequest`, `sendBeacon`, `WebSocket` or `EventSource`. There is no request that could carry
+what a visitor typed, because there is no code that could make one.
+
+### Keeping a customized code scannable
+
+Three things break customized QR codes, and the tool measures all three rather than trusting the
+visitor: contrast (the WCAG relative-luminance ratio, warned below 4.5:1), logo coverage (a share
+of the symbol's *area*, which is the number error correction is quoted in — refused above 30% and
+warned above 20%, with the level raised automatically), and the quiet zone (always the specified
+four modules, never a setting). Modules are drawn at an integer pixel scale and the symbol is
+centred rather than stretched, because a module edge landing on a half pixel is the most common
+reason a code works on screen and fails in print.
 
 ## SEO keyword system
 
@@ -174,4 +249,6 @@ Push to Vercel and it detects Next.js automatically — no `vercel.json` or serv
 ## Privacy
 
 No cookies, no analytics SDK. The beacon sends only a path and an event name. Typed text never
-leaves the browser.
+leaves the browser, and neither does an uploaded image: both are processed by the visitor's own
+device. The QR generator asks for Wi-Fi passwords, phone numbers and contact details, and is held
+to the same line — see "Privacy" under the QR code generator above.

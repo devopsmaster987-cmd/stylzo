@@ -12,6 +12,7 @@ export const site = {
     { href: '/studio', label: 'Studio' },
     { href: '/tools', label: 'Tools', children: [
       { href: '/tools', label: 'Text tools' },
+      { href: '/qr-code-generator', label: 'QR code generator' },
       { href: '/image-compression', label: 'Image compressor' },
     ] },
     {

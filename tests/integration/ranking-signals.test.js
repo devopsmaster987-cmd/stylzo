@@ -108,7 +108,7 @@ describe('every page links onward, not just around itself', () => {
   // so the pages a visitor most likely lands on could not pass a reader on to
   // the pages that do the styling.
   const OUTBOUND = {
-    '/tools': ['/', '/fonts', '/styles', '/studio', '/image-compression'],
+    '/tools': ['/', '/fonts', '/styles', '/studio', '/image-compression', '/qr-code-generator'],
     '/symbols': ['/', '/fonts', '/styles'],
     '/emoji': ['/tools'],
     '/kaomoji': ['/', '/fonts', '/styles'],
@@ -116,7 +116,10 @@ describe('every page links onward, not just around itself', () => {
     '/contact': ['/fonts', '/about', '/styles/instagram'],
     // The compressor is the other image tool on the site, so the two have to
     // point at each other rather than each claiming to be the only one.
-    '/image-compression': ['/', '/fonts', '/styles', '/tools', '/studio'],
+    '/image-compression': ['/', '/fonts', '/styles', '/tools', '/studio', '/qr-code-generator'],
+    // The generator is the other tool on this site that produces something a
+    // visitor downloads and prints, so the two point at each other.
+    '/qr-code-generator': ['/', '/fonts', '/styles', '/tools', '/studio', '/image-compression'],
     '/studio': ['/', '/fonts', '/styles', '/image-compression'],
   };
 

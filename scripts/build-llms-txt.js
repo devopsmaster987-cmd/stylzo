@@ -62,6 +62,8 @@ Typing example: "${sample}".
   ${styleSlugs().length} guides covering where the finished text goes.
 - [Instagram guide](${base}/styles/${LANDING_PAGES[0].key}): field limits and bios, with FAQs.
 - [Text tools](${base}/tools): word counter, case converter, reverse and more.
+- [QR code generator](${base}/qr-code-generator): QR codes for links, text, Wi-Fi,
+  email, phone, SMS, WhatsApp, contacts, maps and events, built in the browser.
 - [Image compressor](${base}/image-compression): compress JPG, PNG and WebP in the
   browser, with the real before-and-after size for every file.
 - [Font studio](${base}/studio): styled text to PNG.

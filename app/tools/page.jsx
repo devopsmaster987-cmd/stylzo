@@ -59,12 +59,28 @@ export default function ToolsPage() {
         </p>
       </section>
 
-      {/* The image compressor is a whole page rather than an eighth tab here.
-          /tools targets "word counter", and putting a second tool's copy on this
-          page would split its signals across two URLs — the one thing
+      {/* Each of these is a whole page rather than another tab here. /tools
+          targets "word counter", and putting a second tool's copy on this page
+          would split its signals across two URLs — the one thing
           lib/seo-keywords.js exists to prevent. A panel that points at its own
           page keeps one tool per page while still putting it where someone
           looking for tools will actually see it. */}
+      <section className="tool-hub" aria-labelledby="tools-qr">
+        <span className="tool-hub-icon" aria-hidden="true">▦</span>
+        <div>
+          <h2 id="tools-qr">
+            <a href="/qr-code-generator">QR code generator</a>
+          </h2>
+          <p>
+            Create a QR code for a website, plain text, a Wi-Fi network, an email address, a phone
+            number, an SMS, a WhatsApp chat, a contact card, a map location or a calendar event.
+            Change the colors, size, error correction and logo, then download as PNG, SVG or JPG. The
+            code is drawn by your own browser, so no Wi-Fi password or contact detail is uploaded.
+          </p>
+        </div>
+        <a className="btn" href="/qr-code-generator">Open the QR code generator</a>
+      </section>
+
       <section className="tool-hub" aria-labelledby="tools-images">
         <span className="tool-hub-icon" aria-hidden="true">🖼️</span>
         <div>
@@ -231,9 +247,11 @@ export default function ToolsPage() {
             honest use of this space, and it is the one place on the page a reader
             can get from counting text to the tools that style it. */}
         <p>
-          Everything above works on plain text and leaves the words alone. For pictures rather
-          than text, the <a href="/image-compression">image compressor</a> shrinks JPG, PNG and
-          WebP files in your browser. To change how the words look, use the{' '}
+          Everything above works on plain text and leaves the words alone. For a code you can print
+          or put on a poster, the <a href="/qr-code-generator">QR code generator</a> builds one for a
+          link, Wi-Fi network, contact card, map location or event entirely in the browser. For
+          pictures rather than text, the <a href="/image-compression">image compressor</a> shrinks
+          JPG, PNG and WebP files in your browser. To change how the words look, use the{' '}
           <a href="/">fancy text generator</a>, browse the{' '}
           <a href="/fonts">font styles by category</a>, or compare 25 words in 25 styles at once on
           the <a href="/styles">style guides</a>. A finished line of styled text can then be turned

@@ -35,6 +35,8 @@ Typing example: "Stylzo".
   6 guides covering where the finished text goes.
 - [Instagram guide](https://www.abdulsamad.shop/styles/instagram): field limits and bios, with FAQs.
 - [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse and more.
+- [QR code generator](https://www.abdulsamad.shop/qr-code-generator): QR codes for links, text, Wi-Fi,
+  email, phone, SMS, WhatsApp, contacts, maps and events, built in the browser.
 - [Image compressor](https://www.abdulsamad.shop/image-compression): compress JPG, PNG and WebP in the
   browser, with the real before-and-after size for every file.
 - [Font studio](https://www.abdulsamad.shop/studio): styled text to PNG.
