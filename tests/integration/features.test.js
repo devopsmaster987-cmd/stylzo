@@ -124,12 +124,22 @@ describe('features', () => {
     for (const hook of [
       'data-qr-zone', 'data-qr-tabs', 'data-qr-type', 'data-qr-panels', 'data-qr-panel',
       'data-qr-canvas', 'data-qr-empty', 'data-qr-errors', 'data-qr-status', 'data-qr-payload',
-      'data-qr-size', 'data-qr-ecl', 'data-qr-foreground', 'data-qr-background',
-      'data-qr-swatch',       'data-qr-logo', 'data-qr-logo-size', 'data-qr-logo-note',
-      'data-qr-logo-remove', 'data-qr-reset', 'data-qr-generate', 'data-qr-download-png',
+      'data-qr-reset', 'data-qr-generate', 'data-qr-download-png',
       'data-qr-download-svg', 'data-qr-download-jpg', 'data-qr-copy',
     ]) {
       assert.ok(html.includes(hook), `the generator is missing ${hook}`);
+    }
+
+    // The appearance controls were removed: the tool takes the defaults (512px,
+    // medium error correction, black on white, no logo) and offers nothing to
+    // change them with. Their hooks have to be gone rather than merely hidden, so
+    // a stale control cannot reappear pointing at a module that no longer reads it.
+    for (const hook of [
+      'data-qr-size', 'data-qr-ecl', 'data-qr-foreground', 'data-qr-background',
+      'data-qr-swatch', 'data-qr-reset-colors', 'data-qr-contrast',
+      'data-qr-logo', 'data-qr-logo-size', 'data-qr-logo-note', 'data-qr-logo-remove',
+    ]) {
+      assert.ok(!html.includes(hook), `${hook} is still on the page but no longer rendered as a control`);
     }
 
     // The privacy claim has to be in the server HTML, not added by the script:
@@ -179,17 +189,8 @@ describe('features', () => {
     }
   });
 
-  test('the QR generator offers the sizes, formats and downloads it claims', async () => {
+  test('the QR generator offers the downloads it claims', async () => {
     const html = await (await get(server.base, '/qr-code-generator')).text();
-    for (const size of [128, 256, 512, 1024]) {
-      // React marks the selected option, so the tag carries a selected attribute.
-      assert.match(html, new RegExp(`<option value="${size}"`), `there is no ${size}px size`);
-    }
-    for (const level of ['L', 'M', 'Q', 'H']) {
-      assert.ok(html.includes(`data-qr-ecl="${level}"`), `there is no error correction level ${level}`);
-    }
-    // All four levels are described, not just labelled, so the choice is informed.
-    assert.match(html, /Recovers about 30%/);
     // And the downloads are named, so nobody is guessing what a file is.
     for (const format of ['Download PNG', 'SVG', 'JPG']) {
       assert.ok(html.includes(format), `there is no ${format} button`);
@@ -276,6 +277,20 @@ describe('features', () => {
     const hookNames = (source) =>
       [...new Set([...source.matchAll(/data-qr-([a-z-]+)/g)].map((m) => m[1]))];
 
+    // The hooks belonging to the appearance controls that were removed. The
+    // module still looks for all of them, every lookup guarded, so a page that
+    // omits them still generates — it just takes the defaults. Naming them here
+    // is what keeps "the module asks for something nobody renders" from quietly
+    // becoming the normal case instead of a decision somebody made.
+    //
+    // `foreground` and `background` are absent from this list deliberately: the
+    // module reaches those through a `[data-qr-${which}]` template, so they are
+    // not literal hooks and this comparison cannot see them at all.
+    const OPTIONAL = new Set([
+      'size', 'ecl', 'swatch', 'reset-colors',
+      'contrast', 'logo', 'logo-size', 'logo-size-out', 'logo-note', 'logo-remove',
+    ]);
+
     let html;
     before(async () => { html = markup(await (await get(server.base, '/qr-code-generator')).text()); });
 
@@ -287,31 +302,39 @@ describe('features', () => {
       assert.deepEqual(unhandled, [], `the page renders ${unhandled.join(', ')} but nothing acts on it`);
     });
 
-    test('every hook the module reads is rendered by the page', () => {
+    test('every hook the module requires is rendered by the page', () => {
       const onPage = new Set(hookNames(html));
-      const missing = hookNames(script).filter((name) => !onPage.has(name));
+      const missing = hookNames(script).filter((name) => !onPage.has(name) && !OPTIONAL.has(name));
       assert.deepEqual(missing, [], `the module looks for ${missing.join(', ')} and finds nothing`);
     });
 
-    test('a color swatch is always a channel and a color the module can apply', () => {
-      // This is the bug the two tests above exist for: a swatch carrying a
-      // color but no channel renders as a button and does nothing when pressed.
-      const swatches = [...html.matchAll(/data-qr-swatch="([^"]*)"[^>]*data-colour="([^"]+)"/g)];
-      assert.ok(swatches.length >= 4, 'there are no colour swatches');
-      for (const [, channel, colour] of swatches) {
-        assert.ok(['foreground', 'background'].includes(channel),
-          `a swatch names the channel "${channel}", which setColour() cannot use`);
-        assert.match(colour, /^#[\da-f]{6}$/i, `a swatch carries "${colour}", which is not a hex color`);
-      }
+    test('a hook the module looks for but the page omits is optional by construction', () => {
+      // The appearance controls are gone, but the module still asks for them. The
+      // only reason that is safe is that every one of them is guarded, so the
+      // unguarded list has to stay empty: an unguarded lookup on a hook the page
+      // no longer renders would throw and take the whole generator with it.
+      const onPage = new Set(hookNames(html));
+      const absent = hookNames(script).filter((name) => !onPage.has(name));
+      assert.deepEqual(absent.sort(), [...OPTIONAL].sort(),
+        'the page and the module have drifted apart on which hooks exist');
     });
 
-    test('the logo input accepts only image types, and never image/*', () => {
-      const input = html.match(/<input[^>]*data-qr-logo[^>]*>/);
-      assert.ok(input, 'there is no logo input');
-      for (const type of ['image/png', 'image/jpeg', 'image/webp']) {
-        assert.ok(input[0].includes(type), `the logo picker does not accept ${type}`);
+    test('the removed appearance controls left nothing behind that looks interactive', () => {
+      // A label, legend or heading that outlives its control is worse than one
+      // that was never written: it reads as a setting the tool has and does not.
+      // Scoped to the tool itself — the long-form sections still describe these
+      // settings in prose, and whether they should is a content decision, not
+      // something this test gets to decide by asserting it.
+      const tool = html
+        .replace(/<script[\s\S]*?<\/script>/g, '')
+        .replace(/<section class="prose"[\s\S]*?<\/section>/g, '')
+        .replace(/<section class="related-searches"[\s\S]*?<\/section>/g, '');
+      for (const text of [
+        'Size in pixels', 'Error correction', 'Foreground color', 'Background color',
+        'Logo size', 'Quartile', 'Recovers about',
+      ]) {
+        assert.ok(!tool.includes(text), `the tool still says "${text}" with no control behind it`);
       }
-      assert.doesNotMatch(input[0], /image\/\*/, 'an accept list of image/* is a lie about what is checked');
     });
 
     test('the module never sends a field anywhere', () => {

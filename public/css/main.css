@@ -1347,8 +1347,9 @@ fieldset.qr-field { border: 0; padding: 0; margin: 1.1rem 0 0; }
   font: 600 .8rem/1.3 var(--body); text-transform: uppercase; letter-spacing: .12em;
   color: var(--ink);
 }
-.qr-controls > .panel:nth-child(2)::before { content: "Appearance"; }
-.qr-controls > .panel:nth-child(3)::before { content: "Logo"; }
+/* The preview panel is the only one left in the controls column, so it has no
+   generated heading. The Appearance and Logo panels that came after it were
+   removed; if they ever come back they need their ::before content back too. */
 .qr-controls .qr-field:first-child:has(> legend) { margin-top: .6rem; }
 .qr-controls .qr-field > .btn { width: 100%; }
 
