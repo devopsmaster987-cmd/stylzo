@@ -81,6 +81,21 @@ export default function ToolsPage() {
         <a className="btn" href="/qr-code-generator">Open the QR code generator</a>
       </section>
 
+      <section className="tool-hub" aria-labelledby="tools-qr-reader">
+        <span className="tool-hub-icon" aria-hidden="true">🔍</span>
+        <div>
+          <h2 id="tools-qr-reader">
+            <a href="/qr-code-reader">QR code reader</a>
+          </h2>
+          <p>
+            Drop in a picture of a QR code and extract what it holds: a phone number, an email address, a
+            Wi-Fi login, a contact card, a link, a map location or an event. The image is decoded in your
+            browser, so nothing is uploaded, and the details come out as labelled fields you can copy.
+          </p>
+        </div>
+        <a className="btn" href="/qr-code-reader">Open the QR code reader</a>
+      </section>
+
       <section className="tool-hub" aria-labelledby="tools-images">
         <span className="tool-hub-icon" aria-hidden="true">🖼️</span>
         <div>
@@ -95,6 +110,52 @@ export default function ToolsPage() {
           </p>
         </div>
         <a className="btn" href="/image-compression">Open the image compressor</a>
+      </section>
+
+      <section className="tool-hub" aria-labelledby="tools-fixer">
+        <span className="tool-hub-icon" aria-hidden="true">🧹</span>
+        <div>
+          <h2 id="tools-fixer">
+            <a href="/universal-text-fixer">Text fixer</a>
+          </h2>
+          <p>
+            Repair the mess that arrives with pasted text: repeated words, doubled spaces, stray
+            spaces before punctuation, zero-width characters, curly quotes that break a search,
+            sentences starting in lower case and common misspellings. Every fix is a toggle, your
+            wording is never rewritten, and the text stays in your browser.
+          </p>
+        </div>
+        <a className="btn" href="/universal-text-fixer">Open the text fixer</a>
+      </section>
+
+      <section className="tool-hub" aria-labelledby="tools-ocr">
+        <span className="tool-hub-icon" aria-hidden="true">📷</span>
+        <div>
+          <h2 id="tools-ocr">
+            <a href="/screenshot-to-text">Screenshot to text</a>
+          </h2>
+          <p>
+            Read the text out of a screenshot and get it back as editable text you can copy or
+            download. Drop an image or paste one from the clipboard and the recognition runs in a
+            Web Worker on your own device, so the picture is never uploaded to an OCR service.
+          </p>
+        </div>
+        <a className="btn" href="/screenshot-to-text">Open screenshot to text</a>
+      </section>
+
+      <section className="tool-hub" aria-labelledby="tools-pdf">
+        <span className="tool-hub-icon" aria-hidden="true">♿</span>
+        <div>
+          <h2 id="tools-pdf">
+            <a href="/pdf-accessibility-checker">PDF accessibility checker</a>
+          </h2>
+          <p>
+            Check a PDF for the accessibility signals that live in the file: tags, structure tree,
+            document language, title, readable fonts, alt text, labelled links and form fields. Every
+            check passes, warns or fails with the fix beside it, and the PDF is parsed in your browser.
+          </p>
+        </div>
+        <a className="btn" href="/pdf-accessibility-checker">Open the PDF checker</a>
       </section>
 
       <div className="tool-layout">
@@ -249,8 +310,9 @@ export default function ToolsPage() {
         <p>
           Everything above works on plain text and leaves the words alone. For a code you can print
           or put on a poster, the <a href="/qr-code-generator">QR code generator</a> builds one for a
-          link, Wi-Fi network, contact card, map location or event entirely in the browser. For
-          pictures rather than text, the <a href="/image-compression">image compressor</a> shrinks
+          link, Wi-Fi network, contact card, map location or event entirely in the browser, and the{' '}
+          <a href="/qr-code-reader">QR code reader</a> turns a picture of one back into its contents.
+          For pictures rather than text, the <a href="/image-compression">image compressor</a> shrinks
           JPG, PNG and WebP files in your browser. To change how the words look, use the{' '}
           <a href="/">fancy text generator</a>, browse the{' '}
           <a href="/fonts">font styles by category</a>, or compare 25 words in 25 styles at once on

@@ -1,0 +1,257 @@
+# Stylix — AdSense Content Quality and Website Improvement Master Prompt
+
+You are a senior SEO engineer, content strategist, technical auditor, and Google AdSense readiness specialist working on my existing website:
+
+Website: https://abdulsamad.shop
+
+Project name: Stylix
+
+## 1. PRIMARY OBJECTIVE
+
+Improve the website's content quality, originality, usefulness, trustworthiness, navigation, and overall readiness for Google AdSense review.
+
+The website is a fancy text generator built with:
+- Node.js
+- Express
+- EJS templates
+- Vanilla JavaScript
+- CSS
+- A small, existing React Three Fiber component for the 3D hero
+
+IMPORTANT:
+- Do NOT migrate the project to Next.js.
+- Do NOT convert the site into a React SPA.
+- Do NOT replace Express or EJS.
+- Preserve all existing features, routes, functionality, design, and working integrations.
+- Inspect the repository before editing anything.
+- Make changes directly in the existing project.
+- Do not stop after providing suggestions; implement the improvements.
+
+The goal is to create a genuinely useful website with substantial original content, not artificial content written merely to satisfy an advertising review.
+
+## 2. FIRST: AUDIT THE ENTIRE PROJECT
+
+Before making changes, inspect:
+
+- package.json and the application entry point
+- Express routes and route controllers
+- EJS templates and partials
+- Existing homepage and main generator
+- All /styles/:key pages
+- All /fonts/:slug pages
+- All /tools/:slug pages
+- /fancy-text-generator
+- /symbols
+- /emoji
+- /kaomoji
+- /image-compression
+- /qr-code-generator
+- /studio
+- /embed
+- CSS, JavaScript, and reusable components
+- Sitemap generation
+- robots.txt
+- Canonical URLs
+- Meta titles and descriptions
+- JSON-LD structured data
+- Breadcrumbs and internal links
+- Existing About, Contact, Privacy Policy, Terms, and Disclaimer pages
+- Existing keyword map and SEO scripts
+- Existing tests and deployment configuration
+
+Build an inventory of all routes and identify:
+
+1. Pages with substantial original content.
+2. Pages containing mostly a tool or character grid.
+3. Pages with duplicated or near-duplicated text.
+4. Pages with placeholder or incomplete content.
+5. Pages with broken links or missing metadata.
+6. Pages that target unsupported or misleading search intent.
+7. Pages that should be improved, merged, redirected, or excluded from indexing.
+
+Do not assume a page is defective without examining its source and behavior.
+
+## 3. CREATE A REUSABLE HIGH-QUALITY CONTENT SYSTEM
+
+Build a maintainable content system using the project's existing architecture.
+
+Prefer reusable EJS partials and structured local data files where appropriate.
+
+For each important landing page, create genuinely useful sections selected according to the page's purpose:
+
+- A unique introduction explaining the page's specific purpose.
+- A working tool or immediately usable examples near the top.
+- A practical step-by-step usage guide.
+- Original examples with before-and-after text where relevant.
+- Instructions for copying and pasting results.
+- Compatibility notes for browsers, devices, and platforms.
+- Limitations and troubleshooting guidance.
+- Relevant use cases.
+- Specific, helpful FAQs.
+- Contextual internal links to genuinely related tools.
+- Clear headings and accessible page structure.
+
+Do not force every section onto every page. Each section must serve the visitor.
+
+Write complete, useful content rather than short keyword introductions.
+
+Suggested length:
+- Simple tool pages: enough content to explain use, limitations, examples, and troubleshooting.
+- Important platform pages: approximately 600–1,000 words when that length is genuinely useful.
+- Comprehensive guides: approximately 800–1,500 words when the topic supports that depth.
+- Other pages: determine length based on user intent and actual information available.
+
+These lengths are editorial guidelines, NOT mandatory quotas. Never add filler just to reach a word count.
+
+## 4. MAKE EACH PAGE GENUINELY DIFFERENT
+
+Existing page families include:
+
+- Instagram fancy text
+- WhatsApp fancy text
+- Discord fancy text
+- Gaming text styles
+- Language-related pages
+- Colour-related styles
+- Individual font/style pages
+- Symbol collections
+- Emoji collections
+- Kaomoji collections
+- Image compression
+- QR code generation
+- Main fancy text generator
+
+For every route, answer these questions before writing:
+
+1. What specific problem does this page solve?
+2. Who is the intended visitor?
+3. What information does this page provide that related pages do not?
+4. Which examples and instructions are actually relevant?
+5. What limitations should users understand?
+6. Which existing Stylix tools genuinely complement this page?
+
+For example:
+
+INSTAGRAM PAGE:
+Explain profile bios, display names, captions, Unicode styling, copy/paste workflow, and display limitations. Do not claim that every character works everywhere.
+
+WHATSAPP PAGE:
+Focus on messages, profile information, status text where supported, and practical copy/paste usage. Distinguish Unicode styling from WhatsApp's built-in formatting features.
+
+DISCORD PAGE:
+Focus on usernames, profile text, messages, supported fields, and display differences. Do not claim that all fields accept all characters.
+
+GAMING PAGE:
+Explain nickname styling, supported character limitations, readability, and potential restrictions imposed by individual games.
+
+LANGUAGE PAGE:
+Explain the actual language and characters supported. Never claim a tool translates languages when it only changes Unicode styling.
+
+COLOUR PAGE:
+Explain that decorative Unicode characters do not change the actual font colour. Do not promise coloured text unless the tool really implements it.
+
+IMAGE COMPRESSION PAGE:
+Explain supported file types, compression settings, image dimensions, quality trade-offs, and privacy implications according to the actual implementation.
+
+QR CODE GENERATOR:
+Explain how to create and test a QR code, supported input types, downloading, scanning, and any actual limitations.
+
+SYMBOLS AND EMOJI:
+Organize examples into useful categories, explain their common uses, and discuss platform-dependent rendering.
+
+Individual font/style pages must explain the particular style and demonstrate its actual output. Do not create hundreds of pages that differ only by a title, keyword, or symbol.
+
+## 5. ORIGINALITY AND FACTUAL ACCURACY
+
+Create original explanations, examples, instructions, and troubleshooting content.
+
+Do not:
+- Copy competitor websites.
+- Paraphrase competitor pages sentence by sentence.
+- Generate repetitive paragraphs with synonyms.
+- Invent tests, research, statistics, expert opinions, or user testimonials.
+- Claim a feature works unless it exists.
+- Claim official affiliation with Instagram, WhatsApp, Discord, Roblox, or other brands.
+- Promise that every Unicode character is supported by every platform.
+- Create fake author biographies or qualifications.
+- Generate fake reviews, ratings, awards, or usage figures.
+- Publish generic AI-generated articles with no meaningful editorial value.
+
+When external facts are necessary, verify them against reliable official documentation. If a fact cannot be verified, omit it or explain the uncertainty.
+
+## 6. AUDIT AND IMPROVE THE KEYWORD MAP
+
+Inspect:
+- scripts/build-keyword-map.js
+- data/keyword-map.json
+- Existing keyword audit reports
+- Existing route definitions and sitemap generation
+
+Preserve legitimate, useful search intent while avoiding keyword stuffing.
+
+Classify keywords into:
+- Relevant and supported
+- Relevant but needing additional functionality
+- Duplicate or near-duplicate intent
+- Unsupported functionality
+- Competitor-branded queries
+- Misleading or inaccurate queries
+- Low-value page candidates
+
+Respect the project's existing exclusions for competitor terms such as Lingojam, Coolsymbol, FontVilla, MessLetters, TextTrick, and NickFinder.
+
+Do not generate a landing page simply because a keyword exists.
+
+Only publish a separate landing page when it provides a meaningful, distinct benefit to users.
+
+For overlapping pages:
+- Improve and differentiate them when justified.
+- Consolidate overlapping content where appropriate.
+- Use redirects only when the destination is a suitable replacement.
+- Use noindex selectively for appropriate low-value utility or duplicate pages.
+- Keep important canonical URLs consistent.
+
+Do not indiscriminately noindex or delete useful existing pages.
+
+## 7. ADD HIGH-VALUE EDUCATIONAL CONTENT
+
+Identify real questions visitors may have and create helpful guides such as:
+
+- What is Unicode text styling?
+- How do fancy text generators work?
+- Why do decorative letters look different on different devices?
+- Why does a copied character appear as a square or question mark?
+- How to copy and paste styled text on desktop and mobile.
+- How to choose readable profile text.
+- How to troubleshoot unsupported symbols.
+- What is the difference between a font and a Unicode character?
+- How to use image compression without unnecessarily reducing quality.
+- How to create and test a QR code safely.
+
+Do not publish all these topics blindly. Check existing pages first, merge duplicates, verify technical accuracy, and prioritize topics that match actual Stylix functionality and user needs.
+
+Add original screenshots or diagrams only where useful and feasible. Do not use fabricated screenshots or claim that illustrations show actual functionality when they do not.
+
+## 8. BUILD TRUST AND TRANSPARENCY PAGES
+
+Audit and create or improve:
+
+ABOUT:
+Explain Stylix's actual purpose, tools, scope, and limitations.
+
+CONTACT:
+Provide a working contact method. Do not invent an email address or claim that a form works unless it does.
+
+PRIVACY POLICY:
+Describe actual data collection, cookies, analytics, storage, third-party services, advertising technologies, and user choices. Verify the real implementation before documenting it.
+
+TERMS OF USE:
+Explain appropriate use, tool limitations, user responsibilities, and service availability without making unsupported legal claims.
+
+DISCLAIMER:
+Explain independence from third-party platforms where relevant. Do not imply official endorsements.
+
+AUTHORS AND EDITORIAL STANDARDS:
+Provide transparent ownership or authorship information where appropriate. Do not fabricate credentials or editorial reviews.
+
+Ensure that important legal and trust pages are accessible from the footer and other appropriate navigation areas

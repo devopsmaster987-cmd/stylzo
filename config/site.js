@@ -13,7 +13,11 @@ export const site = {
     { href: '/tools', label: 'Tools', children: [
       { href: '/tools', label: 'Text tools' },
       { href: '/qr-code-generator', label: 'QR code generator' },
+      { href: '/qr-code-reader', label: 'QR code reader' },
       { href: '/image-compression', label: 'Image compressor' },
+      { href: '/universal-text-fixer', label: 'Text fixer' },
+      { href: '/screenshot-to-text', label: 'Screenshot to text' },
+      { href: '/pdf-accessibility-checker', label: 'PDF accessibility checker' },
     ] },
     {
       href: '/symbols', label: 'Libraries',

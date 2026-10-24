@@ -29,7 +29,9 @@ describe('keyword targeting', () => {
   test('every mapped page exists as a route', () => {
     const ROUTES = new Set([
       '/', '/fonts', '/tools', '/studio', '/image-compression', '/qr-code-generator',
+      '/qr-code-reader',
       '/symbols', '/emoji', '/kaomoji', '/styles', '/about', '/privacy', '/terms', '/contact',
+      '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker',
     ]);
     const missing = KEYWORD_MAP.filter((e) => !ROUTES.has(e.path));
     assert.deepEqual(missing.map((e) => e.path), [], 'keyword map points at a route that does not exist');

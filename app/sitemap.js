@@ -23,6 +23,10 @@ const STATIC_PAGES = [
   { path: '/tools', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/image-compression', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/qr-code-generator', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/qr-code-reader', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/universal-text-fixer', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/screenshot-to-text', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/pdf-accessibility-checker', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/studio', changeFrequency: 'monthly', priority: 0.7 },
   // The embed page is how other sites link back here, so it is worth a reader
   // finding it rather than only finding it through this site's own nav.

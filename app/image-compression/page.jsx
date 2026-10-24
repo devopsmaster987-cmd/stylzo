@@ -85,6 +85,7 @@ export default function ImageCompressionPage() {
       </nav>
 
       <section className="hero">
+        <span className="eyebrow">Runs on your device — no upload, no sign-up</span>
         <h1>Image compression tool</h1>
         <p className="lede">
           Shrink JPG, PNG and WebP images and see the exact size you saved. Add a whole batch,
@@ -92,6 +93,15 @@ export default function ImageCompressionPage() {
           ZIP. Your images are decoded and re-encoded by your own browser, so nothing is uploaded
           and nothing is stored.
         </p>
+        {/* The four numbers a visitor has to know before they trust the tool with a
+            file, set where the lede still has their attention rather than buried in
+            the settings column. Every figure here is the one the module enforces. */}
+        <ul className="cz-specs">
+          <li><b>JPG · PNG · WebP</b><span>in and out, convert between them</span></li>
+          <li><b>20 images</b><span>per batch, up to 25 MB each</span></li>
+          <li><b>10–100%</b><span>quality, with three presets</span></li>
+          <li><b>Zero uploads</b><span>nothing leaves this device</span></li>
+        </ul>
       </section>
 
       {/* Answer-first, before the tool and the long prose. The privacy claim is
@@ -104,26 +114,28 @@ export default function ImageCompressionPage() {
 
       <div className="cz-layout">
         <div className="cz-main">
-          <div className="panel">
-            {/* A <label> wrapping the input rather than a <div> with a click
-                handler: the picker then opens with no JavaScript at all, the
-                control is reachable by keyboard, and drag-and-drop layers on
-                top without duplicating either. */}
-            <label className="cz-dropzone" htmlFor="cz-input" data-cz-zone>
-              <span className="visually-hidden">Choose JPG, PNG or WebP images to compress</span>
-              <input
-                id="cz-input"
-                className="visually-hidden"
-                type="file"
-                accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-                multiple
-                data-cz-input
-              />
+          {/* A <label> wrapping the input rather than a <div> with a click
+              handler: the picker then opens with no JavaScript at all, the
+              control is reachable by keyboard, and drag-and-drop layers on
+              top without duplicating either. The card itself carries the brand
+              gradient on its border, so the one control that is interactive
+              before anything has happened is also the one that reads first. */}
+          <label className="cz-dropzone" htmlFor="cz-input" data-cz-zone>
+            <span className="visually-hidden">Choose JPG, PNG or WebP images to compress</span>
+            <input
+              id="cz-input"
+              className="visually-hidden"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+              multiple
+              data-cz-input
+            />
+            <span className="cz-drop-tile" aria-hidden="true">
               <svg
                 className="cz-drop-icon"
                 viewBox="0 0 24 24"
-                width="44"
-                height="44"
+                width="28"
+                height="28"
                 aria-hidden="true"
               >
                 <path
@@ -135,30 +147,33 @@ export default function ImageCompressionPage() {
                   d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15v2.5A2.5 2.5 0 0 0 6.5 20h11a2.5 2.5 0 0 0 2.5-2.5V15"
                 />
               </svg>
-              <h2>Drop your images here</h2>
-              <p>
-                or <span className="cz-browse">choose files</span> from your device. JPG, PNG and
-                WebP, up to 20 images at a time and 25 MB each.
-              </p>
-            </label>
-
-            <p className="cz-privacy">
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  d="M12 2 4 5v6c0 4.5 3.2 8.7 8 10 4.8-1.3 8-5.5 8-10V5l-8-3Zm0 6a2 2 0 0 1 1 3.7V15h-2v-3.3A2 2 0 0 1 12 8Zm0 9.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
-                />
-              </svg>
-              <span>
-                <b>Your images never leave this device.</b> They are decoded and re-encoded by
-                your own browser using a canvas. No image is uploaded, no image is sent to a third
-                party, and nothing is stored on a server. Closing the tab discards everything.
-              </span>
+            </span>
+            <h2>Drop your images here</h2>
+            <p>
+              or <span className="cz-browse">choose files</span> from your device. JPG, PNG and
+              WebP, up to 20 images at a time and 25 MB each.
             </p>
-          </div>
+          </label>
+
+          <p className="cz-privacy">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 2 4 5v6c0 4.5 3.2 8.7 8 10 4.8-1.3 8-5.5 8-10V5l-8-3Zm0 6a2 2 0 0 1 1 3.7V15h-2v-3.3A2 2 0 0 1 12 8Zm0 9.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
+              />
+            </svg>
+            <span>
+              <b>Your images never leave this device.</b> They are decoded and re-encoded by
+              your own browser using a canvas. No image is uploaded, no image is sent to a third
+              party, and nothing is stored on a server. Closing the tab discards everything.
+            </span>
+          </p>
 
           <div className="cz-errors" role="alert" data-cz-errors hidden />
 
+          {/* The action row is a bar rather than loose buttons: the batch actions and
+              the running total belong together, and the total is a status rather than
+              a caption, so it is announced as one. */}
           <div className="cz-toolbar">
             <button type="button" className="btn" data-cz-compress-all disabled>
               Compress all
@@ -178,6 +193,20 @@ export default function ImageCompressionPage() {
           </div>
 
           <p className="cz-empty" data-cz-empty>
+            <span className="cz-empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="30" height="30">
+                <rect
+                  x="3" y="5" width="18" height="14" rx="2.5"
+                  fill="none" stroke="currentColor" strokeWidth="1.4"
+                />
+                <path
+                  d="m6 16 3.5-4 2.5 3 2-2.5L18 16"
+                  fill="none" stroke="currentColor" strokeWidth="1.4"
+                  strokeLinecap="round" strokeLinejoin="round"
+                />
+                <circle cx="9" cy="9.5" r="1.3" fill="currentColor" />
+              </svg>
+            </span>
             <span className="visually-hidden">Empty state. </span>
             <b>No images yet</b>
             Add one above and it will be compressed automatically.
@@ -187,7 +216,16 @@ export default function ImageCompressionPage() {
         </div>
 
         <div className="cz-controls">
+          <div className="cz-side-head">
+            <h2>Settings</h2>
+            <p className="muted">
+              Every change re-compresses the whole batch, so the numbers you see are always the
+              ones these controls produced.
+            </p>
+          </div>
+
           <div className="panel">
+            <h3 className="cz-group">Quality and format</h3>
             <div className="cz-field">
               <label id="cz-preset-label">Preset</label>
               <div className="cz-presets" role="group" aria-labelledby="cz-preset-label">
@@ -234,6 +272,7 @@ export default function ImageCompressionPage() {
           </div>
 
           <div className="panel">
+            <h3 className="cz-group">Resize</h3>
             <div className="cz-field">
               <label htmlFor="cz-scale">Resize percentage</label>
               <input

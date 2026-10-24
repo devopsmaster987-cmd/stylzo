@@ -15,6 +15,9 @@ Typing example: "Stylzo".
 - Browser text tools: word counter, case converter, reverse, slug, find and replace.
 - A font studio that renders styled text to a 1200x630 PNG in the browser.
 - An image compressor for JPG, PNG and WebP that reports the real before-and-after size.
+- A text fixer, a screenshot-to-text OCR tool and a PDF accessibility checker.
+- A QR code reader that extracts phone numbers, email addresses, Wi-Fi logins and
+  contact cards from a picture of a code, without uploading it.
 
 ## Important limits
 - Output is Unicode characters, not an image or a font. Apps without the
@@ -37,8 +40,16 @@ Typing example: "Stylzo".
 - [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse and more.
 - [QR code generator](https://www.abdulsamad.shop/qr-code-generator): QR codes for links, text, Wi-Fi,
   email, phone, SMS, WhatsApp, contacts, maps and events, built in the browser.
+- [QR code reader](https://www.abdulsamad.shop/qr-code-reader): read a QR code from an image and extract
+  the phone number, email address, Wi-Fi login, contact card, link, place or event.
 - [Image compressor](https://www.abdulsamad.shop/image-compression): compress JPG, PNG and WebP in the
   browser, with the real before-and-after size for every file.
+- [Text fixer](https://www.abdulsamad.shop/universal-text-fixer): repair spacing, punctuation, invisible
+  characters, sentence case, repeated words and common misspellings.
+- [Screenshot to text](https://www.abdulsamad.shop/screenshot-to-text): OCR a screenshot in a Web Worker
+  on the visitor's device and return editable text.
+- [PDF accessibility checker](https://www.abdulsamad.shop/pdf-accessibility-checker): check a PDF for tags,
+  language, title, readable fonts, alt text, labelled links and form fields.
 - [Font studio](https://www.abdulsamad.shop/studio): styled text to PNG.
 - [Symbols](https://www.abdulsamad.shop/symbols) / [Emoji](https://www.abdulsamad.shop/emoji) / [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.
 - [About](https://www.abdulsamad.shop/about) and [Privacy](https://www.abdulsamad.shop/privacy).

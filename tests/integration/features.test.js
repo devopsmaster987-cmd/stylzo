@@ -7,7 +7,7 @@ process.env.ADMIN_KEY = 'test-admin-key-123';
 
 const pages = [
   '/symbols', '/emoji', '/kaomoji', '/tools', '/image-compression', '/qr-code-generator',
-  '/studio', '/admin',
+  '/qr-code-reader', '/studio', '/admin', '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker',
 ];
 
 // Next repeats rendered props inside its RSC flight payload, so counting a
@@ -385,6 +385,79 @@ describe('features', () => {
     assert.ok(sm.includes('/image-compression</loc>'));
   });
 
+  test('the text fixer ships its controls and its client module', async () => {
+    const html = await (await get(server.base, '/universal-text-fixer')).text();
+    for (const hook of [
+      'data-fix-tool', 'data-fix-option', 'data-fix-input', 'data-fix-out',
+      'data-fix-summary', 'data-fix-run', 'data-fix-copy', 'data-fix-reset',
+    ]) {
+      assert.ok(html.includes(hook), `the text fixer is missing ${hook}`);
+    }
+    // The privacy claim has to be in the server HTML, not added by the script.
+    assert.match(html, /nothing leaves\s+your browser/);
+
+    const res = await get(server.base, '/js/universal-text-fixer.js');
+    assert.equal(res.status, 200, '/js/universal-text-fixer.js is referenced but not served');
+  });
+
+  test('the screenshot-to-text tool ships its controls and its client module', async () => {
+    const html = await (await get(server.base, '/screenshot-to-text')).text();
+    for (const hook of [
+      'data-ocr-tool', 'data-ocr-zone', 'data-ocr-input', 'data-ocr-psm', 'data-ocr-lang',
+      'data-ocr-reset', 'data-ocr-errors', 'data-ocr-status', 'data-ocr-progress',
+      'data-ocr-bar', 'data-ocr-empty', 'data-ocr-list', 'data-ocr-copy-all', 'data-ocr-download',
+    ]) {
+      assert.ok(html.includes(hook), `the OCR tool is missing ${hook}`);
+    }
+    assert.match(html, /never leaves this device/);
+    // The OCR engine is vendored, because the CSP does not allow a CDN script.
+    assert.match(html, /Web Worker/);
+
+    for (const asset of [
+      '/js/screenshot-to-text.js',
+      '/vendor/tesseract/tesseract.esm.min.js',
+      '/vendor/tesseract/worker.min.js',
+      '/vendor/tesseract/tesseract-core-lstm.wasm.js',
+      '/vendor/tesseract/eng.traineddata.gz',
+    ]) {
+      const res = await get(server.base, asset);
+      assert.equal(res.status, 200, `${asset} is referenced but not served`);
+    }
+  });
+
+  test('the QR code reader ships its controls and its client module', async () => {
+    const html = await (await get(server.base, '/qr-code-reader')).text();
+    for (const hook of [
+      'data-qr-reader', 'data-qr-zone', 'data-qr-input', 'data-qr-errors', 'data-qr-status',
+      'data-qr-copy-all', 'data-qr-reset', 'data-qr-empty', 'data-qr-list',
+    ]) {
+      assert.ok(html.includes(hook), `the QR reader is missing ${hook}`);
+    }
+    assert.match(html, /never leaves this device/);
+
+    // The decoder is vendored, because the CSP does not allow a CDN script, and
+    // the payload parser is a plain module the page imports.
+    for (const asset of ['/js/qr-code-reader.js', '/js/qr-reader-payloads.js', '/vendor/jsqr/jsqr.js']) {
+      const res = await get(server.base, asset);
+      assert.equal(res.status, 200, `${asset} is referenced but not served`);
+    }
+  });
+
+  test('the PDF accessibility checker ships its controls and its client module', async () => {
+    const html = await (await get(server.base, '/pdf-accessibility-checker')).text();
+    for (const hook of [
+      'data-pa-tool', 'data-pa-zone', 'data-pa-input', 'data-pa-file', 'data-pa-reset',
+      'data-pa-errors', 'data-pa-status', 'data-pa-empty', 'data-pa-results', 'data-pa-score',
+      'data-pa-grade', 'data-pa-summary', 'data-pa-facts', 'data-pa-checks', 'data-pa-copy',
+    ]) {
+      assert.ok(html.includes(hook), `the PDF checker is missing ${hook}`);
+    }
+    assert.match(html, /never leaves this device/);
+
+    const res = await get(server.base, '/js/pdf-accessibility-checker.js');
+    assert.equal(res.status, 200, '/js/pdf-accessibility-checker.js is referenced but not served');
+  });
+
   test('the tools hub surfaces every tool that has its own page', async () => {
     // A tool nobody can find is a tool nobody uses. This asserts the entry
     // points exist rather than the wording, so editing the copy does not break
@@ -396,6 +469,10 @@ describe('features', () => {
     for (const [name, href] of [
       ['Image compressor', '/image-compression'],
       ['QR code generator', '/qr-code-generator'],
+      ['QR code reader', '/qr-code-reader'],
+      ['Text fixer', '/universal-text-fixer'],
+      ['Screenshot to text', '/screenshot-to-text'],
+      ['PDF accessibility checker', '/pdf-accessibility-checker'],
     ]) {
       const panel = panels.find((p) => p.includes(`href="${href}"`));
       assert.ok(panel, `/tools has no panel pointing at ${href}`);
@@ -415,6 +492,19 @@ describe('features', () => {
     assert.match(nav, /has-sub/);
   });
 
+  test('the header nav reaches every tool page', async () => {
+    const home = markup(await (await get(server.base, '/')).text());
+    const nav = (home.match(/<nav aria-label="Main">[\s\S]*?<\/nav>/) || [])[0];
+    assert.ok(nav, 'no main nav in the document');
+    for (const href of [
+      '/image-compression', '/qr-code-generator',
+      '/qr-code-reader',
+      '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker',
+    ]) {
+      assert.ok(nav.includes(href), `the main nav does not link to ${href}`);
+    }
+  });
+
   test('sitemap includes the new library pages', async () => {
     const sm = await (await get(server.base, '/sitemap.xml')).text();
     for (const p of ['/symbols', '/emoji', '/kaomoji', '/tools']) {
@@ -422,6 +512,9 @@ describe('features', () => {
     }
     // /studio is indexable now that it carries its own explainer.
     assert.ok(sm.includes('/studio</loc>'));
+    for (const p of ['/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker', '/qr-code-reader']) {
+      assert.ok(sm.includes(`${p}</loc>`), `sitemap misses ${p}`);
+    }
     assert.ok(!sm.includes('/admin</loc>'));
   });
 });

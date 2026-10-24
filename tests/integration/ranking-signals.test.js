@@ -120,6 +120,9 @@ describe('every page links onward, not just around itself', () => {
     // The generator is the other tool on this site that produces something a
     // visitor downloads and prints, so the two point at each other.
     '/qr-code-generator': ['/', '/fonts', '/styles', '/tools', '/studio', '/image-compression'],
+    // The reader is the inverse of the generator, so each points at the other
+    // and both point back at the text tools.
+    '/qr-code-reader': ['/tools', '/qr-code-generator', '/screenshot-to-text', '/universal-text-fixer'],
     '/studio': ['/', '/fonts', '/styles', '/image-compression'],
   };
 

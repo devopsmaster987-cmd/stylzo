@@ -42,6 +42,9 @@ Typing example: "${sample}".
 - Browser text tools: word counter, case converter, reverse, slug, find and replace.
 - A font studio that renders styled text to a 1200x630 PNG in the browser.
 - An image compressor for JPG, PNG and WebP that reports the real before-and-after size.
+- A text fixer, a screenshot-to-text OCR tool and a PDF accessibility checker.
+- A QR code reader that extracts phone numbers, email addresses, Wi-Fi logins and
+  contact cards from a picture of a code, without uploading it.
 
 ## Important limits
 - Output is Unicode characters, not an image or a font. Apps without the
@@ -64,8 +67,16 @@ Typing example: "${sample}".
 - [Text tools](${base}/tools): word counter, case converter, reverse and more.
 - [QR code generator](${base}/qr-code-generator): QR codes for links, text, Wi-Fi,
   email, phone, SMS, WhatsApp, contacts, maps and events, built in the browser.
+- [QR code reader](${base}/qr-code-reader): read a QR code from an image and extract
+  the phone number, email address, Wi-Fi login, contact card, link, place or event.
 - [Image compressor](${base}/image-compression): compress JPG, PNG and WebP in the
   browser, with the real before-and-after size for every file.
+- [Text fixer](${base}/universal-text-fixer): repair spacing, punctuation, invisible
+  characters, sentence case, repeated words and common misspellings.
+- [Screenshot to text](${base}/screenshot-to-text): OCR a screenshot in a Web Worker
+  on the visitor's device and return editable text.
+- [PDF accessibility checker](${base}/pdf-accessibility-checker): check a PDF for tags,
+  language, title, readable fonts, alt text, labelled links and form fields.
 - [Font studio](${base}/studio): styled text to PNG.
 - [Symbols](${base}/symbols) / [Emoji](${base}/emoji) / [Kaomoji](${base}/kaomoji): copyable libraries.
 - [About](${base}/about) and [Privacy](${base}/privacy).

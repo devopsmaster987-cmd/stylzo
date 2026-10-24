@@ -134,7 +134,8 @@ is a content decision rather than a code one.
 
 `/`, `/fancy-text-generator` (308 to `/`), `/fonts` (`?q=`), `/fonts/[slug]`,
 `/styles` (the hub) and `/styles/[key]`, `/symbols`, `/emoji`, `/kaomoji`, `/tools`,
-`/qr-code-generator`, `/image-compression`, `/studio`, `/admin` (`noindex`), `/admin/seo`
+`/qr-code-generator`, `/qr-code-reader`, `/image-compression`, `/universal-text-fixer`, `/screenshot-to-text`,
+`/pdf-accessibility-checker`, `/studio`, `/admin` (`noindex`), `/admin/seo`
 (`noindex`), `/about`, `/privacy`, `/terms`, `/contact`, `/robots.txt`, `/sitemap.xml`, plus
 `GET /api/styles`, `/api/search`, `/api/ai/suggest`, `/api/health`, `/api/config`, `/api/beat`,
 `POST /api/generate`.
@@ -210,6 +211,26 @@ warned above 20%, with the level raised automatically), and the quiet zone (alwa
 four modules, never a setting). Modules are drawn at an integer pixel scale and the symbol is
 centred rather than stretched, because a module edge landing on a half pixel is the most common
 reason a code works on screen and fails in print.
+
+## Browser text and file tools
+
+Four tools run entirely on the visitor's device and each has its own page, module and privacy
+claim in the server HTML:
+
+- `/universal-text-fixer` (`public/js/universal-text-fixer.js`) repairs spacing, punctuation,
+  invisible characters, sentence case, repeated words and common misspellings. Every rule is a
+  toggle with its own change count, and wording is never rewritten.
+- `/screenshot-to-text` (`public/js/screenshot-to-text.js`) runs OCR on dropped, pasted or chosen
+  images. Tesseract.js is vendored under `public/vendor/tesseract/` rather than loaded from a CDN,
+  because the CSP is `script-src 'self'`; the worker is started with `workerBlobURL: false` since
+  `blob:` workers are blocked too.
+- `/pdf-accessibility-checker` (`public/js/pdf-accessibility-checker.js`) scans the raw PDF and
+  inflates FlateDecode streams with `DecompressionStream` to check for tags, language, document
+  title, readable fonts, image alt text, labelled links and form fields, and scores the result.
+- `/qr-code-reader` (`public/js/qr-code-reader.js`) decodes a QR code image in the browser with
+  jsQR, vendored under `public/vendor/jsqr/` for the same CSP reason, then parses the payload with
+  `public/js/qr-reader-payloads.js` into phone, email, Wi-Fi, contact-card, link, location or event
+  fields. The image is never uploaded.
 
 ## SEO keyword system
 
