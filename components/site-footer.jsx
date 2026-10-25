@@ -28,6 +28,7 @@ export function SiteFooter() {
             <li><a href="/studio">Font studio</a></li>
             <li><a href="/tools">Text tools</a></li>
             <li><a href="/image-compression">Image compressor</a></li>
+            <li><a href="/embed">Embed the generator</a></li>
           </ul>
         </nav>
 

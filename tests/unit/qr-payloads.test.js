@@ -2,7 +2,10 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildPayload,
+  buildEventIcs,
+  decodeEventData,
   fieldsFor,
+  parseEventStamp,
   TYPES,
   WIFI_SECURITY,
   MAPS_PROVIDER,
@@ -262,65 +265,107 @@ describe('qr payloads', () => {
 
   describe('event', () => {
     const base = { eventSummary: 'Stylzo launch', eventStart: '2026-06-01T09:00' };
+    const context = { baseUrl: 'https://example.com' };
 
-    test('the calendar is well formed', () => {
-      const { text, error } = buildPayload('event', base);
+    test('the code opens the event page with the details in the fragment', () => {
+      const { text, error } = buildPayload('event', base, context);
       assert.equal(error, '');
-      assert.ok(text.startsWith('BEGIN:VCALENDAR'));
-      assert.ok(text.trimEnd().endsWith('END:VCALENDAR'));
-      assert.match(text, /VERSION:2\.0/);
-      assert.match(text, /BEGIN:VEVENT/);
-      assert.match(text, /END:VEVENT/);
-      assert.match(text, /DTSTART:20260601T090000/);
-      assert.match(text, /SUMMARY:Stylzo launch/);
+      assert.ok(text.startsWith('https://example.com/event#'), text);
+      const decoded = decodeEventData(text.split('#')[1]);
+      assert.equal(decoded.summary, 'Stylzo launch');
+      assert.equal(decoded.start, '20260601T090000');
+      assert.ok(parseEventStamp(decoded.start));
     });
 
-    test('the same event produces the same identifier, so re-scanning does not duplicate it', () => {
-      const a = buildPayload('event', base);
-      const b = buildPayload('event', base);
-      const uid = (t) => t.match(/UID:(\S+)/)[1];
-      assert.equal(uid(a.text), uid(b.text));
-      const other = buildPayload('event', { ...base, eventSummary: 'Something else' });
-      assert.notEqual(uid(a.text), uid(other.text), 'two different events share a UID');
+    test('the same event produces the same link, so re-scanning does not duplicate it', () => {
+      assert.equal(
+        buildPayload('event', base, context).text,
+        buildPayload('event', base, context).text,
+      );
+      assert.notEqual(
+        buildPayload('event', base, context).text,
+        buildPayload('event', { ...base, eventSummary: 'Something else' }, context).text,
+      );
     });
 
     test('an end time is optional, but must not be before the start', () => {
-      assert.ok(!buildPayload('event', base).text.includes('DTEND'));
-      assert.match(buildPayload('event', { ...base, eventEnd: '2026-06-01T10:30' }).text, /DTEND:20260601T103000/);
+      const plain = decodeEventData(buildPayload('event', base, context).text.split('#')[1]);
+      assert.equal(plain.end, '');
+      const withEnd = decodeEventData(
+        buildPayload('event', { ...base, eventEnd: '2026-06-01T10:30' }, context).text.split('#')[1],
+      );
+      assert.equal(withEnd.end, '20260601T103000');
       assert.match(
-        buildPayload('event', { ...base, eventEnd: '2026-06-01T08:00' }).error,
+        buildPayload('event', { ...base, eventEnd: '2026-06-01T08:00' }, context).error,
         /ends before it starts/,
       );
     });
 
     test('a summary and a start are required', () => {
-      assert.match(buildPayload('event', { ...base, eventSummary: '' }).error, /name/i);
-      assert.match(buildPayload('event', { eventSummary: 'x' }).error, /start date/i);
-      assert.match(buildPayload('event', { ...base, eventStart: 'not a date' }).error, /could not be read/);
+      assert.match(buildPayload('event', { ...base, eventSummary: '' }, context).error, /name/i);
+      assert.match(buildPayload('event', { eventSummary: 'x' }, context).error, /start date/i);
+      assert.match(
+        buildPayload('event', { ...base, eventStart: 'not a date' }, context).error,
+        /could not be read/,
+      );
     });
 
-    test('commas and newlines in a description are escaped and folded', () => {
-      const { text } = buildPayload('event', {
-        ...base, eventDescription: 'Bring a laptop, and;\ncome early',
-      });
+    test('the event page address must be available', () => {
+      assert.match(buildPayload('event', base).error, /address/i);
+    });
+
+    test('the location and description round-trip exactly', () => {
+      const fields = {
+        ...base,
+        eventLocation: 'Online',
+        eventDescription: 'Bring a laptop, and;\ncome early',
+      };
+      const decoded = decodeEventData(buildPayload('event', fields, context).text.split('#')[1]);
+      assert.equal(decoded.location, 'Online');
+      assert.equal(decoded.description, 'Bring a laptop, and;\ncome early');
+    });
+
+    test('a damaged event payload is rejected rather than rendered', () => {
+      assert.equal(decodeEventData('not-base64-json'), null);
+      assert.equal(decodeEventData(''), null);
+      assert.equal(decodeEventData(undefined), null);
+    });
+
+    test('the calendar download escapes, folds and keeps a stable identifier', () => {
+      const fields = {
+        ...base,
+        eventDescription: 'Bring a laptop, and;\ncome early',
+      };
+      const decoded = decodeEventData(buildPayload('event', fields, context).text.split('#')[1]);
+      const text = buildEventIcs(decoded);
+
+      assert.ok(text.startsWith('BEGIN:VCALENDAR'));
+      assert.ok(text.trimEnd().endsWith('END:VCALENDAR'));
+      assert.match(text, /VERSION:2\.0/);
+      assert.match(text, /DTSTART:20260601T090000/);
+      assert.match(text, /SUMMARY:Stylzo launch/);
       assert.ok(text.includes('DESCRIPTION:Bring a laptop\\, and\\;\\ncome early'), text);
-      // Properties are separated by CRLF; a fold is CRLF plus one space. Splitting
-      // on both reconstructs the original lines, none of which may exceed 75 octets.
-      for (const line of text.split(/\r\n ?/)) {
-        assert.ok(Buffer.byteLength(line, 'utf8') <= 75, `a line is too long: ${line}`);
-      }
+
+      const uid = (value) => value.match(/UID:(\S+)/)[1];
+      assert.equal(uid(text), uid(buildEventIcs(decoded)));
+      assert.notEqual(
+        uid(text),
+        uid(buildEventIcs({ ...decoded, summary: 'Something else' })),
+        'two different events share a UID',
+      );
     });
 
     test('long content folds rather than producing an over-long line', () => {
       const description = 'x'.repeat(300);
-      const { text } = buildPayload('event', { ...base, eventDescription: description });
+      const decoded = decodeEventData(
+        buildPayload('event', { ...base, eventDescription: description }, context).text.split('#')[1],
+      );
+      const text = buildEventIcs(decoded);
       assert.match(text, /\r\n /, 'a long description should be folded');
       const lines = text.split(/\r\n ?/);
       for (const line of lines) {
         assert.ok(Buffer.byteLength(line, 'utf8') <= 75, `a folded line is ${Buffer.byteLength(line)} octets`);
       }
-      // Unfolding has to give the value back exactly, or the description a phone
-      // shows is not the one that was typed.
       const unfolded = lines.filter((l) => l.startsWith('DESCRIPTION:') || /^x+$/.test(l));
       assert.equal(unfolded.join('').replace('DESCRIPTION:', ''), description);
     });
@@ -378,7 +423,8 @@ describe('qr payloads', () => {
         },
       };
       for (const [type, fields] of Object.entries(samples)) {
-        const { text, error } = buildPayload(type, fields);
+        const context = type === 'event' ? { baseUrl: 'https://example.com' } : undefined;
+        const { text, error } = buildPayload(type, fields, context);
         assert.equal(error, '', `${type}: ${error}`);
         assert.ok(Buffer.byteLength(text, 'utf8') <= byteCapacity(20, 'M'),
           `${type} produces ${Buffer.byteLength(text, 'utf8')} bytes, too long to be practical`);

@@ -29,19 +29,24 @@ const AI_CRAWLERS = [
 ];
 
 export default function robots() {
+  // Private paths only. Nothing public is blocked here: filtered catalogue
+  // views are noindexed on the page instead, because a robots block would stop
+  // the crawler seeing the noindex directive at all.
+  const DISALLOW = ['/api/', '/admin', '/event'];
+
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin'],
+        disallow: DISALLOW,
       },
       // Named explicitly after the wildcard so the AI permission is visible and
       // survives a later tightening of the wildcard rule.
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,
         allow: '/',
-        disallow: ['/api/', '/admin'],
+        disallow: DISALLOW,
       })),
     ],
     sitemap: `${env.siteUrl}/sitemap.xml`,

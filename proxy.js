@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { env, firebaseConfigured, adsenseConfigured } from './config/environment.js';
+import { CATEGORY_KEYS } from './lib/category-keys.js';
 
 // /fonts/Bold and /styles/Instagram are how third-party links and hand-typed
 // URLs actually arrive. Both routes match lowercase slugs only, so today they
@@ -11,6 +12,53 @@ import { env, firebaseConfigured, adsenseConfigured } from './config/environment
 // so an uppercase kept style slug reaches this handler rather than being
 // swallowed by the /styles catch-all. Both layers agreeing on that is what stops
 // the two rules from fighting each other.
+
+// One canonical origin for the whole site: https and, when configured, www.
+// Without this, `http://` and the bare domain serve the same page under a
+// different host, which splits signals and produces duplicate canonical URLs.
+// Preview and local hosts are left alone; only the configured production host
+// and its bare alias are redirected.
+function canonicalOriginRedirect(request) {
+  if (!env.isProd) return null;
+
+  const canonical = new URL(env.siteUrl);
+  const canonicalHost = canonical.hostname.toLowerCase();
+  if (canonicalHost === 'localhost' || canonicalHost === '127.0.0.1') return null;
+
+  const forwardedHost = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
+  const host = forwardedHost.split(',')[0].trim().toLowerCase().replace(/:\d+$/, '');
+  if (!host) return null;
+
+  const forwardedProto = request.headers.get('x-forwarded-proto')
+    || request.nextUrl.protocol.replace(':', '');
+  const proto = forwardedProto.split(',')[0].trim().toLowerCase();
+  const canonicalProto = canonical.protocol.replace(':', '');
+
+  const bareHost = canonicalHost.replace(/^www\./, '');
+  const wrongHost = host === bareHost;
+  const wrongProto = host === canonicalHost && proto !== canonicalProto;
+  if (!wrongHost && !wrongProto) return null;
+
+  const url = new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, env.siteUrl);
+  return NextResponse.redirect(url, 308);
+}
+
+// Category filters used to be `/?category=<key>` URLs canonicalising to `/`.
+// They were noindex, so every internal category link went to a page that could
+// not rank. The category hubs are real pages now; this sends the old query URL
+// to the matching hub and drops the redundant `category` parameter while
+// keeping any `text` value the visitor typed.
+function categoryQueryRedirect(request) {
+  if (request.nextUrl.pathname !== '/') return null;
+  const key = request.nextUrl.searchParams.get('category');
+  if (!key || !CATEGORY_KEYS.includes(key)) return null;
+
+  const url = request.nextUrl.clone();
+  url.pathname = `/fonts/category/${key}`;
+  url.searchParams.delete('category');
+  return NextResponse.redirect(url, 301);
+}
+
 function caseNormalizedRedirect(request) {
   const { pathname } = request.nextUrl;
   for (const segment of ['fonts', 'styles']) {
@@ -110,6 +158,12 @@ function cspTemplate() {
 // dynamically rendered page and copies the nonce onto its own <script> tags,
 // so no 'unsafe-inline' is needed anywhere.
 export function proxy(request) {
+  const originRedirect = canonicalOriginRedirect(request);
+  if (originRedirect) return originRedirect;
+
+  const categoryRedirect = categoryQueryRedirect(request);
+  if (categoryRedirect) return categoryRedirect;
+
   const redirect = caseNormalizedRedirect(request);
   if (redirect) return redirect;
 

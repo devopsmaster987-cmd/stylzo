@@ -65,7 +65,7 @@ export default async function HomePage({ searchParams }) {
   const categories = Object.entries(db.categories).map(([key, c]) => ({
     key,
     name: c.name,
-    count: db.counts[key] || 0,
+    count: db.indexableCounts[key] || 0,
   }));
 
   // A ?category= render is already narrowed by the chips above; showing the full
@@ -103,7 +103,7 @@ export default async function HomePage({ searchParams }) {
         {categories.map((c) => (
           <a
             key={c.key}
-            href={`/?category=${c.key}`}
+            href={`/fonts/category/${c.key}`}
             aria-current={category === c.key ? 'page' : undefined}
           >
             {c.name} ({c.count})

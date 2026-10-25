@@ -27,7 +27,7 @@ const stats = (html) => {
 
 describe('landing pages', () => {
   let server;
-  before(async () => { server = await startServer(3221); });
+  before(async () => { server = await startServer(3224); });
   after(() => server?.stop());
 
   for (const page of LANDING_PAGES) {
@@ -154,13 +154,15 @@ describe('sitemap', () => {
 
   test('contains every eligible indexable page', async () => {
     const sm = await (await get(server.base, '/sitemap.xml')).text();
+    const paths = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
     for (const p of ['/', '/fonts', '/tools']) {
-      assert.ok(sm.includes(`${p}</loc>`), `sitemap misses ${p}`);
+      assert.ok(paths.includes(p), `sitemap misses ${p}`);
     }
     for (const page of LANDING_PAGES) {
-      assert.ok(sm.includes(`/styles/${page.key}</loc>`), `sitemap misses /styles/${page.key}`);
+      assert.ok(paths.includes(`/styles/${page.key}`), `sitemap misses /styles/${page.key}`);
     }
-    assert.ok(sm.includes('/fonts/bold</loc>'));
+    assert.ok(paths.includes('/fonts/bold'));
+    assert.ok(paths.includes('/fonts/category/gothic'));
   });
 
   test('never lists admin or the dashboard', async () => {

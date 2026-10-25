@@ -31,13 +31,17 @@ import {
   STYLES_GUIDES_HEADING, STYLES_GUIDES_BODY, stylesHubAdPlan,
 } from '@/lib/styles-material.js';
 
-function stylesMeta() {
+function stylesMeta(hasText = false) {
   return pageMeta({
     title: 'Fancy Text Styles: 25 Examples and Six Guides',
     description: `See the same 25 words in ${WORDS_PER_KEYWORD} Unicode styles at once, then go deeper on Instagram, WhatsApp, Discord, gaming, non-Latin scripts and colour.`,
     path: '/styles',
-    faq: STYLES_QA,
-    quickAnswer: STYLES_ANSWER,
+    // `?text=` renders arbitrary visitor input. That is a duplicate of the clean
+    // hub with a different body, so it must not be indexed or claim the hub's
+    // FAQ and answer as its own.
+    noindex: hasText,
+    faq: hasText ? [] : STYLES_QA,
+    quickAnswer: hasText ? null : STYLES_ANSWER,
     breadcrumbs: [
       { name: 'Home', path: '/' },
       { name: 'Styles', path: '/styles' },
@@ -45,14 +49,15 @@ function stylesMeta() {
   });
 }
 
-export function generateMetadata() {
-  return toMetadata(stylesMeta());
+export async function generateMetadata({ searchParams }) {
+  const sp = (await searchParams) || {};
+  return toMetadata(stylesMeta(Boolean(sp.text)));
 }
 
 export function renderStylesHub(searchParams) {
-  const meta = stylesMeta();
   const sp = searchParams || {};
   const text = clampText(sp.text, { max: env.maxInputLength });
+  const meta = stylesMeta(Boolean(text.trim()));
   const rows = boardRows(text.trim() ? text : null);
   const { allowed } = stylesHubAdPlan();
 

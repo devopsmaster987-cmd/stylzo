@@ -53,6 +53,14 @@ function link(raw) {
   // "the indexable ones" rebuilt this array from the position list per request.
   const indexableStyles = raw.indexable.map((index) => styles[index]);
 
+  // The category hubs list only the indexable styles, so their links must count
+  // the same set. Using the full catalog count sent visitors to a "482 styles"
+  // page that only had two rows.
+  const indexableCounts = {};
+  for (const style of indexableStyles) {
+    indexableCounts[style.category] = (indexableCounts[style.category] || 0) + 1;
+  }
+
   const apiPayload = JSON.stringify({
     styles: styles.map((style) => ({
       id: style.id,
@@ -66,6 +74,7 @@ function link(raw) {
     byCategory,
     haystack,
     indexableStyles,
+    indexableCounts,
     apiPayload,
     loadedAt: Date.now(),
   };

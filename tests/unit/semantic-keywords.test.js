@@ -18,7 +18,7 @@ function realRoutes() {
   const routes = new Set(PATHS);
   styleSlugs().forEach((s) => routes.add(`/styles/${s}`));
   catalog().styles.filter((s) => s.indexable).forEach((s) => routes.add(`/fonts/${s.slug}`));
-  Object.keys(catalog().categories).forEach((k) => routes.add(`/?category=${k}`));
+  Object.keys(catalog().categories).forEach((k) => routes.add(`/fonts/category/${k}`));
   ['/privacy', '/terms', '/contact', '/styles'].forEach((r) => routes.add(r));
   return routes;
 }

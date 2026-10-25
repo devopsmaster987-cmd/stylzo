@@ -15,7 +15,7 @@ const PKG_DIR = new URL('../../services/unicode/', import.meta.url);
 
 describe('embeddable widget', () => {
   let server;
-  before(async () => { server = await startServer(3231); });
+  before(async () => { server = await startServer(3241); });
   after(() => server?.stop());
 
   test('the widget is served with a JavaScript content type', async () => {

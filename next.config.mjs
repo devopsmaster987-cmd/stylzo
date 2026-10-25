@@ -8,6 +8,10 @@ const REVALIDATE = 'public, max-age=0, must-revalidate';
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  // One URL shape for every page. Next's default already redirects a trailing
+  // slash, but making it explicit stops a future config change from producing
+  // `/about` and `/about/` as two crawlable addresses.
+  trailingSlash: false,
   outputFileTracingIncludes: {
     "/*": ["./data/**/*"],
   },
@@ -18,7 +22,7 @@ const nextConfig = {
       // no inbound internal link, so it is a crawlable orphan competing with the
       // real page. A 301 passes any accumulated equity instead. Query strings
       // are carried across by Next, so ?text=/?category= keep working.
-      { source: '/fancy-text-generator', destination: '/', permanent: true },
+      { source: '/fancy-text-generator', destination: '/', statusCode: 301 },
 
       // Thin doorway pages under /styles/*.
       //

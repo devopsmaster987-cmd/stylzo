@@ -31,7 +31,7 @@ export async function startServer(port = 3211) {
   const deadline = Date.now() + 60_000;
   for (;;) {
     try {
-      const res = await fetch(`${base}/api/health`);
+      const res = await fetch(`${base}/api/health`, { signal: AbortSignal.timeout(2_000) });
       if (res.ok) break;
     } catch {
       /* not up yet */

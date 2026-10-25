@@ -48,6 +48,11 @@ const WARN_LOGO_COVERAGE = 0.2;
 const zone = $('[data-qr-zone]');
 if (!zone) throw new Error('qr-code-generator.js loaded on a page without the tool');
 
+const siteBase = (
+  zone.dataset.siteUrl
+  || (typeof window !== 'undefined' && window.location ? window.location.origin : '')
+).replace(/\/+$/, '');
+
 const canvas = $('[data-qr-canvas]');
 const emptyEl = $('[data-qr-empty]');
 const errorsEl = $('[data-qr-errors]');
@@ -298,7 +303,7 @@ function setReady(ready) {
  */
 function generate({ initial = false } = {}) {
   const fields = readFields();
-  const payload = buildPayload(state.type, fields);
+  const payload = buildPayload(state.type, fields, { baseUrl: siteBase });
 
   if (payload.error) {
     showErrors(initial ? [] : [payload.error]);

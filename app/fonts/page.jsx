@@ -32,7 +32,7 @@ export async function generateMetadata({ searchParams }) {
 }
 
 export default async function FontsIndexPage({ searchParams }) {
-  const { categories, counts, sample } = catalog();
+  const { categories, indexableCounts, sample } = catalog();
   const sp = (await searchParams) || {};
 
   // ?q= filters the server-rendered list, so a search result is a real URL with
@@ -55,7 +55,7 @@ export default async function FontsIndexPage({ searchParams }) {
       key,
       name: c.name,
       intro: c.intro,
-      count: counts[key] || 0,
+      count: indexableCounts[key] || 0,
       styles: renderCards(listStyles({ category: key }).filter((s) => s.indexable && matches(s)), sample),
     }))
     // A search legitimately narrows the list; the unfiltered view must not.
@@ -81,6 +81,11 @@ export default async function FontsIndexPage({ searchParams }) {
 
       <section className="hero">
         <h1>Fancy font styles</h1>
+        <nav className="chips" aria-label="Style categories">
+          {groups.map((g) => (
+            <a key={g.key} href={`/fonts/category/${g.key}`}>{g.name} ({g.count})</a>
+          ))}
+        </nav>
         <div className="search">
           <label className="skip" htmlFor="fonts-q">Search font styles</label>
           <form method="get" action="/fonts" role="search">
@@ -128,13 +133,15 @@ export default async function FontsIndexPage({ searchParams }) {
 
       {groups.map((g) => (
         <section key={g.key} aria-labelledby={`cat-${g.key}`}>
-          <h2 id={`cat-${g.key}`}>{g.name}</h2>
+          <h2 id={`cat-${g.key}`}>
+            <a href={`/fonts/category/${g.key}`}>{g.name}</a>
+          </h2>
           <p className="muted">{g.intro}</p>
           <ul className="rows">
             {g.styles.map((s) => <StyleRow key={s.id} s={s} />)}
           </ul>
           <p className="more">
-            <a href={`/?category=${g.key}`}>All {g.count} {g.name.toLowerCase()} variations</a>
+            <a href={`/fonts/category/${g.key}`}>All {g.count} {g.name.toLowerCase()} styles</a>
           </p>
         </section>
       ))}

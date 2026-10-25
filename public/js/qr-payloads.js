@@ -300,7 +300,94 @@ function buildLocation(f) {
   return { text: `geo:${lat},${lng}${q}`, error: '' };
 }
 
-function buildEvent(f) {
+const EVENT_STAMP_RE = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/;
+
+function toBase64Url(value) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function fromBase64Url(value) {
+  const normalised = String(value).replace(/-/g, '+').replace(/_/g, '/');
+  const padded = normalised + '='.repeat((4 - (normalised.length % 4)) % 4);
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+export function parseEventStamp(value) {
+  const match = EVENT_STAMP_RE.exec(String(value || ''));
+  if (!match) return null;
+  const [, year, month, day, hour, minute, second] = match.map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  if (
+    date.getUTCFullYear() !== year
+    || date.getUTCMonth() !== month - 1
+    || date.getUTCDate() !== day
+    || date.getUTCHours() !== hour
+    || date.getUTCMinutes() !== minute
+    || date.getUTCSeconds() !== second
+  ) return null;
+  return date;
+}
+
+export function encodeEventData(event) {
+  const data = { v: 1, s: clean(event.summary), a: clean(event.start) };
+  if (clean(event.location)) data.l = clean(event.location);
+  if (clean(event.end)) data.b = clean(event.end);
+  if (clean(event.description)) data.d = clean(event.description);
+  return toBase64Url(JSON.stringify(data));
+}
+
+export function decodeEventData(encoded) {
+  if (typeof encoded !== 'string' || !encoded || encoded.length > 20000) return null;
+  try {
+    const data = JSON.parse(fromBase64Url(encoded));
+    if (!data || data.v !== 1 || typeof data.s !== 'string' || !clean(data.s)) return null;
+    if (!parseEventStamp(data.a)) return null;
+    if (data.b !== undefined && !parseEventStamp(data.b)) return null;
+    return {
+      summary: data.s,
+      location: typeof data.l === 'string' ? data.l : '',
+      start: data.a,
+      end: typeof data.b === 'string' ? data.b : '',
+      description: typeof data.d === 'string' ? data.d : '',
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function buildEventIcs(event) {
+  if (!event || typeof event.summary !== 'string' || !clean(event.summary)) return '';
+  if (!parseEventStamp(event.start)) return '';
+
+  const summary = clean(event.summary);
+  const uid = `${event.start}-${Math.abs(hashString(summary))}`;
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Stylzo//QR Code Generator//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}@stylzo`,
+    `DTSTAMP:${event.start}`,
+    `DTSTART:${event.start}`,
+    ...(parseEventStamp(event.end) ? [`DTEND:${event.end}`] : []),
+    `SUMMARY:${escapeCal(summary)}`,
+    ...(clean(event.location) ? [`LOCATION:${escapeCal(clean(event.location))}`] : []),
+    ...(clean(event.description) ? [`DESCRIPTION:${escapeCal(clean(event.description))}`] : []),
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ];
+
+  return lines.map(foldLine).join('\r\n');
+}
+
+function buildEvent(f, context) {
   const summary = clean(f.eventSummary);
   if (!summary) return { text: '', error: 'Give the event a name.' };
 
@@ -319,30 +406,18 @@ function buildEvent(f) {
     }
   }
 
-  // A UID has to be stable and unique. The timestamp is generated once per
-  // event build, so two scans of the same code carry the same identifier and two
-  // different events never collide on a phone's calendar.
-  const uid = `${dtStart}-${Math.abs(hashString(summary))}`;
+  const baseUrl = clean(context && context.baseUrl).replace(/\/+$/, '');
+  if (!baseUrl) return { text: '', error: 'The event page address is not available.' };
 
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Stylzo//QR Code Generator//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:${uid}@stylzo`,
-    `DTSTAMP:${dtStart}`,
-    `DTSTART:${dtStart}`,
-    ...(dtEnd ? [`DTEND:${dtEnd}`] : []),
-    `SUMMARY:${escapeCal(summary)}`,
-    ...(clean(f.eventLocation) ? [`LOCATION:${escapeCal(clean(f.eventLocation))}`] : []),
-    ...(clean(f.eventDescription) ? [`DESCRIPTION:${escapeCal(clean(f.eventDescription))}`] : []),
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ];
+  const encoded = encodeEventData({
+    summary,
+    location: clean(f.eventLocation),
+    start: dtStart,
+    end: dtEnd,
+    description: clean(f.eventDescription),
+  });
 
-  return { text: lines.map(foldLine).join('\r\n'), error: '' };
+  return { text: `${baseUrl}/event#${encoded}`, error: '' };
 }
 
 /** A small non-cryptographic hash, only to make the event UID stable. */
@@ -378,11 +453,11 @@ const BUILDERS = {
  * fails are both reported as a message the page can display, because an
  * exception here would take the preview down with it.
  */
-export function buildPayload(type, fields) {
+export function buildPayload(type, fields, context) {
   const builder = BUILDERS[type];
   if (!builder) return { text: '', error: 'That QR code type is not available.' };
   try {
-    const result = builder(fields || {});
+    const result = builder(fields || {}, context);
     return { text: result.text, error: result.error || '' };
   } catch {
     // A builder that throws has a bug, but the visitor still needs a usable page.

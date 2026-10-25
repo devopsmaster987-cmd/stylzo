@@ -153,7 +153,8 @@ describe('home page content', () => {
 
   test('still in the sitemap', async () => {
     const sm = await (await get(server.base, '/sitemap.xml')).text();
-    assert.match(sm, /\/<\/loc>/, 'sitemap no longer lists the home page');
+    const paths = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
+    assert.ok(paths.includes('/'), 'sitemap no longer lists the home page');
   });
 });
 
@@ -169,18 +170,19 @@ describe('home page query variants', () => {
     assert.ok(html.includes('data-sample="Hi"'));
   });
 
-  test('?category= stays noindex and hides the duplicated content sections', async () => {
-    const html = await (await get(server.base, '/?category=gothic')).text();
-    assert.match(html, /noindex,follow/);
-    const doc = markup(html);
-    assert.ok(!doc.includes('id="how-heading"'), 'content sections should not repeat on a filtered view');
-    assert.ok(doc.includes('Gothic fancy text generator'));
-    assert.ok((doc.match(/<h1[ >]/g) || []).length, 1);
+  test('?category= redirects to the real category hub', async () => {
+    const res = await get(server.base, '/?category=gothic', { redirect: 'manual' });
+    assert.equal(res.status, 301);
+    const location = new URL(res.headers.get('location'), server.base);
+    assert.equal(location.pathname, '/fonts/category/gothic');
   });
 
-  test('?category= keeps a self-referencing canonical to /', async () => {
-    const html = await (await get(server.base, '/?category=gothic')).text();
-    assert.equal(new URL(canonical(html)).pathname, '/');
+  test('the category hub is indexable and self-canonical', async () => {
+    const html = await (await get(server.base, '/fonts/category/gothic')).text();
+    assert.match(html, /<meta name="robots" content="index,follow"/);
+    assert.equal(new URL(canonical(html)).pathname, '/fonts/category/gothic');
+    assert.equal((markup(html).match(/<h1[ >]/g) || []).length, 1);
+    assert.ok(markup(html).includes('Gothic text styles'));
   });
 
   test('unknown category still 404s', async () => {

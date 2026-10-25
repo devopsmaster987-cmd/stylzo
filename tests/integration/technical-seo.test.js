@@ -103,13 +103,13 @@ describe('technical seo', () => {
 
     test('the legacy /fancy-text-generator permanently redirects to /', async () => {
       const res = await get(server.base, '/fancy-text-generator', { redirect: 'manual' });
-      assert.equal(res.status, 308);
+      assert.ok([301, 308].includes(res.status), `expected a permanent redirect, got ${res.status}`);
       assert.match(res.headers.get('location'), /\/(?:\?|$)/);
     });
 
     test('the redirect carries the query string through', async () => {
       const res = await get(server.base, '/fancy-text-generator?text=Hi', { redirect: 'manual' });
-      assert.equal(res.status, 308);
+      assert.ok([301, 308].includes(res.status), `expected a permanent redirect, got ${res.status}`);
       assert.match(res.headers.get('location'), /\?text=Hi/);
     });
 

@@ -230,7 +230,7 @@ export default function QrCodeGeneratorPage() {
         <p>{QR_GENERATOR_ANSWER.a}</p>
       </section>
 
-      <div className="qr-layout" data-qr-zone>
+      <div className="qr-layout" data-qr-zone data-site-url={env.siteUrl}>
         <div className="qr-main">
           <div className="panel">
             <div className="tabbar qr-tabs" role="tablist" aria-label="QR code type" data-qr-tabs>

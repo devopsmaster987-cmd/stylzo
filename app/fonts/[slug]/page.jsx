@@ -124,7 +124,7 @@ export default async function FontDetailPage({ params, searchParams }) {
         <p>{content.fact}</p>
         <p>{content.distinct}</p>
         <p>
-          Category: <a href={`/?category=${style.category}`}>{cat ? cat.name : style.category}</a>.{' '}
+          Category: <a href={`/fonts/category/${style.category}`}>{cat ? cat.name : style.category}</a>.{' '}
           {style.tags?.length ? `Tagged as ${style.tags.slice(0, 3).join(', ')}.` : ''}
         </p>
         {parent ? <p>This style builds on <a href={`/fonts/${parent.slug}`}>{parent.name}</a>.</p> : null}

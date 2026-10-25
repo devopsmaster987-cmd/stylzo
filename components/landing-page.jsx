@@ -86,7 +86,7 @@ export async function renderLandingPage({ key, searchParams }) {
           {hero.cards.map((s) => <StyleRow key={s.id} s={s} />)}
         </ul>
         <p className="more">
-          <a href={`/?category=${hero.cards[0].category}`}>
+          <a href={`/fonts/category/${hero.cards[0].category}`}>
             Browse every {page.subject.toLowerCase()} style in the generator
           </a>
         </p>

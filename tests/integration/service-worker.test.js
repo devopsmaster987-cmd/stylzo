@@ -13,7 +13,7 @@ const SW = new URL('../../public/sw.js', import.meta.url);
 
 describe('service worker routing', () => {
   let server;
-  before(async () => { server = await startServer(3251); });
+  before(async () => { server = await startServer(3262); });
   after(() => server?.stop());
 
   test('is served, and not cached', async () => {
