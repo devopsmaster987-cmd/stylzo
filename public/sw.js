@@ -10,7 +10,7 @@
    immutable — so a stylesheet change is invisible to this worker unless the
    worker itself changes. Bump this in the same commit as any edit to a file
    listed in PRECACHE, or returning visitors keep painting the old CSS. */
-const VERSION = 'stylix-v11';
+const VERSION = 'stylix-v12';
 const PRECACHE = [
   '/offline.html',
   '/css/main.css',
@@ -25,6 +25,7 @@ const PRECACHE = [
   '/js/zip.js',
   '/js/universal-text-fixer.js',
   '/js/screenshot-to-text.js',
+  '/js/pdf-editor.js',
   '/js/pdf-accessibility-checker.js',
   '/js/qr-code-reader.js',
   '/js/qr-reader-payloads.js',

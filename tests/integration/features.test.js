@@ -7,7 +7,7 @@ process.env.ADMIN_KEY = 'test-admin-key-123';
 
 const pages = [
   '/symbols', '/emoji', '/kaomoji', '/tools', '/image-compression', '/qr-code-generator',
-  '/qr-code-reader', '/studio', '/admin', '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker',
+  '/qr-code-reader', '/studio', '/admin', '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker',
 ];
 
 // Next repeats rendered props inside its RSC flight payload, so counting a
@@ -458,6 +458,35 @@ describe('features', () => {
     assert.equal(res.status, 200, '/js/pdf-accessibility-checker.js is referenced but not served');
   });
 
+  test('the PDF editor ships its controls, its module and its PDF libraries', async () => {
+    const html = await (await get(server.base, '/pdf-editor')).text();
+    for (const hook of [
+      'data-pe-tool', 'data-pe-zone', 'data-pe-input', 'data-pe-add', 'data-pe-reset',
+      'data-pe-errors', 'data-pe-status', 'data-pe-empty', 'data-pe-workspace', 'data-pe-pages',
+      'data-pe-current-label', 'data-pe-canvas', 'data-pe-overlays', 'data-pe-overlays-list',
+      'data-pe-prev', 'data-pe-next', 'data-pe-move-earlier', 'data-pe-move-later',
+      'data-pe-rotate-left', 'data-pe-rotate-right',
+      'data-pe-duplicate', 'data-pe-blank', 'data-pe-delete', 'data-pe-text', 'data-pe-size',
+      'data-pe-colour', 'data-pe-opacity', 'data-pe-position', 'data-pe-apply', 'data-pe-add-text',
+      'data-pe-number-format', 'data-pe-number-position', 'data-pe-number-start', 'data-pe-add-numbers',
+      'data-pe-clear-numbers', 'data-pe-name', 'data-pe-download',
+    ]) {
+      assert.ok(html.includes(hook), `the PDF editor is missing ${hook}`);
+    }
+    assert.match(html, /never leaves this device/);
+
+    // The client module and the two vendored libraries have to be served, and
+    // the libraries have to be same-origin: the CSP does not allow a CDN.
+    for (const asset of [
+      '/js/pdf-editor.js',
+      '/vendor/pdf-lib/pdf-lib.esm.min.js',
+      '/vendor/pdfjs/pdf.min.mjs',
+      '/vendor/pdfjs/pdf.worker.min.mjs',
+    ]) {
+      assert.equal((await get(server.base, asset)).status, 200, `${asset} is referenced but not served`);
+    }
+  });
+
   test('the tools hub surfaces every tool that has its own page', async () => {
     // A tool nobody can find is a tool nobody uses. This asserts the entry
     // points exist rather than the wording, so editing the copy does not break
@@ -472,6 +501,7 @@ describe('features', () => {
       ['QR code reader', '/qr-code-reader'],
       ['Text fixer', '/universal-text-fixer'],
       ['Screenshot to text', '/screenshot-to-text'],
+      ['PDF editor', '/pdf-editor'],
       ['PDF accessibility checker', '/pdf-accessibility-checker'],
     ]) {
       const panel = panels.find((p) => p.includes(`href="${href}"`));
@@ -499,7 +529,7 @@ describe('features', () => {
     for (const href of [
       '/image-compression', '/qr-code-generator',
       '/qr-code-reader',
-      '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker',
+      '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker',
     ]) {
       assert.ok(nav.includes(href), `the main nav does not link to ${href}`);
     }
@@ -512,7 +542,7 @@ describe('features', () => {
     }
     // /studio is indexable now that it carries its own explainer.
     assert.ok(sm.includes('/studio</loc>'));
-    for (const p of ['/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker', '/qr-code-reader']) {
+    for (const p of ['/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker', '/qr-code-reader']) {
       assert.ok(sm.includes(`${p}</loc>`), `sitemap misses ${p}`);
     }
     assert.ok(!sm.includes('/admin</loc>'));

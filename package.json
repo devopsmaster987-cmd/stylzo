@@ -25,6 +25,8 @@
     "@react-three/fiber": "^9.8.1",
     "dotenv": "^16.4.5",
     "next": "^16.4.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "three": "^0.186.1"

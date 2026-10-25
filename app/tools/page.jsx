@@ -143,6 +143,21 @@ export default function ToolsPage() {
         <a className="btn" href="/screenshot-to-text">Open screenshot to text</a>
       </section>
 
+      <section className="tool-hub" aria-labelledby="tools-pdf-editor">
+        <span className="tool-hub-icon" aria-hidden="true">PDF</span>
+        <div>
+          <h2 id="tools-pdf-editor">
+            <a href="/pdf-editor">PDF editor</a>
+          </h2>
+          <p>
+            Reorder, rotate, duplicate, delete and merge PDF pages, add blank pages, then stamp text
+            or page numbers onto one page or all of them. The PDF is opened, changed and rebuilt by
+            your browser, so the document is never uploaded.
+          </p>
+        </div>
+        <a className="btn" href="/pdf-editor">Open the PDF editor</a>
+      </section>
+
       <section className="tool-hub" aria-labelledby="tools-pdf">
         <span className="tool-hub-icon" aria-hidden="true">♿</span>
         <div>

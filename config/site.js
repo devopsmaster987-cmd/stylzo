@@ -17,6 +17,7 @@ export const site = {
       { href: '/image-compression', label: 'Image compressor' },
       { href: '/universal-text-fixer', label: 'Text fixer' },
       { href: '/screenshot-to-text', label: 'Screenshot to text' },
+      { href: '/pdf-editor', label: 'PDF editor' },
       { href: '/pdf-accessibility-checker', label: 'PDF accessibility checker' },
     ] },
     {

@@ -42,7 +42,7 @@ Typing example: "${sample}".
 - Browser text tools: word counter, case converter, reverse, slug, find and replace.
 - A font studio that renders styled text to a 1200x630 PNG in the browser.
 - An image compressor for JPG, PNG and WebP that reports the real before-and-after size.
-- A text fixer, a screenshot-to-text OCR tool and a PDF accessibility checker.
+- A text fixer, a screenshot-to-text OCR tool, a PDF page editor and a PDF accessibility checker.
 - A QR code reader that extracts phone numbers, email addresses, Wi-Fi logins and
   contact cards from a picture of a code, without uploading it.
 
@@ -75,6 +75,8 @@ Typing example: "${sample}".
   characters, sentence case, repeated words and common misspellings.
 - [Screenshot to text](${base}/screenshot-to-text): OCR a screenshot in a Web Worker
   on the visitor's device and return editable text.
+- [PDF editor](${base}/pdf-editor): reorder, rotate, duplicate, merge and stamp PDF pages in the
+  browser, without uploading the document.
 - [PDF accessibility checker](${base}/pdf-accessibility-checker): check a PDF for tags,
   language, title, readable fonts, alt text, labelled links and form fields.
 - [Font studio](${base}/studio): styled text to PNG.

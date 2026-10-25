@@ -5,7 +5,7 @@ Components that stream complete HTML; interactivity is progressive enhancement f
 modules in `public/js/`, with a React Three Fiber hero as the only client-rendered island.
 
 Type text once, get 5,600+ Unicode styles you can paste anywhere — plus symbol, emoji and kaomoji
-libraries, browser-based text tools, a QR code generator and a font studio for shareable images.
+libraries, browser-based text and PDF tools, a QR code generator and a font studio for shareable images.
 
 ## Run it
 
@@ -13,7 +13,7 @@ libraries, browser-based text tools, a QR code generator and a font studio for s
 npm install
 cp .env.example .env     # optional, every feature degrades gracefully without it
 npm run dev              # http://localhost:3000
-npm test                 # 150 tests (builds first, then drives the production server)
+npm test                 # 600+ tests (builds first, then drives the production server)
 ```
 
 Node 20+ required.
@@ -135,7 +135,7 @@ is a content decision rather than a code one.
 `/`, `/fancy-text-generator` (308 to `/`), `/fonts` (`?q=`), `/fonts/[slug]`,
 `/styles` (the hub) and `/styles/[key]`, `/symbols`, `/emoji`, `/kaomoji`, `/tools`,
 `/qr-code-generator`, `/qr-code-reader`, `/image-compression`, `/universal-text-fixer`, `/screenshot-to-text`,
-`/pdf-accessibility-checker`, `/studio`, `/admin` (`noindex`), `/admin/seo`
+`/pdf-editor`, `/pdf-accessibility-checker`, `/studio`, `/admin` (`noindex`), `/admin/seo`
 (`noindex`), `/about`, `/privacy`, `/terms`, `/contact`, `/robots.txt`, `/sitemap.xml`, plus
 `GET /api/styles`, `/api/search`, `/api/ai/suggest`, `/api/health`, `/api/config`, `/api/beat`,
 `POST /api/generate`.
@@ -214,7 +214,7 @@ reason a code works on screen and fails in print.
 
 ## Browser text and file tools
 
-Four tools run entirely on the visitor's device and each has its own page, module and privacy
+Five tools run entirely on the visitor's device and each has its own page, module and privacy
 claim in the server HTML:
 
 - `/universal-text-fixer` (`public/js/universal-text-fixer.js`) repairs spacing, punctuation,
@@ -224,6 +224,9 @@ claim in the server HTML:
   images. Tesseract.js is vendored under `public/vendor/tesseract/` rather than loaded from a CDN,
   because the CSP is `script-src 'self'`; the worker is started with `workerBlobURL: false` since
   `blob:` workers are blocked too.
+- `/pdf-editor` (`public/js/pdf-editor.js`) arranges PDF pages and draws text or page numbers on
+  them. pdf-lib writes the output and PDF.js draws the preview, both vendored under
+  `public/vendor/` because the CSP is `script-src 'self'`; the document is never uploaded.
 - `/pdf-accessibility-checker` (`public/js/pdf-accessibility-checker.js`) scans the raw PDF and
   inflates FlateDecode streams with `DecompressionStream` to check for tags, language, document
   title, readable fonts, image alt text, labelled links and form fields, and scores the result.

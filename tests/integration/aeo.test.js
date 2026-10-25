@@ -57,7 +57,7 @@ describe('answer engine optimisation', () => {
       assert.match(body, /^# Stylzo/);
       // It has to point at pages that exist, or it is worse than nothing.
       for (const path of ['/fonts', '/tools', '/studio', '/image-compression', '/about', '/privacy', '/symbols',
-        '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker', '/qr-code-reader']) {
+        '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker', '/qr-code-reader']) {
         assert.ok(body.includes(`](https://www.abdulsamad.shop${path}`), `llms.txt omits ${path}`);
       }
       assert.match(body, /## Important limits/, 'llms.txt should state what the tool cannot do');
@@ -72,7 +72,7 @@ describe('answer engine optimisation', () => {
   });
 
   describe('answer-first content', () => {
-    const PAGES = ['/', '/tools', '/image-compression', '/qr-code-generator', '/qr-code-reader', '/about', '/privacy', '/terms', '/contact', '/symbols', '/emoji', '/kaomoji', '/fonts', '/styles', '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker'];
+    const PAGES = ['/', '/tools', '/image-compression', '/qr-code-generator', '/qr-code-reader', '/about', '/privacy', '/terms', '/contact', '/symbols', '/emoji', '/kaomoji', '/fonts', '/styles', '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker'];
 
     test('every page answers its core question before the long prose', async () => {
       for (const path of PAGES) {
@@ -129,7 +129,7 @@ describe('answer engine optimisation', () => {
       // Schema the page does not show is a manual-action risk, and it is the
       // most common way structured data goes wrong.
       for (const path of ['/tools', '/image-compression', '/qr-code-generator', '/qr-code-reader', '/about', '/symbols', '/studio', '/fonts', '/styles',
-        '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker']) {
+        '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker']) {
         const html = await (await get(server.base, path)).text();
         const faq = jsonLd(html, 'FAQPage');
         assert.ok(faq, `${path} has no FAQPage`);
@@ -247,7 +247,7 @@ describe('answer engine optimisation', () => {
     test('no page emits JSON-LD that is not valid JSON', async () => {
       for (const path of ['/', '/tools', '/about', '/fonts/bold', '/symbols', '/styles/instagram', '/image-compression', '/qr-code-generator',
         '/qr-code-reader',
-        '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker']) {
+        '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker']) {
         const html = await (await get(server.base, path)).text();
         // ldBlocks() JSON.parses every block; reaching here without a throw is
         // the assertion.

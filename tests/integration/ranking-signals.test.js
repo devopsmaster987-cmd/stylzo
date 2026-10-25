@@ -124,6 +124,7 @@ describe('every page links onward, not just around itself', () => {
     // and both point back at the text tools.
     '/qr-code-reader': ['/tools', '/qr-code-generator', '/screenshot-to-text', '/universal-text-fixer'],
     '/studio': ['/', '/fonts', '/styles', '/image-compression'],
+    '/pdf-editor': ['/tools', '/pdf-accessibility-checker', '/image-compression', '/screenshot-to-text'],
   };
 
   for (const [path, destinations] of Object.entries(OUTBOUND)) {

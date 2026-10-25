@@ -31,7 +31,7 @@ describe('keyword targeting', () => {
       '/', '/fonts', '/tools', '/studio', '/image-compression', '/qr-code-generator',
       '/qr-code-reader',
       '/symbols', '/emoji', '/kaomoji', '/styles', '/about', '/privacy', '/terms', '/contact',
-      '/universal-text-fixer', '/screenshot-to-text', '/pdf-accessibility-checker',
+      '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker',
     ]);
     const missing = KEYWORD_MAP.filter((e) => !ROUTES.has(e.path));
     assert.deepEqual(missing.map((e) => e.path), [], 'keyword map points at a route that does not exist');

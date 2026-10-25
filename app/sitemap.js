@@ -69,6 +69,7 @@ const STATIC_PAGES = [
   { path: '/qr-code-reader', changeFrequency: 'monthly', priority: 0.8, sources: ['app/qr-code-reader/page.jsx', ...TOOL_SOURCES] },
   { path: '/universal-text-fixer', changeFrequency: 'monthly', priority: 0.8, sources: ['app/universal-text-fixer/page.jsx', ...TOOL_SOURCES] },
   { path: '/screenshot-to-text', changeFrequency: 'monthly', priority: 0.8, sources: ['app/screenshot-to-text/page.jsx', ...TOOL_SOURCES] },
+  { path: '/pdf-editor', changeFrequency: 'monthly', priority: 0.8, sources: ['app/pdf-editor/page.jsx', ...TOOL_SOURCES] },
   { path: '/pdf-accessibility-checker', changeFrequency: 'monthly', priority: 0.8, sources: ['app/pdf-accessibility-checker/page.jsx', ...TOOL_SOURCES] },
   { path: '/studio', changeFrequency: 'monthly', priority: 0.7, sources: ['app/studio/page.jsx', 'lib/aeo.js'] },
   // The embed page is how other sites link back here, so it is worth a reader
