@@ -3,7 +3,7 @@ import { getStyle, getCategory, relatedStyles } from '@/services/catalog.js';
 import { SLUG_RE } from '@/lib/validation.js';
 import { pageMeta, toMetadata, renderCards, inputFromQuery, faqFor, SUPPORT_LABEL } from '@/lib/pages.js';
 import { site as SITE } from '@/config/site.js';
-import { styleContent } from '@/lib/style-content.js';
+import { nameWithText, styleContent } from '@/lib/style-content.js';
 import { fontPageContent, renderCustomFontExamples } from '@/lib/font-page-content.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
@@ -37,6 +37,7 @@ function styleTitle(name, budget = 60) {
 function detailMeta(style, parent, hasText) {
   const support = SUPPORT_LABEL[style.support] || '';
   const custom = fontPageContent[style.slug];
+  const textName = nameWithText(style.name);
   return pageMeta({
     title: custom ? custom.title : styleTitle(style.name),
     description: custom ? custom.description : `${style.description}`.slice(0, 160),
@@ -52,10 +53,10 @@ function detailMeta(style, parent, hasText) {
     // The same question the visible answer block answers, so an assistant can
     // quote the page's own opening claim.
     quickAnswer: custom
-      ? { q: `What is ${style.name} text and will it work in my app?`, a: custom.quick }
+      ? { q: `What is ${textName} and will it work in my app?`, a: custom.quick }
       : {
-        q: `What is ${style.name} text and will it work in my app?`,
-        a: `${style.name} text is ordinary text with each letter replaced by its Unicode `
+        q: `What is ${textName} and will it work in my app?`,
+        a: `${textName} is ordinary text with each letter replaced by its Unicode `
           + `look-alike, so it works anywhere plain text is accepted without installing a font. `
           + `${support ? `Support: ${support.toLowerCase()}. ` : ''}`
           + 'If an app draws empty boxes, that app is missing the characters this style uses.',
@@ -87,6 +88,7 @@ export default async function FontDetailPage({ params, searchParams }) {
   const meta = detailMeta(style, parent, Boolean(sp.text));
   const card = renderCards([style], text)[0];
   const custom = fontPageContent[style.slug] || null;
+  const textName = nameWithText(style.name);
   const related = renderCards(
     custom ? custom.related.map((relatedSlug) => getStyle(relatedSlug)).filter(Boolean) : relatedStyles(style),
     text,
@@ -105,7 +107,7 @@ export default async function FontDetailPage({ params, searchParams }) {
       </nav>
 
       <section className="hero">
-        <h1>{custom ? custom.h1 : `${style.name} text generator`}</h1>
+        <h1>{custom ? custom.h1 : `${textName} generator`}</h1>
         <p className="lede">{custom ? custom.lede : style.description}</p>
         <GeneratorInput formAction={`/fonts/${style.slug}`} text={text} />
         <ul className="rows big" data-rows>
@@ -117,12 +119,12 @@ export default async function FontDetailPage({ params, searchParams }) {
         <>
           <section className="prose" aria-labelledby="about-style">
             <section className="quick-answer" aria-labelledby="quick-answer-heading">
-              <h2 id="quick-answer-heading">What is {style.name} text and will it work in my app?</h2>
+              <h2 id="quick-answer-heading">What is {textName} and will it work in my app?</h2>
               <p>{custom.quick}</p>
             </section>
-            <h2 id="about-style">How {style.name} text works</h2>
+            <h2 id="about-style">How {textName} works</h2>
             <p>{custom.intro}</p>
-            <h2 id="where-heading">Where {style.name} text works</h2>
+            <h2 id="where-heading">Where {textName} works</h2>
             <p>{custom.where}</p>
           </section>
 
@@ -173,9 +175,9 @@ export default async function FontDetailPage({ params, searchParams }) {
             question an assistant is asked about a font page, and it is answered
             by the support level, which is the one fact that decides it. */}
         <section className="quick-answer" aria-labelledby="quick-answer-heading">
-          <h2 id="quick-answer-heading">What is {style.name} text and will it work in my app?</h2>
+          <h2 id="quick-answer-heading">What is {textName} and will it work in my app?</h2>
           <p>
-            {style.name} text is ordinary text converted to {content.label}, so it works anywhere
+            {textName} is ordinary text converted to {content.label}, so it works anywhere
             plain text is accepted without installing a font. Support level:{' '}
             {card.supportLabel ? card.supportLabel.toLowerCase() : content.support.toLowerCase()}.{' '}
             {content.supportAdvice} If an app draws empty boxes, that app is missing the characters
@@ -183,7 +185,7 @@ export default async function FontDetailPage({ params, searchParams }) {
           </p>
         </section>
 
-        <h2 id="about-style">How {style.name} text works</h2>
+        <h2 id="about-style">How {textName} works</h2>
         <p>{content.how}</p>
         <p>{content.fact}</p>
         <p>{content.distinct}</p>
@@ -214,7 +216,7 @@ export default async function FontDetailPage({ params, searchParams }) {
       </section>
 
       <section className="prose" aria-labelledby="where-heading">
-        <h2 id="where-heading">Where {style.name} text works</h2>
+        <h2 id="where-heading">Where {textName} works</h2>
         <p>{content.supportAdvice}</p>
         <p>The apps people paste styled text into most often behave like this:</p>
         <ul>

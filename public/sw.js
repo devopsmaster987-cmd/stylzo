@@ -1,7 +1,8 @@
 /* M8 - offline support.
    Static assets: stale-while-revalidate (cached copy paints immediately, a fresh
    one is fetched behind it and stored for next time).
-   Pages: network-first with a cache fallback, then the offline page.
+   Pages: network-first. A cached page is used only when the browser reports
+   offline; an online failure gets the offline page rather than an older copy.
    Text styling itself never needs the network — the engine is precached.
 
    VERSION is not a formality. It is the only thing that rebuilds PRECACHE, and
@@ -10,7 +11,7 @@
    immutable — so a stylesheet change is invisible to this worker unless the
    worker itself changes. Bump this in the same commit as any edit to a file
    listed in PRECACHE, or returning visitors keep painting the old CSS. */
-const VERSION = 'stylix-v12';
+const VERSION = 'stylix-v13';
 const PRECACHE = [
   '/offline.html',
   '/css/main.css',
@@ -101,15 +102,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  const isPage = request.mode === 'navigate';
+  const network = isPage ? fetch(request, { cache: 'no-store' }) : fetch(request);
   event.respondWith(
-    fetch(request)
+    network
       .then((res) => {
-        if (res.ok && request.mode === 'navigate') {
+        if (res.ok && isPage) {
           const copy = res.clone();
-          caches.open(VERSION).then((cache) => cache.put(request, copy));
+          event.waitUntil(caches.open(VERSION).then((cache) => cache.put(request, copy)));
         }
         return res;
       })
-      .catch(async () => (await caches.match(request)) || (await caches.match('/offline.html'))),
+      .catch(async () => {
+        if (self.navigator.onLine === false) {
+          return (await caches.match(request)) || (await caches.match('/offline.html'));
+        }
+        return (await caches.match('/offline.html')) || new Response('Offline', { status: 503 });
+      }),
   );
 });

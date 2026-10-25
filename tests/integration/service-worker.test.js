@@ -65,6 +65,12 @@ describe('service worker routing', () => {
     }
   });
 
+  test('navigations bypass the HTTP cache and only fall back when offline', () => {
+    const src = readFileSync(SW, 'utf8');
+    assert.match(src, /fetch\(request, \{ cache: 'no-store' \}\)/, 'navigations can reuse a stale HTTP cache');
+    assert.match(src, /navigator\.onLine === false/, 'an online failure can still return cached HTML');
+  });
+
   test('admin and API routes are still never cached', () => {
     const src = readFileSync(SW, 'utf8');
     const privateRule = src.slice(src.indexOf('const PRIVATE'));
