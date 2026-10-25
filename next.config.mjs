@@ -18,6 +18,17 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // One canonical host. AdSense checks ads.txt on the domain that is
+      // registered in the account, and the bare domain must not answer with a
+      // separate copy of the site. Sending it to the canonical www host keeps
+      // /ads.txt reachable at the address the crawler is told to use.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'abdulsamad.shop' }],
+        destination: 'https://www.abdulsamad.shop/:path*',
+        permanent: true,
+      },
+
       // Legacy duplicate of the home page. It canonicalises to "/" but carries
       // no inbound internal link, so it is a crawlable orphan competing with the
       // real page. A 301 passes any accumulated equity instead. Query strings
@@ -93,6 +104,17 @@ const nextConfig = {
       {
         source: '/manifest.webmanifest',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=3600' }],
+      },
+      // ads.txt is a text file, not a page. Declaring the type explicitly keeps
+      // a host or CDN from guessing and returning HTML, which AdSense reports
+      // as "not found" even when the file exists. must-revalidate lets a newly
+      // generated publisher line replace a cached copy on the next check.
+      {
+        source: '/ads.txt',
+        headers: [
+          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+          { key: 'Cache-Control', value: REVALIDATE },
+        ],
       },
       // The llms.txt convention asks for text/markdown. Served from /public it
       // would otherwise be labelled text/plain by extension.

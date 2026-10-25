@@ -38,7 +38,10 @@ export default function robots() {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        // /ads.txt is named separately because AdSense treats a robots block as
+        // a missing file. The wildcard already allows it, but an explicit rule
+        // survives a later tightening of the crawl policy.
+        allow: ['/', '/ads.txt'],
         disallow: DISALLOW,
       },
       // Named explicitly after the wildcard so the AI permission is visible and

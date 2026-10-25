@@ -51,7 +51,7 @@ function lastModifiedFor(files) {
 
 const HOME_SOURCES = ['app/page.jsx', 'lib/home-content.js', 'lib/aeo.js', 'services/seo.js'];
 const STATIC_SOURCES = ['data/pages.json', 'components/static-page.jsx', 'lib/pages.js'];
-const FONT_SOURCES = ['data/fonts.json', 'lib/style-content.js', 'app/fonts/[slug]/page.jsx'];
+const FONT_SOURCES = ['data/fonts.json', 'lib/style-content.js', 'data/font-page-content.js', 'app/fonts/[slug]/page.jsx'];
 const STYLE_SOURCES = ['lib/landing-pages.js', 'lib/aeo.js', 'components/landing-page.jsx'];
 const CATEGORY_SOURCES = ['data/categories.json', 'lib/category-content.js', 'components/category-page.jsx'];
 const TOOL_SOURCES = ['lib/aeo.js', 'lib/pages.js', 'services/seo.js'];

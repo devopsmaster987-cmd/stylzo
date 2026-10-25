@@ -4,6 +4,7 @@ import { SLUG_RE } from '@/lib/validation.js';
 import { pageMeta, toMetadata, renderCards, inputFromQuery, faqFor, SUPPORT_LABEL } from '@/lib/pages.js';
 import { site as SITE } from '@/config/site.js';
 import { styleContent } from '@/lib/style-content.js';
+import { fontPageContent, renderCustomFontExamples } from '@/lib/font-page-content.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
@@ -35,9 +36,10 @@ function styleTitle(name, budget = 60) {
 
 function detailMeta(style, parent, hasText) {
   const support = SUPPORT_LABEL[style.support] || '';
+  const custom = fontPageContent[style.slug];
   return pageMeta({
-    title: styleTitle(style.name),
-    description: `${style.description}`.slice(0, 160),
+    title: custom ? custom.title : styleTitle(style.name),
+    description: custom ? custom.description : `${style.description}`.slice(0, 160),
     path: `/fonts/${style.slug}`,
     canonicalPath: `/fonts/${style.indexable ? style.slug : (parent ? parent.slug : style.slug)}`,
     noindex: !style.indexable || hasText,
@@ -46,16 +48,18 @@ function detailMeta(style, parent, hasText) {
       { name: 'Font styles', path: '/fonts' },
       { name: style.name, path: `/fonts/${style.slug}` },
     ],
-    faq: hasText ? [] : faqFor(style),
+    faq: hasText ? [] : (custom ? custom.faqs : faqFor(style)),
     // The same question the visible answer block answers, so an assistant can
     // quote the page's own opening claim.
-    quickAnswer: {
-      q: `What is ${style.name} text and will it work in my app?`,
-      a: `${style.name} text is ordinary text with each letter replaced by its Unicode `
-        + `look-alike, so it works anywhere plain text is accepted without installing a font. `
-        + `${support ? `Support: ${support.toLowerCase()}. ` : ''}`
-        + 'If an app draws empty boxes, that app is missing the characters this style uses.',
-    },
+    quickAnswer: custom
+      ? { q: `What is ${style.name} text and will it work in my app?`, a: custom.quick }
+      : {
+        q: `What is ${style.name} text and will it work in my app?`,
+        a: `${style.name} text is ordinary text with each letter replaced by its Unicode `
+          + `look-alike, so it works anywhere plain text is accepted without installing a font. `
+          + `${support ? `Support: ${support.toLowerCase()}. ` : ''}`
+          + 'If an app draws empty boxes, that app is missing the characters this style uses.',
+      },
   });
 }
 
@@ -82,9 +86,14 @@ export default async function FontDetailPage({ params, searchParams }) {
   const parent = style.parent ? getStyle(style.parent) : null;
   const meta = detailMeta(style, parent, Boolean(sp.text));
   const card = renderCards([style], text)[0];
-  const related = renderCards(relatedStyles(style), text);
-  const faq = faqFor(style);
-  const content = styleContent(style, sp.text);
+  const custom = fontPageContent[style.slug] || null;
+  const related = renderCards(
+    custom ? custom.related.map((relatedSlug) => getStyle(relatedSlug)).filter(Boolean) : relatedStyles(style),
+    text,
+  );
+  const faq = custom ? custom.faqs : faqFor(style);
+  const content = custom ? null : styleContent(style, sp.text);
+  const examples = custom ? renderCustomFontExamples(style, custom.examples) : content.examples;
 
   return (
     <>
@@ -96,14 +105,69 @@ export default async function FontDetailPage({ params, searchParams }) {
       </nav>
 
       <section className="hero">
-        <h1>{style.name} text generator</h1>
-        <p className="lede">{style.description}</p>
+        <h1>{custom ? custom.h1 : `${style.name} text generator`}</h1>
+        <p className="lede">{custom ? custom.lede : style.description}</p>
         <GeneratorInput formAction={`/fonts/${style.slug}`} text={text} />
         <ul className="rows big" data-rows>
           <StyleRow s={card} />
         </ul>
       </section>
 
+      {custom ? (
+        <>
+          <section className="prose" aria-labelledby="about-style">
+            <section className="quick-answer" aria-labelledby="quick-answer-heading">
+              <h2 id="quick-answer-heading">What is {style.name} text and will it work in my app?</h2>
+              <p>{custom.quick}</p>
+            </section>
+            <h2 id="about-style">What is {style.name} text?</h2>
+            <p>{custom.intro}</p>
+            <h2 id="where-heading">Where {style.name} text works</h2>
+            <p>{custom.where}</p>
+          </section>
+
+          <section className="style-examples" aria-labelledby="examples-heading">
+            <h2 id="examples-heading">{style.name} examples</h2>
+            <p className="muted">
+              Real output from this style. Copy any line to use it exactly as shown.
+            </p>
+            <ul className="example-list">
+              {examples.map((ex) => (
+                <li key={ex.label}>
+                  <span className="example-label">{ex.label}</span>
+                  <p className="example-out" data-output="true">{ex.output}</p>
+                  <span className="example-plain">typed as: {ex.plain}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="prose" aria-labelledby="faq">
+            <h2 id="faq">Questions</h2>
+            {faq.map((f) => (
+              <div key={f.q}>
+                <h3>{f.q}</h3>
+                <p>{f.a}</p>
+              </div>
+            ))}
+          </section>
+
+          {related.length ? (
+            <section aria-labelledby="related">
+              <h2 id="related">Related styles</h2>
+              <ul className="rows" data-rows>
+                {related.map((s) => <StyleRow key={s.id} s={s} />)}
+              </ul>
+              <p className="muted">
+                Browse the{' '}
+                <a href={`/fonts/category/${style.category}`}>{cat ? cat.name : style.category}</a>{' '}
+                category, or see <a href="/fonts">all font styles</a>.
+              </p>
+            </section>
+          ) : null}
+        </>
+      ) : (
+        <>
       <section className="prose" aria-labelledby="about-style">
         {/* Answer first. "What is this style and will it work for me" is the
             question an assistant is asked about a font page, and it is answered
@@ -210,6 +274,8 @@ export default async function FontDetailPage({ params, searchParams }) {
           </ul>
         </section>
       ) : null}
+        </>
+      )}
     </>
   );
 }

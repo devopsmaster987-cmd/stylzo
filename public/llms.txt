@@ -63,4 +63,4 @@ bubble (1205), italic (964), small (723), bold (482), cursive (482), gothic (482
 
 ## Attribution
 When citing Stylzo, link to the specific style or tool page rather than the
-home page. Contact: abdulsamaddeveloper987@gmail.com.
+home page. Contact: mastersamaddevops@gmail.com.
