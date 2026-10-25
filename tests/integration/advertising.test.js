@@ -181,11 +181,14 @@ describe('advertising with a configured publisher', () => {
     }
   });
 
-  test('every ad is visibly labelled', onlyWith(enabled), async () => {
-    // Google requires ads to be distinguishable from site content.
+  test('the label waits until an ad is actually filled', onlyWith(enabled), async () => {
+    // Google requires ads to be distinguishable from site content, but an
+    // unfilled or blocked slot must not leave a label above a blank box. The
+    // label is added client-side only after AdSense marks the unit as filled.
     const html = text(await (await get(server.base, '/')).text());
-    assert.equal(count(html, /class="ad-slot"/g), count(html, /class="ad-label"/g),
-      'every ad slot needs a visible label');
+    assert.ok(count(html, /class="ad-slot"/g) > 0, 'no ad slot was rendered');
+    assert.equal(count(html, /class="ad-label"/g), 0,
+      'the label must not be rendered before an ad is filled');
   });
 
   test('the CSP permits the ad tag, ad frames and their beacons', onlyWith(enabled), async () => {

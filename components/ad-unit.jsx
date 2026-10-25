@@ -25,13 +25,14 @@ const escapeHtml = (value) =>
     "'": '&#39;',
   })[c]);
 
-/* The label is visible rather than screen-reader only, because Google requires
-   ads to be distinguishable from the surrounding site; aria-hidden because the
-   <aside> already carries the label for assistive tech. The unit starts empty:
-   nothing is requested before consent is recorded. */
-const slotHtml = ({ client, slot, format, label }) =>
-  `<span class="ad-label" aria-hidden="true">${escapeHtml(label)}</span>`
-  + `<ins class="adsbygoogle" data-ad-client="${escapeHtml(client)}"`
+/* The unit starts empty: nothing is requested before consent is recorded. The
+   "Advertisement" label is added on the client only once AdSense marks the unit
+   as filled, so an unfilled or blocked slot never shows a heading above a blank
+   box. The label is visible rather than screen-reader only, because Google
+   requires ads to be distinguishable from the surrounding site; aria-hidden
+   because the <aside> already carries the label for assistive tech. */
+const slotHtml = ({ client, slot, format }) =>
+  `<ins class="adsbygoogle" data-ad-client="${escapeHtml(client)}"`
   + ` data-ad-slot="${escapeHtml(slot)}" data-ad-format="${escapeHtml(format)}"`
   + ' data-full-width-responsive="true"></ins>';
 
@@ -53,15 +54,53 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
     let poll = 0;
     let stop = 0;
 
+    const unit = () => ref.current?.querySelector('ins.adsbygoogle');
+
+    // Google sets data-ad-status on the <ins> after it fills or rejects the
+    // unit, and empties the <ins> when consent is withdrawn. Both changes flow
+    // through this observer, so the label follows the real state rather than
+    // the fact that a push was attempted.
+    const syncLabel = () => {
+      const slotEl = ref.current;
+      const ad = unit();
+      if (!slotEl || !ad) return;
+
+      const isFilled = ad.getAttribute('data-ad-status') === 'filled'
+        && ad.innerHTML.trim() !== '';
+      const existing = slotEl.querySelector('.ad-label');
+
+      if (isFilled && !existing) {
+        const node = document.createElement('span');
+        node.className = 'ad-label';
+        node.setAttribute('aria-hidden', 'true');
+        node.textContent = label;
+        slotEl.insertBefore(node, ad);
+      } else if (!isFilled && existing) {
+        existing.remove();
+      }
+    };
+
     const tryPush = () => {
       if (cancelled || filled.current || readConsent() !== 'granted') return;
-      if (!ref.current?.querySelector('ins.adsbygoogle') || !pushAdUnit()) return;
+      if (!unit() || !pushAdUnit()) return;
       filled.current = true;
       clearInterval(poll);
+      syncLabel();
     };
+
+    const observer = new MutationObserver(syncLabel);
+    if (ref.current) {
+      observer.observe(ref.current, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['data-ad-status'],
+      });
+    }
 
     // The tag is static markup in the document head and may not have run yet,
     // so either the load event or the poll below can be the one that finds it.
+    syncLabel();
     tryPush();
 
     document.querySelector('script[data-adsense]')
@@ -74,10 +113,11 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
       cancelled = true;
       clearInterval(poll);
       clearTimeout(stop);
+      observer.disconnect();
       document.querySelector('script[data-adsense]')
         ?.removeEventListener('load', tryPush);
     };
-  }, [client, slot]);
+  }, [client, slot, label]);
 
   if (!client || !slot) return null;
 
@@ -90,7 +130,7 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
       // would ever compare is markup Google has since changed: that is the one
       // comparison in here worth silencing.
       suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: slotHtml({ client, slot, format, label }) }}
+      dangerouslySetInnerHTML={{ __html: slotHtml({ client, slot, format }) }}
     />
   );
 }

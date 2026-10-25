@@ -120,7 +120,7 @@ export default async function FontDetailPage({ params, searchParams }) {
               <h2 id="quick-answer-heading">What is {style.name} text and will it work in my app?</h2>
               <p>{custom.quick}</p>
             </section>
-            <h2 id="about-style">What is {style.name} text?</h2>
+            <h2 id="about-style">How {style.name} text works</h2>
             <p>{custom.intro}</p>
             <h2 id="where-heading">Where {style.name} text works</h2>
             <p>{custom.where}</p>

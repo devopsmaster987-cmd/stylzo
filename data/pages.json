@@ -174,10 +174,10 @@
   },
   "contact": {
     "title": "Contact",
-    "description": "How to reach the team behind Stylzo, how to report a broken style or an incorrect result, and what happens to a message you send us.",
+    "description": "How to reach the owner of Stylzo, how to report a broken style or an incorrect result, and what happens to a message you send.",
     "body": [
-      "Questions, bug reports, feature requests or partnership enquiries are all welcome. The quickest way to reach us is by email, and the address is on this page.",
-      "We read every message. We cannot always reply to each one, but a report that includes enough detail to reproduce usually gets a response, and it always makes the site better for the next person."
+      "Questions, bug reports, feature requests or partnership enquiries are all welcome. Stylzo is run by one owner, and the quickest way to reach the owner is by email at the address on this page.",
+      "The owner reads every message. A reply is not always possible, but a report that includes enough detail to reproduce usually gets a response, and it always makes the site better for the next person."
     ],
     "sections": [
       {
@@ -203,15 +203,15 @@
       {
         "heading": "Business and press",
         "body": [
-          "For advertising, licensing, partnerships or press, use the same address with the subject line you need. There is no separate form to fill in and no sales funnel here: you will reach the people who run the site.",
-          "We are happy to talk about a written permission for a screenshot of the tool, and about sponsored placements, provided the placement is labelled and does not change how the tools behave."
+          "For advertising, licensing, partnerships or press, use the same address with the subject line you need. There is no separate form to fill in and no sales funnel here: you will reach the owner of the site.",
+          "The owner is happy to talk about written permission for a screenshot of the tool, and about sponsored placements, provided the placement is labelled and does not change how the tools behave."
         ]
       },
       {
         "heading": "What happens to your message",
         "body": [
-          "Your message is used to answer your question and, where it describes a fault, to fix it. It is not sold, shared or added to a mailing list, and we do not have a mailing list to add you to.",
-          "Because there is no account system, nothing you send is linked to anything else we hold. If you would like a reply, leave a way to reach you back and we will use it for that reply only."
+          "Your message is used to answer your question and, where it describes a fault, to fix it. It is not sold, shared or added to a mailing list, and there is no mailing list to add you to.",
+          "Because there is no account system, nothing you send is linked to anything else the site holds. If you would like a reply, leave a way to reach you back and it will be used for that reply only."
         ]
       }
     ]

@@ -6,6 +6,10 @@ export const site = {
     'Turn plain text into bold, cursive, gothic, bubble, glitch and hundreds of other styles. Plus symbols, emoji, kaomoji and text tools. Free, no sign-up, everything runs in your browser.',
   twitter: '',
   themeColor: '#4b2fe0',
+  // TODO: fill in the site owner's name. Used on the About and Contact pages.
+  ownerName: '',
+  // TODO: fill in a business email. Used on Contact; falls back to CONTACT_EMAIL.
+  businessEmail: '',
   nav: [
     { href: '/', label: 'Generator' },
     { href: '/styles', label: 'Style guides', className: 'nav-board' },

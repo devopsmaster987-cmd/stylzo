@@ -1,5 +1,6 @@
 import { pageContent } from '@/services/catalog.js';
 import { env } from '@/config/environment.js';
+import { site } from '@/config/site.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { ABOUT_QA, WHAT_IT_IS } from '@/lib/aeo.js';
 import { keyFacts } from '@/lib/facts.js';
@@ -29,7 +30,7 @@ const PAGE_ANSWER = {
       + 'to impersonate others, evade moderation or harass people.',
   },
   contact: {
-    q: 'How do I contact the people behind Stylzo?',
+    q: 'How do I contact the owner of Stylzo?',
     // No response-time promise here: it is a claim about a human's inbox that
     // nobody can audit, and an unverifiable promise on a contact page is worse
     // than saying nothing.
@@ -67,6 +68,8 @@ export function StaticPage({ pageKey }) {
   const page = pageContent(pageKey);
   const meta = staticMeta(pageKey);
   const answer = PAGE_ANSWER[pageKey];
+  const ownerName = String(site.ownerName || '').trim();
+  const businessEmail = String(site.businessEmail || '').trim() || env.contactEmail;
 
   return (
     <>
@@ -90,6 +93,15 @@ export function StaticPage({ pageKey }) {
         ) : null}
 
         {page.body.map((p) => <p key={p.slice(0, 40)}>{p}</p>)}
+
+        {pageKey === 'about' ? (
+          <p>
+            {ownerName
+              ? `Stylzo is owned and run by ${ownerName}.`
+              : 'Stylzo is owned and run by one person.'}
+          </p>
+        ) : null}
+
         {page.sections?.map((s) => (
           <section key={s.heading}>
             <h2>{s.heading}</h2>
@@ -134,12 +146,16 @@ export function StaticPage({ pageKey }) {
         ) : null}
 
         {pageKey === 'contact' ? (
-          env.contactEmail ? (
-            <p>Email <a href={`mailto:${env.contactEmail}`}>{env.contactEmail}</a>.</p>
+          businessEmail ? (
+            <p>
+              {ownerName ? `${ownerName}, who runs Stylzo, can be reached at ` : 'Email the owner at '}
+              <a href={`mailto:${businessEmail}`}>{businessEmail}</a>.
+            </p>
           ) : (
             <p>
-              No contact address is configured yet. Set <code>CONTACT_EMAIL</code> in the environment
-              to show one here.
+              No contact address is configured yet. Set <code>businessEmail</code> in
+              <code>config/site.js</code> or <code>CONTACT_EMAIL</code> in the environment to show
+              one here.
             </p>
           )
         ) : null}

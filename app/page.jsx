@@ -8,6 +8,7 @@ import {
 } from '@/lib/home-content.js';
 import { HOME_QA, HOME_ANSWER } from '@/lib/aeo.js';
 import { RelatedSearches } from '@/components/related-searches.jsx';
+import { RELATION } from '@/lib/semantic-keywords.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { StylePreviewGrid, stylePreviews } from '@/components/style-preview-grid.jsx';
@@ -180,7 +181,9 @@ export default async function HomePage({ searchParams }) {
         </section>
       ) : null}
 
-      {showContent ? <RelatedSearches path="/" /> : null}
+      {showContent ? (
+        <RelatedSearches path="/" excludeRelations={[RELATION.SYNONYM, RELATION.ENTITY]} />
+      ) : null}
 
       {showContent && (
         <>

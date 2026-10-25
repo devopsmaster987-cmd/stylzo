@@ -14,9 +14,10 @@ import { semanticGroups } from '@/lib/semantic-keywords.js';
 /**
  * @param path  the site path whose terms to show
  * @param title optional heading override
+ * @param excludeRelations relation keys to leave out
  */
-export function RelatedSearches({ path, title = 'Related searches' }) {
-  const groups = semanticGroups(path);
+export function RelatedSearches({ path, title = 'Related searches', excludeRelations = [] }) {
+  const groups = semanticGroups(path).filter((g) => !excludeRelations.includes(g.relation));
   if (!groups.length) return null;
 
   return (
