@@ -136,8 +136,9 @@ export default function ToolsPage() {
           </h2>
           <p>
             Read the text out of a screenshot and get it back as editable text you can copy or
-            download. Drop an image or paste one from the clipboard and the recognition runs in a
-            Web Worker on your own device, so the picture is never uploaded to an OCR service.
+            download — or replace a line directly on the image and save the edited PNG. Drop an
+            image or paste one from the clipboard and the recognition runs in a Web Worker on your
+            own device, so the picture is never uploaded to an OCR service.
           </p>
         </div>
         <a className="btn" href="/screenshot-to-text">Open screenshot to text</a>

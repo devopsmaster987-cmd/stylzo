@@ -406,6 +406,9 @@ describe('features', () => {
       'data-ocr-tool', 'data-ocr-zone', 'data-ocr-input', 'data-ocr-psm', 'data-ocr-lang',
       'data-ocr-reset', 'data-ocr-errors', 'data-ocr-status', 'data-ocr-progress',
       'data-ocr-bar', 'data-ocr-empty', 'data-ocr-list', 'data-ocr-copy-all', 'data-ocr-download',
+      'data-ocr-editor', 'data-ocr-canvas', 'data-ocr-boxes', 'data-ocr-show-boxes',
+      'data-ocr-edit-count', 'data-ocr-replace-text', 'data-ocr-background',
+      'data-ocr-match-background', 'data-ocr-apply', 'data-ocr-download-image',
     ]) {
       assert.ok(html.includes(hook), `the OCR tool is missing ${hook}`);
     }

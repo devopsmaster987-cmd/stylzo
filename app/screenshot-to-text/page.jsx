@@ -7,9 +7,9 @@ import { Scripts } from '@/components/scripts.jsx';
 // The same steps the page's own how-to section renders, so the HowTo schema
 // cannot describe a procedure the page does not show.
 const HOW_TO = {
-  name: 'How to turn a screenshot into editable text',
-  description: 'Read the text out of a screenshot with OCR that runs in your own browser, then edit, copy '
-    + 'or download the result.',
+  name: 'How to extract or replace text in a screenshot',
+  description: 'Read the text out of a screenshot with OCR that runs in your own browser, then copy it, '
+    + 'download it, or replace a line on the image itself.',
   steps: [
     {
       name: 'Add the screenshot',
@@ -26,14 +26,20 @@ const HOW_TO = {
       text: 'The recognised text lands in an editable box. Correct any mistakes the recogniser made, then '
         + 'copy a single result or everything at once, or download the text as a file.',
     },
+    {
+      name: 'Replace text in the screenshot',
+      text: 'Choose Edit text in image, select any recognised line, and type the replacement. The tool '
+        + 'matches the original font, size, weight, slant and colour by comparing the pixels, clears '
+        + 'the old line and paints the new text back before you download the edited PNG.',
+    },
   ],
 };
 
 function screenshotToTextMeta() {
   return pageMeta({
-    title: 'Screenshot to Text Converter — Extract Editable Text Free',
-    description: 'Turn a screenshot into editable text in your browser. Paste or drop an image, read it '
-      + 'with OCR in a Web Worker on your own device, then copy or download the text. Free, no upload, no sign-up.',
+    title: 'Screenshot to Text — Extract & Edit Text in Images',
+    description: 'Turn a screenshot into editable text with OCR in your browser, then replace a line '
+      + 'in the image. Copy the words or download the edited PNG. Free, no upload.',
     path: '/screenshot-to-text',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -74,9 +80,9 @@ export default function ScreenshotToTextPage() {
       <section className="hero">
         <h1>Screenshot to editable text</h1>
         <p className="lede">
-          Paste a screenshot, get the text back. The recogniser runs in your own browser, so the
-          image is never uploaded to an OCR service, and the result lands in an editable box you can
-          fix, copy or download.
+          Paste a screenshot, get the text back — or change the words and keep the picture. The
+          recogniser runs in your own browser, so the image is never uploaded to an OCR service. Copy
+          the text, or replace a line directly on the image and download the edited PNG.
         </p>
       </section>
 
@@ -195,8 +201,178 @@ export default function ScreenshotToTextPage() {
         </div>
       </div>
 
+      <section className="ocr-editor" data-ocr-editor hidden aria-labelledby="ocr-editor-title">
+        <div className="panel">
+          <div className="ocr-editor-head">
+            <div>
+              <h2 id="ocr-editor-title">Replace text in the screenshot</h2>
+              <p className="ocr-editor-note" data-ocr-editor-note>
+                Select a recognised line, type the replacement, and the tool paints it back using
+                the font, size, weight, slant and colour it matched from the image.
+              </p>
+            </div>
+            <button type="button" className="btn small subtle" data-ocr-editor-close>
+              Close editor
+            </button>
+          </div>
+
+          <div className="ocr-editor-body">
+            <div className="ocr-stage">
+              <div className="ocr-canvas-wrap">
+                <canvas
+                  data-ocr-canvas
+                  aria-label="Screenshot with selectable lines of recognised text"
+                />
+                <div className="ocr-boxes" data-ocr-boxes />
+              </div>
+              <div className="ocr-stage-tools">
+                <label className="ocr-toggle">
+                  <input type="checkbox" defaultChecked data-ocr-show-boxes />
+                  <span>Show line boxes</span>
+                </label>
+                <span className="ocr-edit-count" data-ocr-edit-count aria-live="polite">
+                  No replacements yet
+                </span>
+              </div>
+              <p className="tp-note">
+                Dashed boxes mark every line the OCR found. Select one, change the words, and the
+                original line is replaced on the image. Click an empty area of the image to deselect
+                the current line.
+              </p>
+            </div>
+
+            <div className="ocr-editor-panel">
+              <p className="ocr-selection" data-ocr-selection>No line selected yet.</p>
+
+              <div className="tp-field">
+                <label htmlFor="ocr-replace-text">Replacement text</label>
+                <input
+                  id="ocr-replace-text"
+                  className="field-input"
+                  type="text"
+                  placeholder="Select a line first"
+                  data-ocr-replace-text
+                  disabled
+                />
+              </div>
+
+              <div className="ocr-pair">
+                <div className="tp-field">
+                  <label htmlFor="ocr-font">Font</label>
+                  <select id="ocr-font" data-ocr-font disabled>
+                    <option value="auto">Match the original</option>
+                    <option value="sans">Sans-serif</option>
+                    <option value="serif">Serif</option>
+                    <option value="mono">Monospace</option>
+                    <option value="name:Segoe UI">Segoe UI</option>
+                    <option value="name:Arial">Arial</option>
+                    <option value="name:Helvetica">Helvetica</option>
+                    <option value="name:Roboto">Roboto</option>
+                    <option value="name:Inter">Inter</option>
+                    <option value="name:Georgia">Georgia</option>
+                    <option value="name:Times New Roman">Times New Roman</option>
+                    <option value="name:Courier New">Courier New</option>
+                    <option value="name:Consolas">Consolas</option>
+                  </select>
+                </div>
+                <div className="tp-field">
+                  <label htmlFor="ocr-weight">Weight</label>
+                  <select id="ocr-weight" data-ocr-weight disabled>
+                    <option value="400">Regular</option>
+                    <option value="600">Semibold</option>
+                    <option value="700">Bold</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="ocr-pair">
+                <div className="tp-field">
+                  <label htmlFor="ocr-size">Size (px)</label>
+                  <input
+                    id="ocr-size"
+                    className="field-input"
+                    type="number"
+                    min="6"
+                    max="900"
+                    step="1"
+                    data-ocr-size
+                    disabled
+                  />
+                </div>
+                <div className="tp-field">
+                  <label htmlFor="ocr-style">Style</label>
+                  <select id="ocr-style" data-ocr-style disabled>
+                    <option value="normal">Regular</option>
+                    <option value="italic">Italic</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="ocr-pair">
+                <div className="tp-field">
+                  <label htmlFor="ocr-colour">Text colour</label>
+                  <input
+                    id="ocr-colour"
+                    className="ocr-colour"
+                    type="color"
+                    defaultValue="#1a1a1a"
+                    data-ocr-colour
+                    disabled
+                  />
+                </div>
+                <div className="tp-field">
+                  <label htmlFor="ocr-background">Background</label>
+                  <input
+                    id="ocr-background"
+                    className="ocr-colour"
+                    type="color"
+                    defaultValue="#ffffff"
+                    data-ocr-background
+                    disabled
+                  />
+                  <button
+                    type="button"
+                    className="linkish ocr-match-colour"
+                    data-ocr-match-background
+                    disabled
+                  >
+                    Use image colour
+                  </button>
+                </div>
+              </div>
+
+              <div className="ocr-editor-actions">
+                <button type="button" className="btn grad" data-ocr-apply disabled>
+                  Replace text
+                </button>
+                <button type="button" className="btn small subtle" data-ocr-undo disabled>
+                  Undo
+                </button>
+                <button type="button" className="btn small subtle" data-ocr-reset-image disabled>
+                  Reset image
+                </button>
+                <button type="button" className="btn small" data-ocr-download-image disabled>
+                  Download PNG
+                </button>
+              </div>
+
+              <p className="tp-note" data-ocr-editor-status role="status" aria-live="polite" />
+
+              <p className="tp-note">
+                When you pick a line, the tool compares its pixels against the fonts installed on
+                your device and pre-selects the closest family, weight, slant and size. You can still
+                adjust any of them by hand. The background is white by default; use
+                <b>Use image colour</b> when the screenshot has a coloured background. Flat
+                backgrounds reproduce best, and gradients or photos may still need the colour
+                adjusted by hand.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="prose" aria-labelledby="ocr-how">
-        <h2 id="ocr-how">How to turn a screenshot into editable text</h2>
+        <h2 id="ocr-how">How to extract or replace text in a screenshot</h2>
         <ol className="how-steps">
           {HOW_TO.steps.map((step) => (
             <li key={step.name}>
@@ -224,6 +400,26 @@ export default function ScreenshotToTextPage() {
           OCR is good, never perfect. Small type, tight leading, icons next to words and low contrast
           all produce mistakes, which is why the text lands in an editable box instead of a finished
           document. Correct what is wrong, then copy it or download it as a plain text file.
+        </p>
+
+        <h3>Replacing text on the image itself</h3>
+        <p>
+          Reading the words is only half the job when a screenshot needs correcting. The editor on
+          this page uses the same recognition result to find each line&apos;s position, then clears
+          that line and draws the replacement in its place. It samples the background and text
+          colours from the pixels around the selection and measures the line height, so the new words
+          sit where the old ones did instead of floating on a white patch.
+        </p>
+        <p>
+          Font matching is honest rather than magical. A screenshot carries pixels, not the original
+          font file, so the tool renders the selected line in the fonts installed on your device and
+          scores each one against the original glyph shapes. The closest family wins, along with its
+          weight, slant and size; if nothing scores well, it falls back to a measured approximation
+          and says so. Flat backgrounds — app windows, slides, forms, menus — reproduce almost
+          invisibly. Gradients, photographs and text over artwork need the background colour adjusted
+          by hand, and very long replacements shrink to fit the original line width. Everything is
+          composited on a canvas in this tab and the result downloads as a PNG; the image is never
+          uploaded.
         </p>
 
         <p>

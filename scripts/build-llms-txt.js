@@ -74,7 +74,8 @@ Typing example: "${sample}".
 - [Text fixer](${base}/universal-text-fixer): repair spacing, punctuation, invisible
   characters, sentence case, repeated words and common misspellings.
 - [Screenshot to text](${base}/screenshot-to-text): OCR a screenshot in a Web Worker
-  on the visitor's device and return editable text.
+  on the visitor's device, return editable text, or replace a recognised line on the
+  image and download the edited PNG.
 - [PDF editor](${base}/pdf-editor): reorder, rotate, duplicate, merge and stamp PDF pages in the
   browser, without uploading the document.
 - [PDF accessibility checker](${base}/pdf-accessibility-checker): check a PDF for tags,

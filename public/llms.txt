@@ -47,7 +47,8 @@ Typing example: "Stylzo".
 - [Text fixer](https://www.abdulsamad.shop/universal-text-fixer): repair spacing, punctuation, invisible
   characters, sentence case, repeated words and common misspellings.
 - [Screenshot to text](https://www.abdulsamad.shop/screenshot-to-text): OCR a screenshot in a Web Worker
-  on the visitor's device and return editable text.
+  on the visitor's device, return editable text, or replace a recognised line on the
+  image and download the edited PNG.
 - [PDF editor](https://www.abdulsamad.shop/pdf-editor): reorder, rotate, duplicate, merge and stamp PDF pages in the
   browser, without uploading the document.
 - [PDF accessibility checker](https://www.abdulsamad.shop/pdf-accessibility-checker): check a PDF for tags,

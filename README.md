@@ -221,9 +221,11 @@ claim in the server HTML:
   invisible characters, sentence case, repeated words and common misspellings. Every rule is a
   toggle with its own change count, and wording is never rewritten.
 - `/screenshot-to-text` (`public/js/screenshot-to-text.js`) runs OCR on dropped, pasted or chosen
-  images. Tesseract.js is vendored under `public/vendor/tesseract/` rather than loaded from a CDN,
-  because the CSP is `script-src 'self'`; the worker is started with `workerBlobURL: false` since
-  `blob:` workers are blocked too.
+  images, and can replace any recognised line on the image itself using a font, weight, slant,
+  size, colour and background matched from the original pixels before exporting a PNG. Tesseract.js
+  is vendored under
+  `public/vendor/tesseract/` rather than loaded from a CDN, because the CSP is `script-src 'self'`;
+  the worker is started with `workerBlobURL: false` since `blob:` workers are blocked too.
 - `/pdf-editor` (`public/js/pdf-editor.js`) arranges PDF pages and draws text or page numbers on
   them. pdf-lib writes the output and PDF.js draws the preview, both vendored under
   `public/vendor/` because the CSP is `script-src 'self'`; the document is never uploaded.
