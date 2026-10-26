@@ -59,9 +59,17 @@ export default function RootLayout({ children }) {
         {adsenseConfigured ? (
           <>
             <meta name="google-adsense-account" content={env.adsense.client} />
+            {/* Kept in the served HTML for AdSense verification, but as a
+                non-executing script. Browsers do not fetch or run a script with
+                an unknown type, so the real tag is injected only after consent
+                (or by a certified CMP). The privacy policy depends on this:
+                declining must mean no advertising script runs at all. */}
             <script
               async
+              type="text/plain"
               data-adsense="1"
+              data-adsense-pending="1"
+              data-adsense-client={env.adsense.client}
               src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${env.adsense.client}`}
               crossOrigin="anonymous"
             />
@@ -127,7 +135,10 @@ export default function RootLayout({ children }) {
 
         {/* Renders nothing unless ADSENSE_CLIENT is set, and loads the ad tag
             only after the visitor accepts. */}
-        <ConsentGate client={adsenseConfigured ? env.adsense.client : ''} />
+        <ConsentGate
+          client={adsenseConfigured ? env.adsense.client : ''}
+          certifiedCmp={env.certifiedCmp}
+        />
       </body>
     </html>
   );

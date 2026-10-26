@@ -147,7 +147,10 @@ for (const p of REQUIRED) {
 
 // Thin and policy pages. Google expects ads only where there is content to
 // scroll past, so a unit on any of these is a policy problem, not just clutter.
-const NO_AD_PAGES = ['/about', '/contact', '/privacy', '/terms', '/tools', '/fonts', '/symbols', '/emoji', '/kaomoji', '/studio'];
+const NO_AD_PAGES = [
+  '/about', '/contact', '/privacy', '/terms', '/tools', '/fonts', '/symbols',
+  '/emoji', '/kaomoji', '/studio', '/qr-code-generator',
+];
 
 // The real guide pages under /styles/*, each of which must carry exactly one ad.
 const STYLE_GUIDES = KEPT_STYLE_SLUGS.map((slug) => `/styles/${slug}`);
@@ -351,7 +354,21 @@ if (!adsLive) {
     filledBeforeConsent.length ? 'an ad unit is already filled in the server HTML' : '');
 
   const banner = home.includes('data-consent="granted"') && home.includes('data-consent="denied"');
-  check('Consent banner offered', banner, banner ? '' : 'required before loading ads in the EEA/UK');
+  if (env.certifiedCmp) {
+    check('Certified CMP marked live', true,
+      'AdSense Privacy & messaging owns consent');
+    check('Custom consent banner hidden beside certified CMP', !banner,
+      banner ? 'both consent UIs are present' : '');
+  } else {
+    check('Consent banner offered', banner, banner ? '' : 'required before loading ads in the EEA/UK');
+    warn('EEA/UK/CH certified CMP not confirmed',
+      'the site banner is not a Google-certified CMP',
+      'AdSense > Privacy & messaging > GDPR message > create and publish, then set CERTIFIED_CMP=1 and rebuild');
+  }
+
+  warn('Thin style pages remain indexable',
+    '70 style pages are under the 250-word floor; 30 are protected and no ad unit is placed on them',
+    'Enrich in approved batches or noindex with owner approval; do not add ads to these pages');
 }
 
 /* -------------------------------------------------------- presentation --- */

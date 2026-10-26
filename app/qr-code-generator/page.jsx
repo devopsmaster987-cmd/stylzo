@@ -3,8 +3,7 @@ import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { RelatedSearches } from '@/components/related-searches.jsx';
 import { Scripts } from '@/components/scripts.jsx';
-import { AdUnit } from '@/components/ad-unit.jsx';
-import { env, adsenseConfigured } from '@/config/environment.js';
+import { env } from '@/config/environment.js';
 
 // The same four steps the page's own how-to section renders, in the same order,
 // so the visible instructions stay the single source of truth.
@@ -336,11 +335,6 @@ export default function QrCodeGeneratorPage() {
           </div>
         </div>
       </div>
-
-      {/* Visually separated from the controls and never adjacent to a button a
-          visitor is aiming at. An ad that looks like part of the tool is the
-          fastest way to lose the trust the rest of this page is built on. */}
-      <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} />
 
       <section className="prose" aria-labelledby="qr-how">
         <h2 id="qr-how">How to create a QR code</h2>

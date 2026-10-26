@@ -88,6 +88,12 @@ export const env = {
     client: str(process.env.ADSENSE_CLIENT), // e.g. ca-pub-0000000000000000
     slot: str(process.env.ADSENSE_SLOT),     // the numeric ad unit id
   },
+
+  // Set only after a Google-certified CMP is live in AdSense Privacy &
+  // messaging. When true, the custom banner is hidden and AdSense is allowed to
+  // load without waiting for the site's own localStorage answer; Google's CMP
+  // owns the consent decision for EEA/UK/CH visitors.
+  certifiedCmp: /^(1|true|yes)$/i.test(str(process.env.CERTIFIED_CMP).trim()),
 };
 
 /** Ads load only when both ids are present, so a half-configured build stays ad-free. */

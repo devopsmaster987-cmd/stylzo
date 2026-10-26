@@ -89,7 +89,7 @@ export function SiteFooter() {
             <>
               {' · '}
               <a href="/privacy">cookie policy</a>
-              <ConsentControl client={env.adsense.client} />
+              {env.certifiedCmp ? null : <ConsentControl client={env.adsense.client} />}
             </>
           ) : null}
         </p>

@@ -250,3 +250,15 @@ Status: batch 2 approved with the emoji-frame rewrite. Batch 3 has not started.
 - Protected comparison: 49 URLs, 0 errors. Titles, descriptions, canonicals and H1s unchanged. Bodies still differ on the same eight URLs reported before Phase 9; JSON-LD still differs on all 49 from the Phase 6 schema change. No protected page received a Phase 9 body edit.
 - Sitemap is now 143 URLs. No commit or deployment.
 - Phase 9 batch 1 is complete pending review; the official TikTok, Facebook and Telegram pages could not be re-fetched in this session and should be checked again before deployment.
+
+## AdSense audit fixes (2026-10-26)
+
+- Applied the user-approved safe ad compliance pass. No protected URL was changed and no thin page was enriched, merged, redirected or noindexed.
+- AdSense now stays inert in the served HTML (`type="text/plain"`); the executable tag is created only after consent. A certified CMP, when enabled, owns the decision and hides the custom banner.
+- Added `CERTIFIED_CMP`, `adsAllowed()` and idempotent `loadAdTag()` to the consent path, with a fresh retry when a visitor accepts after the first poll.
+- Reserved 320 px for configured ad slots to remove layout shift; declined and unconfigured slots still collapse.
+- Removed the ad from `/qr-code-generator`; added it to the preflight no-ad list.
+- Preflight now warns that the EEA/UK/CH CMP is unconfirmed and that 70 thin style pages remain indexable.
+- `npm test`: 693 tests, 689 passed, 4 skipped, 0 failed. Advertising suite: 13 passed, 0 failed, 3 skipped. `NODE_ENV=production npm run adsense:check`: 73 passed, 0 blocking, 2 warnings.
+- Manual follow-up: publish the AdSense certified CMP before setting `CERTIFIED_CMP=1`; approve the `/privacy` wording dependency; keep the 70 thin pages ad-free; retest verification and regional consent after deployment.
+- No commit or deployment.

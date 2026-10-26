@@ -1021,3 +1021,54 @@ Content size and duplication:
 - Confirm the source table is visible in rendered HTML without JavaScript.
 - Keep ad slots away from copy controls, generated rows and the source table.
 - Recheck mobile first-screen layout: the generator must remain the first useful element, not the field table or FAQ.
+
+---
+
+## AdSense audit fixes (2026-10-26)
+
+Scope: the user chose **safe ad compliance**. This pass fixes consent-script loading, layout shift, topical ad placement and CMP readiness. It does not change any protected URL, does not add thin content and does not remove the 70 thin style pages.
+
+### What changed
+
+- `app/layout.jsx`: the AdSense URL remains in the served HTML for verification, but the tag is `type="text/plain"` and therefore inert. The executable tag is created only after consent. The `google-adsense-account` meta tag remains.
+- `lib/consent.js`: added `configureConsent()`, `adsAllowed()` and an idempotent `loadAdTag()`. `syncAds()` now creates the live script only when `adsAllowed()` is true; withdrawal removes the live script and clears filled units.
+- `components/consent-gate.jsx`: accepts `certifiedCmp`. A certified CMP hides the custom banner and owns the consent decision. The custom banner still appears when no certified CMP is configured.
+- `components/ad-unit.jsx`: every push checks `adsAllowed()` instead of reading the old local answer directly. A visitor who leaves the banner open past the first poll gets a fresh retry when they accept.
+- `components/site-footer.jsx`: the custom cookie control is hidden when a certified CMP is live.
+- `public/css/main.css`: the ad slot reserves **320 px** before a creative loads. The slot still collapses when ads are unconfigured, and a declined slot is collapsed entirely.
+- `app/qr-code-generator/page.jsx`: removed the ad unit. A QR tool is not a topical content page and should not carry an ad.
+- `scripts/adsense-preflight.js`: `/qr-code-generator` added to the no-ad list. The report now warns when no certified CMP is confirmed and records the 70 thin style pages as a remaining risk.
+- `.env.example`: added `CERTIFIED_CMP=0` with the AdSense Privacy & messaging setup note.
+
+### Verification
+
+- `npm test`: **693 tests, 689 passed, 4 skipped, 0 failed**.
+- Advertising integration suite: **13 passed, 0 failed, 3 skipped** in the ads-on build.
+- `NODE_ENV=production npm run adsense:check`: **73 passed, 0 blocking, 2 warnings**:
+  - EEA/UK/CH certified CMP is not confirmed.
+  - 70 thin style pages remain indexable.
+- New tests assert the server tag is inert, the live script is browser-only, the ad slot reserves at least 300 px and the QR page renders no ad.
+- No protected page source was edited in this pass.
+
+### Manual steps still required
+
+1. In AdSense, open **Privacy & messaging → GDPR message**, create and publish the message, then set `CERTIFIED_CMP=1` and rebuild. Until that is live, leave the flag at `0`; the custom banner is not a Google-certified CMP.
+2. Setting `CERTIFIED_CMP=1` changes consent handling for every visitor, not only the EEA/UK/CH. The protected `/privacy` copy says no ad script loads until an answer is accepted; that wording needs owner approval before enabling the flag.
+3. Keep ads off the 70 thin style pages. The 30 protected pages need approval before any enrichment, merge or `noindex` change.
+4. After deployment, confirm AdSense still verifies the site from the inert tag plus the account meta tag, then check a clean browser in the EEA/UK, the US and with consent declined.
+5. Recheck the blocked TikTok, Facebook and Telegram official sources before the AdSense or Search Console review.
+
+### Files changed
+
+- `app/layout.jsx`
+- `lib/consent.js`
+- `components/consent-gate.jsx`
+- `components/ad-unit.jsx`
+- `components/site-footer.jsx`
+- `config/environment.js`
+- `public/css/main.css`
+- `app/qr-code-generator/page.jsx`
+- `scripts/adsense-preflight.js`
+- `.env.example`
+- `tests/integration/advertising.test.js`
+- `SEO-REPORT.md`, `progress.md`

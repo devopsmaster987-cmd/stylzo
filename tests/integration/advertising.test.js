@@ -141,16 +141,27 @@ describe('advertising with a configured publisher', () => {
     assert.match(html, /data-consent="granted"/);
     assert.match(html, /data-consent="denied"/);
 
-    // Ad slots exist on the content pages. The tag itself IS in the server
-    // HTML: AdSense verifies a site by reading it out of the head, so it is
-    // static markup rather than something injected later.
+    // Ad slots exist on the content pages. The AdSense URL is in the server
+    // HTML for site verification, but as an inert tag: the executable copy is
+    // created in the browser only after a grant.
     assert.ok(count(html, /class="adsbygoogle"/g) > 0, 'no ad unit was rendered');
     const head = html.slice(0, html.indexOf('</head>'));
     assert.ok(head.includes('pagead2.googlesyndication.com'), 'the ad tag must be in the head');
     assert.match(head, /<meta name="google-adsense-account" content="ca-pub-\d+"/,
       'the verification meta tag must be in the head');
     assert.equal((html.match(/<script[^>]+pagead\/js\/adsbygoogle\.js/g) || []).length, 1,
-      'the ad tag must load exactly once');
+      'the verification tag must appear exactly once');
+    // The verification tag must be inert in the server HTML. If it is
+    // executable, the browser fetches AdSense before the visitor answers and
+    // the privacy policy's "decline means no ad script" claim becomes false.
+    const adTags = [...head.matchAll(/<script[^>]*>/g)]
+      .map((m) => m[0])
+      .filter((tag) => tag.includes('pagead/js/adsbygoogle.js'));
+    assert.equal(adTags.length, 1, 'expected one server-rendered AdSense tag');
+    assert.match(adTags[0], /type="text\/plain"/,
+      'the server-rendered AdSense tag must not execute before consent');
+    assert.ok(!/<script[^>]*data-adsense-live/.test(head),
+      'the live AdSense script must only be created in the browser');
     // Consent still gates the request for an ad: nothing is filled in server-side.
     assert.equal(count(html, /<ins class="adsbygoogle"[^>]*>\s*[^<\s]/g), 0,
       'an ad must not be requested before consent is recorded');
@@ -166,6 +177,16 @@ describe('advertising with a configured publisher', () => {
     assert.match(unit, /data-full-width-responsive="true"/);
   });
 
+  test('the slot reserves height before the creative loads', onlyWith(enabled), async () => {
+    // The old CSS reserved nothing, so a late responsive ad pushed every FAQ
+    // and footer link below it down. 300px is the minimum that covers a standard
+    // 250/280px creative plus the label inserted after fill.
+    const css = readFileSync(new URL('../../public/css/main.css', import.meta.url), 'utf8');
+    const rule = css.match(/\.ad-slot\s*\{([^}]*)\}/s)?.[1] || '';
+    const height = Number((rule.match(/min-height:\s*(\d+)px/) || [])[1] || 0);
+    assert.ok(height >= 300, `ad slot reserves only ${height}px`);
+  });
+
   test('ads appear only on real-content pages, at most one each', onlyWith(enabled), async () => {
     // The allowlist is the whole point: an ad on a page that is only a list of
     // links, or that exists because a keyword matched, is a policy problem
@@ -175,7 +196,7 @@ describe('advertising with a configured publisher', () => {
       const n = count(html, /class="adsbygoogle"/g);
       assert.equal(n, 1, `${p} should carry exactly one ad, found ${n}`);
     }
-    for (const p of ['/fonts', '/tools', '/symbols', '/emoji', '/kaomoji', '/about', '/contact', '/privacy', '/terms']) {
+    for (const p of ['/fonts', '/tools', '/symbols', '/emoji', '/kaomoji', '/about', '/contact', '/privacy', '/terms', '/qr-code-generator']) {
       const html = await (await get(server.base, p)).text();
       assert.equal(count(html, /class="adsbygoogle"/g), 0, `${p} must not render an ad`);
     }

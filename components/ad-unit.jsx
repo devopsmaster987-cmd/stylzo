@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { readConsent, pushAdUnit } from '@/lib/consent.js';
+import { adsAllowed, pushAdUnit } from '@/lib/consent.js';
 
 /* Everything inside the slot belongs to Google, not to React.
    adsbygoogle.js rewrites the <ins> in place: it adds data-adsbygoogle-status
@@ -81,7 +81,7 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
     };
 
     const tryPush = () => {
-      if (cancelled || filled.current || readConsent() !== 'granted') return;
+      if (cancelled || filled.current || !adsAllowed()) return;
       if (!unit() || !pushAdUnit()) return;
       filled.current = true;
       clearInterval(poll);
@@ -100,9 +100,22 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
 
     // The tag is static markup in the document head and may not have run yet,
     // so either the load event or the poll below can be the one that finds it.
+    // A visitor can leave the banner open for longer than the initial poll.
+    // When they finally accept, start a fresh short poll for the newly injected
+    // AdSense tag instead of leaving an empty slot on the page.
+    const onConsent = () => {
+      if (!adsAllowed()) return;
+      clearInterval(poll);
+      clearTimeout(stop);
+      tryPush();
+      poll = setInterval(tryPush, 250);
+      stop = setTimeout(() => clearInterval(poll), 15000);
+    };
+
     syncLabel();
     tryPush();
 
+    window.addEventListener('stylzo:consent', onConsent);
     document.querySelector('script[data-adsense]')
       ?.addEventListener('load', tryPush);
     poll = setInterval(tryPush, 250);
@@ -114,6 +127,7 @@ export function AdUnit({ slot, client, format = 'auto', label = 'Advertisement' 
       clearInterval(poll);
       clearTimeout(stop);
       observer.disconnect();
+      window.removeEventListener('stylzo:consent', onConsent);
       document.querySelector('script[data-adsense]')
         ?.removeEventListener('load', tryPush);
     };

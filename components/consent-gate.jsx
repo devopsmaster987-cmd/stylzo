@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { readConsent, writeConsent, syncAds } from '@/lib/consent.js';
+import { configureConsent, readConsent, writeConsent, syncAds } from '@/lib/consent.js';
 
 /**
  * Consent banner plus the ad loader.
@@ -13,11 +13,12 @@ import { readConsent, writeConsent, syncAds } from '@/lib/consent.js';
  * With no client id configured this renders nothing at all, so an unconfigured
  * build stays exactly as it is today.
  */
-export function ConsentGate({ client }) {
+export function ConsentGate({ client, certifiedCmp = false }) {
   const [choice, setChoice] = useState(null);
 
   useEffect(() => {
     if (!client) return undefined;
+    configureConsent({ certifiedCmp });
     setChoice(readConsent());
     syncAds(client);
 
@@ -27,9 +28,11 @@ export function ConsentGate({ client }) {
     };
     window.addEventListener('stylzo:consent', onChange);
     return () => window.removeEventListener('stylzo:consent', onChange);
-  }, [client]);
+  }, [client, certifiedCmp]);
 
-  if (!client || choice) return null;
+  // A certified CMP renders its own dialog and owns the decision. Showing the
+  // custom banner beside it would ask twice and could override the CMP.
+  if (!client || certifiedCmp || choice) return null;
 
   const answer = (value) => {
     writeConsent(value);
