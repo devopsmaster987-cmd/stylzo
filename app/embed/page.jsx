@@ -9,10 +9,9 @@ const SNIPPET = `<div data-stylzo-embed></div>
 function embedMeta() {
   return pageMeta({
     title: 'Embed the Fancy Text Generator — Free Widget',
-    description: 'Add a working fancy text generator to any site with one script tag. No account, no API key, no build step, under 10 KB. Built on an MIT-licensed Unicode engine.',
+    description: 'Add a working fancy text generator to any site with one script tag. No account, API key or build step, and under 10 KB. MIT-licensed engine.',
     path: '/embed',
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Embed', path: '/embed' }],
-    app: true,
   });
 }
 

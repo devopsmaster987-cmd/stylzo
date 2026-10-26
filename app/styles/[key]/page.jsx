@@ -12,8 +12,8 @@ export { generateStaticParams };
  * The route used to render a keyword board here: 32 slugs, each a thin page
  * showing the same 25 words under a different search phrase. Those slugs are
  * permanently redirected away in next.config (see lib/styles-routing.js), so
- * they never reach this component — the catch-all rule there turns any slug that
- * is not one of the six into a 301 on the first request.
+ * they never reach this component. A slug that was never part of that board is
+ * not redirected: it 404s below.
  *
  * The notFound() below is the second line of defence, not the first. It stays so
  * that a slug arriving by some other route — a rewrite, a prefetch that skips

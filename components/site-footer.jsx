@@ -18,6 +18,23 @@ export function SiteFooter() {
             {site.name} turns plain text into Unicode styles, symbols and kaomoji. Everything runs in
             your browser — nothing you type is sent to our server.
           </p>
+
+          <nav className="foot-social" aria-label="Social media">
+            <h2>Social media</h2>
+            <ul>
+              {site.social.map((profile) => (
+                <li key={profile.href}>
+                  <a
+                    href={profile.href}
+                    target="_blank"
+                    rel="me noopener noreferrer"
+                  >
+                    {profile.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
         <nav aria-label="Create">

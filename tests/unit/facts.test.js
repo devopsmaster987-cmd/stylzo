@@ -4,6 +4,7 @@ import { catalog } from '../../services/catalog.js';
 import { env } from '../../config/environment.js';
 import { keyFacts, appFeatures } from '../../lib/facts.js';
 import { organizationLd } from '../../services/seo.js';
+import { site } from '../../config/site.js';
 import { KEPT_STYLE_SLUGS } from '../../lib/styles-routing.js';
 
 // Generative engines quote short, standalone claims. These tests protect the
@@ -48,7 +49,16 @@ describe('quotable facts', () => {
     );
     assert.equal(
       facts.find((f) => f.id === 'style-pages').value,
-      String(catalog().indexable),
+      String(catalog().indexableStyles.length),
+    );
+  });
+
+  test('the style-page count is a plain integer, not the index array', () => {
+    const fact = facts.find((f) => f.id === 'style-pages');
+    assert.match(fact.value, /^\d+$/, `the style-page count is not a plain integer: "${fact.value}"`);
+    assert.ok(
+      fact.detail.includes(fact.value),
+      'the style-page detail does not repeat the quoted count',
     );
   });
 
@@ -91,7 +101,7 @@ describe('quotable facts', () => {
     assert.match(studio.detail, /1200 by 630/);
   });
 
-  test('the feature list describes things that exist', () => {
+  test('the generator feature list describes only the generator', () => {
     const list = appFeatures();
     assert.ok(list.length >= 4, 'a feature list this short describes nothing');
     for (const item of list) {
@@ -101,6 +111,12 @@ describe('quotable facts', () => {
     assert.ok(
       list.some((f) => f.includes(catalog().styles.length.toLocaleString('en-US'))),
       'the feature list no longer states how many styles there are',
+    );
+    // Tool pages get their own WebApplication nodes; the generator must not
+    // claim QR, PDF, image or OCR work that belongs to them.
+    assert.ok(
+      list.every((f) => !/(qr|pdf|image compressor|screenshot|ocr)/i.test(f)),
+      `the generator feature list leaked a tool feature: ${list.join(' | ')}`,
     );
   });
 });
@@ -126,7 +142,13 @@ describe('brand identity', () => {
   test('the organization stays linked to the publisher id used across the site', () => {
     // Attribution depends on one canonical Organization node; a second,
     // slightly different one splits the identity it is meant to establish.
-    assert.ok(organizationLd()['@id'].endsWith('#organization'));
-    assert.equal(organizationLd().name, 'Stylzo');
+    const org = organizationLd();
+    assert.ok(org['@id'].endsWith('#organization'));
+    assert.equal(org.name, 'Stylzo');
+    assert.equal(org.alternateName, 'abdulsamad.shop');
+    assert.equal(org.founder?.['@id'], site.ids.owner);
+    assert.equal(org.founder?.name, site.ownerName);
+    assert.equal(org.founder?.email, site.businessEmail);
+    assert.equal(org.contactPoint?.email, site.businessEmail);
   });
 });

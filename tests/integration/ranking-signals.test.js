@@ -2,6 +2,7 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
+import { QUERY_OWNERS } from '../../lib/seo-keywords.js';
 
 const title = (html) => (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
 const desc = (html) => (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
@@ -33,6 +34,48 @@ describe('search appearance budgets', () => {
       const d = desc(await (await get(server.base, path)).text());
       assert.ok(d.length > 0, `${path} has no description`);
       assert.ok(d.length <= 175, `${path} description is ${d.length} chars and will be truncated`);
+    }
+  });
+
+  test('editable pages meet the title and description budgets', async () => {
+    // Protected pages are excluded by design; their meta is frozen until Phase 14.
+    const pages = [
+      '/embed', '/image-compression', '/pdf-accessibility-checker', '/pdf-editor',
+      '/qr-code-generator', '/qr-code-reader', '/universal-text-fixer',
+      '/fonts/overline-strike', '/fonts/short-slash', '/fonts/short-strike',
+      '/fonts/slash', '/fonts/slash-under', '/fonts/strike-underline',
+      '/fonts/tilde-under', '/fonts/triple-underline', '/fonts/underline',
+      '/fonts/wavy-strike', '/fonts/wavy-under',
+      '/fonts/category/bubble', '/fonts/category/decorated',
+      '/fonts/category/glitch', '/fonts/category/lines', '/fonts/category/small',
+    ];
+    const rendered = (value) => value
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;/g, "'")
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>');
+    for (const path of pages) {
+      const html = await (await get(server.base, path)).text();
+      const t = rendered(title(html));
+      const d = rendered(desc(html));
+      assert.ok(t.length < 60, `${path} title is ${t.length} chars`);
+      assert.ok(d.length < 160, `${path} description is ${d.length} chars`);
+    }
+  });
+
+  test('each of the 25 query owners mentions every term it claims', async () => {
+    for (const entry of QUERY_OWNERS) {
+      const html = await (await get(server.base, entry.path)).text();
+      const text = markup(html)
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ')
+        .toLowerCase();
+      for (const term of entry.terms) {
+        assert.ok(text.includes(term.toLowerCase()),
+          `${entry.path} never mentions "${term}" for "${entry.query}"`);
+      }
     }
   });
 
@@ -231,6 +274,9 @@ describe('3d hero performance gating', () => {
     assert.match(hero, /getContext\('webgl2'\)|getContext\('webgl'\)/, 'no WebGL capability check');
     assert.match(hero, /saveData/, 'no Data Saver guard');
     assert.match(hero, /effectiveType/, 'no slow-connection guard');
+    // The CSS hides the empty hero below the desktop grid breakpoint, so the
+    // scene must not be fetched there either.
+    assert.match(hero, /max-width: 860px/, 'no narrow-viewport guard');
     assert.ok(hero.includes("dynamic(() => import('./hero3d.jsx')"), 'the scene must stay a lazy import');
   });
 

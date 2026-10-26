@@ -4,8 +4,8 @@ import { JsonLd } from '@/components/json-ld.jsx';
 import { RelatedSearches } from '@/components/related-searches.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
-// The same steps the page's own how-to section renders, so the HowTo schema
-// cannot describe a procedure the page does not show.
+// The same steps the page's own how-to section renders, so the visible
+// instructions stay the single source of truth.
 const HOW_TO = {
   name: 'How to extract or replace text in a screenshot',
   description: 'Read the text out of a screenshot with OCR that runs in your own browser, then copy it, '
@@ -49,7 +49,7 @@ function screenshotToTextMeta() {
     faq: SCREENSHOT_TO_TEXT_QA,
     quickAnswer: SCREENSHOT_TO_TEXT_ANSWER,
     howTo: HOW_TO,
-    app: true,
+    app: 'screenshot-to-text',
   });
 }
 
@@ -205,7 +205,7 @@ export default function ScreenshotToTextPage() {
         <div className="panel">
           <div className="ocr-editor-head">
             <div>
-              <h2 id="ocr-editor-title">Replace text in the screenshot</h2>
+              <h2 id="ocr-editor-title">Edit the recognised text</h2>
               <p className="ocr-editor-note" data-ocr-editor-note>
                 Select a recognised line, type the replacement, and the tool paints it back using
                 the font, size, weight, slant and colour it matched from the image.

@@ -80,6 +80,8 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .subnav a { display: block; padding: .45rem .7rem; border-radius: var(--radius-sm); }
 .bar-actions { display: flex; align-items: center; gap: .5rem; }
 .nav-toggle { display: none; }
+/* Same specificity as .icon-btn, so the tap-target size needs both classes. */
+.icon-btn.nav-toggle { width: 2.75rem; height: 2.75rem; }
 .icon-btn {
   background: var(--surface); border: 1px solid var(--line); color: var(--ink);
   width: 2.4rem; height: 2.4rem; border-radius: 50%; display: inline-grid; place-items: center;
@@ -120,7 +122,10 @@ h3 { font-size: 1.1rem; }
   .hero > *:not(.hero-3d) { grid-column: 1; min-width: 0; }
   .hero > .hero-3d { grid-column: 2; grid-row: 1 / span 6; height: 420px; position: sticky; top: 5rem; }
 }
-@media (max-width: 640px) { .hero-3d { height: 260px; } }
+/* The 3D scene only has its own column from 861px up. Below that it is
+   decoration with nowhere to sit: hide it rather than leave a 260px empty
+   block above the heading and generator. */
+@media (max-width: 860px) { .hero-3d { display: none; } }
 .eyebrow {
   display: inline-flex; align-items: center; gap: .5rem; font: 600 .8rem/1 var(--body);
   text-transform: uppercase; letter-spacing: .12em; color: var(--accent);
@@ -143,7 +148,9 @@ textarea {
 }
 textarea:hover { border-color: var(--muted); }
 textarea:focus-visible { border-color: var(--accent); outline-offset: 0; }
-.gen-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: .6rem; }
+/* The Paste and Clear buttons are revealed after hydration. Reserve their row
+   height so revealing them does not push the rest of the page down. */
+.gen-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: .6rem; min-height: 2.5rem; }
 .count { color: var(--muted); font-size: .9rem; margin-right: auto; font-variant-numeric: tabular-nums; }
 
 /* Buttons, chips, badges -------------------------------------------------- */
@@ -369,11 +376,17 @@ textarea:focus-visible { border-color: var(--accent); outline-offset: 0; }
 .stat-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: .9rem 1rem; }
 .stat-card b { display: block; font-size: 1.7rem; font-family: var(--display); line-height: 1.1; }
 .stat-card span { color: var(--muted); font-size: .85rem; }
+.table-wrap { overflow-x: auto; margin-top: 1rem; }
+.table-wrap .table { margin-top: 0; }
 .table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .93rem; }
 .table th, .table td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); }
 .table th { color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; }
 .table caption { text-align: left; color: var(--muted); font-size: .85rem; padding-bottom: .5rem; }
 .table tbody th { text-transform: none; letter-spacing: 0; font-size: .95rem; color: var(--ink); }
+.verdict { display: inline-block; padding: .12rem .5rem; border-radius: var(--radius-pill); font-size: .78rem; font-weight: 600; white-space: nowrap; }
+.verdict[data-verdict="try"] { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.verdict[data-verdict="plain"] { background: color-mix(in srgb, var(--bad) 12%, transparent); color: var(--bad); }
+.platform-source-date { display: block; margin-top: .2rem; color: var(--muted); font-size: .78rem; line-height: 1.35; }
 
 /* Key facts. A definition list rather than cards, because the point of the
    block is that each label and value stay paired when the text is extracted
@@ -398,6 +411,8 @@ textarea:focus-visible { border-color: var(--accent); outline-offset: 0; }
 .foot-grid a:hover { color: var(--accent); text-decoration: underline; }
 .foot-wordmark { font: 700 1.4rem/1 var(--glyphs); color: var(--ink); margin: 0 0 .6rem; }
 .foot-brand p.muted { margin: 0; max-width: 34ch; }
+.foot-social { margin-top: 1rem; }
+.foot-social ul { display: flex; flex-wrap: wrap; gap: .75rem; }
 .foot-base { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: space-between; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
 .foot-base p { margin: 0; }
 
@@ -424,11 +439,14 @@ pre code { display: block; padding: .8rem; overflow: auto; }
 @media (max-width: 720px) {
   .nav { display: none; }
   .nav-toggle { display: inline-grid; }
+  /* The toggle ships with [hidden] so it cannot be tapped before the menu
+     script runs. Reserve its box in CSS anyway, otherwise revealing it after
+     hydration makes the header taller and shifts every page down. */
+  .bar-actions { min-width: 2.75rem; min-height: 2.75rem; }
   .row { grid-template-columns: 1fr auto; }
   .row-meta { grid-column: 1 / -1; display: flex; gap: .75rem; align-items: baseline; flex-wrap: wrap; }
   .bar { gap: .75rem 1rem; }
   .brand { font-size: 1.3rem; }
-  .hero-3d { height: 260px; }
 }
 @media (max-width: 480px) {
   .foot-grid { grid-template-columns: 1fr; }
@@ -721,6 +739,13 @@ pre code { display: block; padding: .8rem; overflow: auto; }
 [data-reveal="shown"] { opacity: 1; transform: none; will-change: auto; }
 
 /* Home page ---------------------------------------------------------------- */
+.home-assurance { margin: -.15rem 0 1rem; font-size: .92rem; }
+.home-assurance a { color: var(--ink); }
+.home-assurance a:hover, .home-assurance a:focus-visible { color: var(--accent); }
+.plain-list { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: .9rem; }
+.plain-list li { border-left: 3px solid var(--accent); padding-left: .9rem; }
+.plain-list h3 { font-size: 1rem; margin-bottom: .25rem; }
+.plain-list p { margin: 0; font-size: .93rem; color: var(--muted); }
 .how-steps { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); counter-reset: how; }
 .how-steps li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.15rem; box-shadow: var(--shadow); }
 .how-steps h3 { display: flex; gap: .55rem; align-items: baseline; font-size: 1.05rem; margin-bottom: .3rem; }
@@ -785,7 +810,7 @@ pre code { display: block; padding: .8rem; overflow: auto; }
   padding: .8rem 1rem; background: var(--surface);
 }
 .example-label {
-  display: block; font: 600 .72rem var(--body); text-transform: uppercase;
+  display: block; font: 600 .78rem var(--body); text-transform: uppercase;
   letter-spacing: .08em; color: var(--muted); margin-bottom: .35rem;
 }
 .example-out {

@@ -74,7 +74,7 @@ export default function RootLayout({ children }) {
 
         {/* One Organization node for the whole site: it ties the "Stylzo" brand
             to the production host and gives the page-level entities
-            (WebSite, SoftwareApplication) a `publisher` to reference. Rendered
+            (WebSite, WebApplication) a `publisher` to reference. Rendered
             through JsonLd, not as a raw <head> script, because production CSP
             requires the per-request nonce. */}
         <JsonLd items={[safeJson(organizationLd())]} />

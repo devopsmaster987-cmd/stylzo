@@ -7,7 +7,7 @@ export function StyleRow({ s }) {
   return (
     <li className="row" data-style-id={s.id} data-word={s.word || undefined}>
       <div className="row-meta">
-        <h3 className="row-name"><a href={`/fonts/${s.slug}`}>{s.name}</a></h3>
+        <p className="row-name"><a href={`/fonts/${s.slug}`}>{s.name}</a></p>
         <p className="row-support" data-support={s.support}>{s.supportLabel}</p>
       </div>
       <p className="out" data-output data-emoji-before={before ? before.join(' ') : undefined} data-emoji-after={after ? after.join(' ') : undefined}>{s.output}</p>

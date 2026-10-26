@@ -1,6 +1,9 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { KEYWORD_MAP, QUESTION_QUERIES, RESERVED, normaliseTerm } from '../../lib/seo-keywords.js';
+import { KEYWORD_MAP, QUERY_OWNERS, QUESTION_QUERIES, RESERVED, normaliseTerm } from '../../lib/seo-keywords.js';
+import { getStyle } from '../../services/catalog.js';
+import { isIndexableCategory } from '../../lib/category-routing.js';
+import { getLandingPage } from '../../lib/landing-pages.js';
 
 describe('keyword targeting', () => {
   test('no two pages target the same primary query', () => {
@@ -32,6 +35,8 @@ describe('keyword targeting', () => {
       '/qr-code-reader',
       '/symbols', '/emoji', '/kaomoji', '/styles', '/about', '/privacy', '/terms', '/contact',
       '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker',
+      '/tiktok-font-generator', '/facebook-font-generator', '/x-font-generator',
+      '/youtube-font-generator', '/telegram-font-generator',
     ]);
     const missing = KEYWORD_MAP.filter((e) => !ROUTES.has(e.path));
     assert.deepEqual(missing.map((e) => e.path), [], 'keyword map points at a route that does not exist');
@@ -52,6 +57,31 @@ describe('keyword targeting', () => {
       const words = entry.primary.split(' ').length;
       assert.ok(words >= 1 && words <= 4,
         `"${entry.primary}" (${entry.path}) is ${words} words, too broad to target`);
+    }
+  });
+
+  test('each of the 25 phase 3 queries has exactly one indexable owner', () => {
+    assert.equal(QUERY_OWNERS.length, 25);
+    const seen = new Set();
+    for (const entry of QUERY_OWNERS) {
+      const key = normaliseTerm(entry.query);
+      assert.ok(key, `an empty query is claimed by ${entry.path}`);
+      assert.ok(!seen.has(key), `"${entry.query}" is claimed twice`);
+      seen.add(key);
+      assert.ok(entry.terms?.length, `${entry.query} has no terms to verify`);
+      const path = entry.path;
+      if (path.startsWith('/fonts/category/')) {
+        assert.ok(isIndexableCategory(path.slice('/fonts/category/'.length)),
+          `${path} is not an indexable category`);
+      } else if (path.startsWith('/fonts/')) {
+        assert.ok(getStyle(path.slice('/fonts/'.length))?.indexable,
+          `${path} is not an indexable style page`);
+      } else if (path.startsWith('/styles/')) {
+        assert.ok(getLandingPage(path.slice('/styles/'.length)),
+          `${path} is not a landing page`);
+      } else {
+        assert.fail(`${path} is not a known query-owner page type`);
+      }
     }
   });
 

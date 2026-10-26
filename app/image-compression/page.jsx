@@ -5,7 +5,7 @@ import { RelatedSearches } from '@/components/related-searches.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
 // The same four steps the page's own how-to section renders, in the same order,
-// so the HowTo schema cannot describe a procedure the page does not show.
+// so the visible instructions stay the single source of truth.
 const HOW_TO = {
   name: 'How to compress an image',
   description: 'Reduce the file size of a JPG, PNG or WebP image in your browser, with a real '
@@ -39,8 +39,8 @@ function imageCompressionMeta() {
     // "image compressor" is the term people actually search; it leads, and the
     // supported formats sit behind it where they still get read.
     title: 'Image Compressor — Compress JPG, PNG and WebP Free',
-    description: 'Compress JPG, PNG and WebP images in your browser and see the real file size before '
-      + 'and after. Batch compress, resize, convert format and download as a ZIP. Free, no upload, no sign-up.',
+    description: 'Compress JPG, PNG and WebP in your browser and see the size before and after. '
+      + 'Resize, convert or batch them, then download a ZIP. Free, no upload.',
     path: '/image-compression',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -50,7 +50,7 @@ function imageCompressionMeta() {
     faq: IMAGE_COMPRESSOR_QA,
     quickAnswer: IMAGE_COMPRESSOR_ANSWER,
     howTo: HOW_TO,
-    app: true,
+    app: 'image-compression',
   });
 }
 

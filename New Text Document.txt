@@ -1,0 +1,75 @@
+Read progress.md and indexed-urls.txt first.
+
+PROJECT
+https://www.abdulsamad.shop (brand: Stylzo, single owner). Next.js Unicode text generator with ~100 font-style pages, category hubs, platform guides, symbol/emoji/kaomoji libraries and browser-only tools (QR generator and reader, image compressor, screenshot to text, PDF editor, PDF accessibility checker). Goals: get pages indexed, rank for narrow real search intent (not the head term "fancy text generator"), be citable by AI answer engines, and be ready for a Google AdSense review.
+
+WHAT THE COMPETITOR REVIEW FOUND
+Leaders (fontgenerator.cc, thefancytext.com, Picsart tools, FontSpace, loremipsum.io, fsymbols, lingojam, yaytext, coolsymbol) win through: many specific landing pages (per platform, game, style), long useful home-page content with tables and FAQs, strong authority and usage signals, gaming-name clusters (Roblox, Free Fire, PUBG, Mobile Legends, Fortnite, CODM, TikTok, X, Facebook, YouTube, Telegram, Snapchat) and extra languages. Stylzo's real advantages: typed text never leaves the browser, honest per-style support labels, per-style pages with specific explanations, an unusual browser-only tool set. Stylzo's gaps: only 6 platform guides, no game pages, short home page, English only, no visible authority signals.
+
+HOW TO WORK
+- One phase at a time. Audit before editing. After each phase append findings and changes to SEO-REPORT.md, list files changed, run npm test and npm run build, then STOP and wait for my "go".
+- If context passes about 75%, save state to progress.md and tell me to start a fresh session.
+- Do not commit or deploy.
+
+HARD RULES (every phase)
+1. PROTECTED PAGES: URLs in indexed-urls.txt keep their title, description, H1, body, canonical and JSON-LD unchanged unless I approve a specific edit. Before and after each phase compare their built HTML to production and report differences.
+2. NO SPAM OR SCALED THIN CONTENT: no keyword stuffing, hidden text, fake reviews, fake ratings, invented download or usage numbers, copied competitor text, doorway pages, alphabet pages ("A in different fonts"), or pages differing only by a swapped keyword. Every new page needs at least 400 words of unique, useful content and something the generator alone cannot give, or it is not created.
+3. EVERY FACTUAL RULE NEEDS A SOURCE: character limits, name rules and platform behaviour live in one data file where each fact has a source URL and a checkedOn date. Render only facts that have both. Omit anything unverified and list it in SEO-REPORT.md under "needs owner verification". Never guess limits.
+4. Structured data only for visible content; validate it; no AggregateRating or Review.
+5. No TODO, lorem or [name] in rendered HTML; add a build test.
+6. Typed text must never be sent to the server, logged or stored. Add tests.
+7. Small reversible changes with tests.
+
+ALREADY DECIDED
+- /fonts/category/outline and /wide: 301 to /fonts/double-struck and /fonts/fullwidth. /bold, /cursive, /gothic, /clean: noindex,follow, removed from the sitemap (apply if not done).
+- Font pages are written in batches of 10 (see progress.md); do not rewrite finished batches.
+
+PHASE 1 TECHNICAL SEO
+Crawl the build: status codes, redirect chains over one hop, loops, soft 404s, broken links, orphan pages, duplicate titles/descriptions/H1s. robots.txt: remove Disallow for /event if it relies on noindex; keep /api/ and /admin blocked; never block CSS/JS/images. Sitemap: only canonical, indexable 200 URLs with real per-page lastmod. One self-referencing https www canonical per page; parameter URLs noindex or canonicalised. HTTPS, HSTS, correct Cache-Control, compression, a real 404 page. Confirm main content, H1, title, meta and JSON-LD are in raw server HTML. Check public/sw.js never serves stale HTML when online. Images: sizes, alt text, lazy loading.
+
+PHASE 2 MOBILE SEO AND CORE WEB VITALS
+Lighthouse mobile on /, /fonts, /fonts/category/lines, /fonts/frag-line, /fonts/overline, /styles/instagram, /tools, /qr-code-generator, /about: scores, LCP, CLS, INP/TBT. At 390px check horizontal scroll, text under 16px, tap targets under 44px, sticky elements, cookie banner over 30% of screen. Check layout shift when ads fill and the banner appears; reserve ad space; no ad pushing the tool off screen. Confirm mobile and desktop serve identical content. Report JS/CSS weight and fix the biggest wins.
+
+PHASE 3 ON-PAGE AND INTENT MATCH
+Titles under 60 chars, descriptions under 160, all unique and written for humans; one H1 per page; no repeated headings or "Text text". Every indexable page within 3 clicks of home, descriptive anchors, breadcrumbs with BreadcrumbList. For the 25 most important style queries (bold, italic, cursive, gothic/old english, bubble, strikethrough, underline, upside down, small caps/tiny text, wide/vaporwave, zalgo/glitch, aesthetic, cute, text decorator, and the Instagram, WhatsApp, Discord variants) make exactly one page own each, with title, H1 and first 100 words matching the query. Fix non-protected pages; propose changes for protected ones. Resolve cannibalisation.
+
+PHASE 4 SEMANTIC AND ENTITY SEO
+Define entities once in config/site.js: WebSite, owner (real name and business email, no placeholders), WebApplication for the generator and each tool. JSON-LD graph with stable @id values; sameAs only for profiles that really exist. Use "Stylzo" consistently and explain the abdulsamad.shop relationship on About. Topic clusters (Unicode text styles, tools, libraries, platform guides) with each key term defined once on a canonical page and linked elsewhere.
+
+PHASE 5 PROGRAMMATIC QUALITY GATES
+Treat font pages, hubs and platform pages as templates. Enforce by tests: max 30% shared sentences and 40% main-text similarity between pages of one template; minimum 250 words unique text for style pages; examples generated by the real converter and re-run in a test. List thin pages and propose enrich, merge, redirect or noindex; delete nothing without my approval.
+
+PHASE 6 AEO, GEO AND LLMO
+Open key pages with a direct factual 40 to 60 word answer. Question headings only for real questions. Do not add FAQPage or HowTo schema for rich results. Use verified tables and numbered steps. State what Stylzo is in one identical plain sentence on home, About and in schema. Keep public/llms.txt accurate and short (low effort). Report which AI crawlers robots.txt allows and recommend allow or block with reasons; wait for my decision; never block search crawlers. Keep explanations in server-rendered text. Strengthen the best pages for "how do fancy text generators work" and "why does fancy text show boxes" with verified detail.
+
+PHASE 7 GAP AUDIT (no code)
+Build a table of search-intent page types (platform, game, style, tool, region, symbols/emoji) versus pages Stylzo has. List the 25 most valuable missing page types ranked by: clear visitor need, true useful content available, low duplicate risk. Mark each build, merge into an existing page, or skip. Skip anything that only repeats the generator.
+
+PHASE 8 HOME PAGE, /fonts AND /styles DEPTH
+Add useful sections, not filler: a verified table of which style is safest where (using our support labels), how to choose a style for a bio, username or caption, sourced character-limit reminders, a short Unicode explanation with accessibility notes. Home page 1,200 to 1,800 words of real content below the tool, with the tool still usable on the first mobile screen. Keep the owner and privacy statements prominent.
+
+PHASE 9 NEW PLATFORM AND GAME PAGES (batches of 5, with approval)
+Candidates that pass the Phase 7 filter: TikTok, X, Facebook, YouTube, Telegram, Snapchat, Roblox, Free Fire, PUBG Mobile, Mobile Legends, Fortnite, Call of Duty Mobile. Each page: which fields accept styled text and which do not (sourced limits only), most reliable styles there, converter-generated examples, a plain-text fallback tip, 3 FAQs specific to that platform, links to related pages. A build test fails if a rendered rule lacks a source and date.
+
+PHASE 10 UX, SXO AND ACCESSIBILITY
+Tool usable without scrolling on mobile with a clear copy button and visible "Copied" feedback; keyboard and focus support; WCAG 2.2 AA audit (axe or Lighthouse) with fixes. Differentiating features that keep typed text in the browser: character counter with per-platform limit warnings (sourced limits), compare 2 to 3 styles side by side, favourites and recent styles in the browser only, a "check in the app first" note. Ads only on pages with substantial content; none on /contact, /privacy, /terms, /embed, error pages, thin hubs or beside copy buttons and tool controls; never styled like a button or result. Cookie banner small, dismissible, not covering the tool, Accept and Decline equally prominent. Add a visible "report a broken style" link to /contact.
+
+PHASE 11 ADSENSE READINESS
+Verify ads.txt is exact and text/plain on www and the bare domain; the AdSense meta tag is in every head; Privacy, Terms, About and Contact exist, are linked and have no placeholders; the privacy page matches what the code really does. Report whether EEA/UK/Swiss visitors are handled by a Google-certified consent platform (do not change it; tell me what to configure in AdSense Privacy and messaging). List low-value-looking pages and confirm /pdf-editor and every tool page work and have explanatory text. Give the remaining blockers in plain language.
+
+PHASE 12 OPEN ASSET AND MEASUREMENT
+Package the converter as a small open-source library (README, license, tests, demo page); link it from /embed and About; I will publish and promote it myself. Write docs/seo-checks.md and docs/growth-checks.md: weekly Search Console reports to read, how to find queries on positions 8 to 20 (best candidates to improve), curl checks after each deploy, and docs/target-queries.md mapping each target query to its owning page. Recommend Bing Webmaster Tools (verification tag via config). Analytics must stay cookieless and never capture typed text.
+
+PHASE 13 REGIONAL CLUSTER (only after Search Console shows demand)
+Propose at most 3 pages: Roman Urdu or Hindi bios and styled text, how Urdu and Arabic script behave with Unicode styles (extend /styles/languages), and Pakistan-specific platform tips. Mark what I must verify. Build nothing until I approve.
+
+PHASE 14 UPGRADE THE 30 PROTECTED OLD-TEMPLATE PAGES (only with my approval)
+Show before and after for 3 pages first. Same standards as the new pages (unique description, verified compatibility notes, converter-generated examples, specific FAQ). Keep slugs, canonicals and internal links. Batches of 10 with approval after each.
+
+PHASE 15 OFF-PAGE AND AUTHORITY CHECKLIST (documentation only)
+Write docs/authority-checklist.md of honest steps I do by hand: list the site on AlternativeTo and similar directories with an accurate description; post the open-source library on GitHub; submit to Product Hunt when ready; publish one useful article on why Unicode styles break in some apps, using real test results from my own devices (include a test table I fill in with dates); create a few real profiles with identical name, description and contact email; submit the sitemap to Bing Webmaster Tools. State clearly that buying links, mass link exchanges, fake reviews and automated outreach violate Google's rules.
+
+FINAL REPORT
+SEO-REPORT.md ends with: changes per phase, files changed, test and build results, protected pages compared (unchanged or exceptions), pages added, merged or skipped and why, facts awaiting my verification, open decisions, and the next three actions in order of expected impact, plus a Search Console and AdSense checklist.
+
+Start with Phase 1 only.

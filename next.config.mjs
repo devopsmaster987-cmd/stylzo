@@ -1,4 +1,5 @@
 import { styleRedirects } from './lib/styles-routing.js';
+import { categoryRedirects } from './lib/category-routing.js';
 
 // See the comment on `headers()` below for why nothing under /public may be
 // marked immutable.
@@ -35,6 +36,10 @@ const nextConfig = {
       // are carried across by Next, so ?text=/?category= keep working.
       { source: '/fancy-text-generator', destination: '/', statusCode: 301 },
 
+      // Two category hubs duplicated a single style page. The style pages stay
+      // exactly as they are; only the thin hub URLs are retired.
+      ...categoryRedirects(),
+
       // Thin doorway pages under /styles/*.
       //
       // The site published one near-identical page per search phrase (32 of
@@ -49,11 +54,12 @@ const nextConfig = {
       // good, not to keep serving the same thing at a new address.
       //
       // Rules run in order, so the two narrow ones come before the catch-all and
-      // can never be shadowed by it. The catch-all excludes the six real landing
-      // pages, which is what makes a slug invented tomorrow a redirect instead of
-      // a new thin page. The list is generated in lib/styles-routing.js so the
-      // redirects the server runs, the route, the sitemap and the tests cannot
-      // disagree about which slugs are real.
+      // can never be shadowed by it. The catch-all names only the 17 retired
+      // slugs whose closest destination is the home page; any other /styles
+      // slug reaches the route and 404s instead of becoming a soft 404. The list
+      // is generated in lib/styles-routing.js so the redirects the server runs,
+      // the route, the sitemap and the tests cannot disagree about which slugs
+      // are real.
       ...styleRedirects(),
 
       // NOTE: case normalisation for /fonts/[slug] and /styles/[key] lives in

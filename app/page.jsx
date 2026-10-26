@@ -3,12 +3,13 @@ import { catalog, getCategory, listStyles } from '@/services/catalog.js';
 import { env, adsenseConfigured } from '@/config/environment.js';
 import { pageMeta, toMetadata, renderCards, PAGE_SIZE, inputFromQuery } from '@/lib/pages.js';
 import {
-  HOME_META, HOME_COLLECTIONS, HOME_SIZES, HOME_LIBRARIES, HOME_DESTINATIONS,
-  HOME_HOW, HOME_LINKS,
+  HOME_META, HOME_ASSURANCE, HOME_COLLECTIONS, HOME_SIZES, HOME_LIBRARIES,
+  HOME_DESTINATIONS, HOME_HOW, HOME_CHOOSE, HOME_SAFETY, HOME_UNICODE, HOME_LINKS,
 } from '@/lib/home-content.js';
 import { HOME_QA, HOME_ANSWER } from '@/lib/aeo.js';
 import { RelatedSearches } from '@/components/related-searches.jsx';
 import { RELATION } from '@/lib/semantic-keywords.js';
+import { REDIRECTED_CATEGORY_KEYS } from '@/lib/category-routing.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { StylePreviewGrid, stylePreviews } from '@/components/style-preview-grid.jsx';
@@ -29,7 +30,7 @@ function homeMeta(params) {
     breadcrumbs: [],
     faq: hasQuery ? [] : HOME_QA,
     quickAnswer: HOME_ANSWER,
-    app: !hasQuery,
+    app: !hasQuery ? 'generator' : null,
     home: true,
   });
 }
@@ -63,11 +64,13 @@ export default async function HomePage({ searchParams }) {
   const total = all.length;
   const hasMore = total > PAGE_SIZE;
 
-  const categories = Object.entries(db.categories).map(([key, c]) => ({
-    key,
-    name: c.name,
-    count: db.indexableCounts[key] || 0,
-  }));
+  const categories = Object.entries(db.categories)
+    .filter(([key]) => !REDIRECTED_CATEGORY_KEYS.includes(key))
+    .map(([key, c]) => ({
+      key,
+      name: c.name,
+      count: db.indexableCounts[key] || 0,
+    }));
 
   // A ?category= render is already narrowed by the chips above; showing the full
   // content library again would just repeat the same styles.
@@ -98,6 +101,16 @@ export default async function HomePage({ searchParams }) {
           <GeneratorInput formAction="/" text={text} />
         </section>
       )}
+
+      <p className="muted home-assurance">
+        {HOME_ASSURANCE.text}{' '}
+        {HOME_ASSURANCE.links.map((l, i) => (
+          <span key={l.href}>
+            {i > 0 ? ' · ' : ''}
+            <a href={l.href}>{l.label}</a>
+          </span>
+        ))}
+      </p>
 
       <nav aria-label="Style categories" className="chips">
         <a href="/" aria-current={!category ? 'page' : undefined}>All ({total})</a>
@@ -200,6 +213,56 @@ export default async function HomePage({ searchParams }) {
             <p className="muted how-note">{HOME_HOW.note}</p>
           </section>
 
+          <section className="home-section prose" aria-labelledby="choose-heading" data-reveal="pending">
+            <h2 id="choose-heading">{HOME_CHOOSE.h2}</h2>
+            <p className="muted">{HOME_CHOOSE.intro}</p>
+            <div className="table-wrap">
+              <table className="table">
+                <caption>Pick the field first, then the smallest amount of decoration that works there.</caption>
+                <thead>
+                  <tr>{HOME_CHOOSE.columns.map((c) => <th key={c} scope="col">{c}</th>)}</tr>
+                </thead>
+                <tbody>
+                  {HOME_CHOOSE.rows.map((r) => (
+                    <tr key={r.field}>
+                      <th scope="row">{r.field}</th>
+                      <td>{r.best}</td>
+                      <td>{r.avoid}</td>
+                      <td>{r.why}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="muted how-note">{HOME_CHOOSE.note}</p>
+          </section>
+
+          <section className="home-section prose" aria-labelledby="safety-heading" data-reveal="pending">
+            <h2 id="safety-heading">{HOME_SAFETY.h2}</h2>
+            <p className="muted">{HOME_SAFETY.intro}</p>
+            <div className="table-wrap">
+              <table className="table">
+                <caption>Support labels describe glyph coverage, not a promise from any one app.</caption>
+                <thead>
+                  <tr>{HOME_SAFETY.columns.map((c) => <th key={c} scope="col">{c}</th>)}</tr>
+                </thead>
+                <tbody>
+                  {HOME_SAFETY.rows.map((r) => (
+                    <tr key={r.label}>
+                      <th scope="row">{r.label}</th>
+                      <td>{r.styles}</td>
+                      <td>{r.use}</td>
+                      <td>{r.caveat}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="muted how-note">
+              {HOME_SAFETY.note} <a href={HOME_SAFETY.link.href}>{HOME_SAFETY.link.label}</a>
+            </p>
+          </section>
+
           {collections.map((c) => (
             <section
               key={c.h2}
@@ -220,6 +283,20 @@ export default async function HomePage({ searchParams }) {
               <StylePreviewGrid items={sizeItems} />
             </section>
           )}
+
+          <section className="home-section prose" aria-labelledby="unicode-heading" data-reveal="pending">
+            <h2 id="unicode-heading">{HOME_UNICODE.h2}</h2>
+            <p className="muted">{HOME_UNICODE.intro}</p>
+            <ul className="plain-list">
+              {HOME_UNICODE.points.map((p) => (
+                <li key={p.h3}>
+                  <h3>{p.h3}</h3>
+                  <p>{p.body}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="muted how-note">{HOME_UNICODE.note}</p>
+          </section>
 
           <section className="home-section" aria-labelledby="home-libraries" data-reveal="pending">
             <h2 id="home-libraries">{HOME_LIBRARIES.h2}</h2>

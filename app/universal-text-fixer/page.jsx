@@ -7,9 +7,8 @@ import { Scripts } from '@/components/scripts.jsx';
 function textFixerMeta() {
   return pageMeta({
     title: 'Text Fixer — Fix and Clean Up Text Online',
-    description: 'Fix messy text in your browser: collapse extra spaces and blank lines, normalise curly '
-      + 'quotes and dashes, remove zero-width characters, apply sentence case, collapse repeated words and '
-      + 'correct common misspellings. Free, no upload, every fix a toggle.',
+    description: 'Clean up messy text in your browser: fix spacing, quotes, dashes, repeated words and '
+      + 'zero-width characters, or change case. Every fix is a toggle. No upload.',
     path: '/universal-text-fixer',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -18,7 +17,7 @@ function textFixerMeta() {
     ],
     faq: TEXT_FIXER_QA,
     quickAnswer: TEXT_FIXER_ANSWER,
-    app: true,
+    app: 'universal-text-fixer',
   });
 }
 

@@ -6,6 +6,7 @@ import {
   boardRows, emojiFor, styleSlugs, WORD_LIST, WORD_STYLES, EMOJI_POOL,
   WORDS_PER_KEYWORD, EMOJI_MIN, EMOJI_MAX,
   stylesHubWordCount, stylesHubAdPlan,
+  STYLES_FIELD_ROWS, STYLES_LIMITS, STYLES_LIMIT_CHECKED,
 } from '../../lib/styles-material.js';
 import {
   KEPT_STYLE_SLUGS, STYLE_REDIRECT_RULES, isKeptStyleSlug, styleRedirectFor, styleRedirects,
@@ -116,8 +117,8 @@ describe('styles routing data', () => {
     }
   });
 
-  test('an unknown slug goes to the home page rather than being served', () => {
-    assert.equal(styleRedirectFor('brand-new-slug-nobody-has-heard-of'), '/');
+  test('an unknown slug is a real 404, not a soft 404', () => {
+    assert.equal(styleRedirectFor('brand-new-slug-nobody-has-heard-of'), null);
     assert.equal(styleRedirectFor(''), null);
   });
 
@@ -208,6 +209,26 @@ describe('the /styles hub', () => {
     );
   });
 
+  test('every published limit is sourced to an official help page', () => {
+    const official = new Set([
+      'help.instagram.com',
+      'support.tiktok.com',
+      'www.tiktok.com',
+      'help.x.com',
+      'support.discord.com',
+      'core.telegram.org',
+      'faq.whatsapp.com',
+    ]);
+    assert.equal(STYLES_LIMIT_CHECKED, '2026-10-26');
+    assert.ok(STYLES_LIMITS.length >= 5);
+    for (const row of STYLES_LIMITS) {
+      const url = new URL(row.sourceUrl);
+      assert.equal(url.protocol, 'https:', `${row.platform} source is not HTTPS`);
+      assert.ok(official.has(url.hostname), `${row.platform} source host is not an official help page: ${url.hostname}`);
+      assert.ok(row.limit && row.note && row.sourceLabel, `${row.platform} ${row.field} is missing limit copy`);
+    }
+  });
+
   test('the ad decision follows the same rule everywhere', () => {
     assert.equal(stylesHubAdPlan().allowed, true);
     assert.equal(stylesHubAdPlan().words, stylesHubWordCount());
@@ -248,6 +269,15 @@ describe('styles pages', () => {
     assert.equal((doc.match(/<h1[ >]/g) || []).length, 1);
     assert.match(doc, /<h1[^>]*>Fancy text styles, side by side<\/h1>/);
     assert.match(doc, /<link rel="canonical"/);
+  });
+
+  test('renders field guidance, sourced limits and accessibility notes', async () => {
+    const doc = markup(await (await get(server.base, '/styles')).text());
+    assert.ok(doc.includes('id="styles-fields"'), 'field guidance section missing');
+    assert.ok(doc.includes('id="styles-limits"'), 'source-backed limits section missing');
+    assert.ok(doc.includes('id="styles-accessibility"'), 'accessibility section missing');
+    for (const row of STYLES_FIELD_ROWS) assert.ok(doc.includes(row.field), `field row missing: ${row.field}`);
+    assert.equal((doc.match(/rel="noopener noreferrer"/g) || []).length, STYLES_LIMITS.length);
   });
 
   test('GET /styles shows 25 styled words with emoji and a copy button each', async () => {
@@ -324,13 +354,15 @@ describe('retired /styles/* pages', () => {
     });
   }
 
-  test('a slug nobody has seen before is redirected too, not served', async () => {
-    // The catch-all is what stops the next keyword from becoming the next thin
-    // page. This is the regression that matters most.
+  test('a slug nobody has seen before 404s, not redirects', async () => {
+    // Only the 32 known keyword-board URLs are redirected. An arbitrary slug
+    // must reach the real 404 page; a 301 to the home page would be a soft 404.
     for (const slug of ['some-new-keyword-page', 'fancy-text-generator-2027', 'tiktok-fancy-text']) {
       const res = await get(server.base, `/styles/${slug}`, { redirect: 'manual' });
-      assert.equal(res.status, 301, `/styles/${slug} answered ${res.status}`);
-      assert.equal(new URL(res.headers.get('location'), server.base).pathname, '/');
+      assert.equal(res.status, 404, `/styles/${slug} answered ${res.status}`);
+      const html = await res.text();
+      assert.match(html, /<title>Page not found \| Stylzo<\/title>/);
+      assert.match(html, /<meta name="robots" content="noindex/);
     }
   });
 
@@ -379,7 +411,7 @@ describe('retired /styles/* pages', () => {
 
   test('a new spam slug cannot render an ad either', onlyWith(ADS_ON), async () => {
     const res = await get(server.base, '/styles/keyword-that-does-not-exist-yet', { redirect: 'manual' });
-    assert.equal(res.status, 301);
+    assert.equal(res.status, 404);
     assert.equal(adUnits(await res.text()), 0);
   });
 });

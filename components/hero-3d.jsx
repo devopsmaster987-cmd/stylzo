@@ -42,9 +42,10 @@ function canAfford3d() {
   if (conn?.saveData) return false;
   if (conn?.effectiveType && /^(slow-2g|2g)$/.test(conn.effectiveType)) return false;
 
-  // The scene is decoration behind the h1. On a phone it is barely visible, so
-  // it is not worth the bytes.
-  if (window.matchMedia('(max-width: 640px)').matches) return false;
+  // The scene is decoration beside the h1 and only has a column of its own
+  // from 861px up. Below that it would be a tall empty box above the text, so
+  // it is hidden in CSS and never loaded.
+  if (window.matchMedia('(max-width: 860px)').matches) return false;
 
   return true;
 }

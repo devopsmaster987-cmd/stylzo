@@ -27,7 +27,7 @@ const PAGE_ANSWER = {
     q: 'Can I use the text this site generates commercially?',
     a: 'Yes. The output is built from standard Unicode characters rather than a licensed '
       + 'font, so there is no licence attached to what you generate. You may not use styled text '
-      + 'to impersonate others, evade moderation or harass people.',
+      + 'to impersonate others, evade moderation, harass people or break the law.',
   },
   contact: {
     q: 'How do I contact the owner of Stylzo?',
@@ -53,8 +53,7 @@ function staticMeta(key) {
     path: `/${key}`,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: page.title, path: `/${key}` }],
     // The answer-first question is emitted as its own Question node by
-    // buildMeta(), so it is deliberately not repeated inside FAQPage: the two
-    // would be the same question twice.
+    // buildMeta(); the page's FAQ stays visible without a FAQPage wrapper.
     faq: PAGE_FAQ[key] || [],
     quickAnswer: PAGE_ANSWER[key] || null,
   });
@@ -70,6 +69,7 @@ export function StaticPage({ pageKey }) {
   const answer = PAGE_ANSWER[pageKey];
   const ownerName = String(site.ownerName || '').trim();
   const businessEmail = String(site.businessEmail || '').trim() || env.contactEmail;
+  const domain = new URL(env.siteUrl).host.replace(/^www\./, '');
 
   return (
     <>
@@ -97,8 +97,8 @@ export function StaticPage({ pageKey }) {
         {pageKey === 'about' ? (
           <p>
             {ownerName
-              ? `Stylzo is owned and run by ${ownerName}.`
-              : 'Stylzo is owned and run by one person.'}
+              ? `Stylzo is the brand name for the website at ${domain}, owned and run by ${ownerName}. It publishes Unicode text styles, copyable libraries, browser text tools and platform style guides.`
+              : 'Stylzo is the brand name for this website, owned and run by one person. It publishes Unicode text styles, copyable libraries, browser text tools and platform style guides.'}
           </p>
         ) : null}
 
@@ -148,8 +148,7 @@ export function StaticPage({ pageKey }) {
         {pageKey === 'contact' ? (
           businessEmail ? (
             <p>
-              {ownerName ? `${ownerName}, who runs Stylzo, can be reached at ` : 'Email the owner at '}
-              <a href={`mailto:${businessEmail}`}>{businessEmail}</a>.
+              Email the owner at <a href={`mailto:${businessEmail}`}>{businessEmail}</a>.
             </p>
           ) : (
             <p>

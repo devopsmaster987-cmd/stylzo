@@ -10,6 +10,7 @@ import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 import { Hero3D } from '@/components/hero-3d.jsx';
 import { buildVariations } from '@/lib/emoji-variations.js';
+import { categoryHref } from '@/lib/category-routing.js';
 
 function landingMeta(page, hasText) {
   return pageMeta({
@@ -22,7 +23,6 @@ function landingMeta(page, hasText) {
       { name: page.subject, path: `/styles/${page.key}` },
     ],
     faq: hasText ? [] : page.faq,
-    app: !hasText,
   });
 }
 
@@ -86,7 +86,7 @@ export async function renderLandingPage({ key, searchParams }) {
           {hero.cards.map((s) => <StyleRow key={s.id} s={s} />)}
         </ul>
         <p className="more">
-          <a href={`/fonts/category/${hero.cards[0].category}`}>
+          <a href={categoryHref(hero.cards[0].category)}>
             Browse every {page.subject.toLowerCase()} style in the generator
           </a>
         </p>

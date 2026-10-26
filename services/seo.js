@@ -32,30 +32,90 @@ export const OG_IMAGE = {
   alt: 'Stylzo — turn plain text into fancy Unicode styles you can copy and paste',
 };
 
-/** Entity ids so schema nodes can cross-reference each other instead of duplicating. */
-export const ids = {
-  organization: `${abs('/')}#organization`,
-  website: `${abs('/')}#website`,
-  page: (path) => `${abs(path)}#webpage`,
-};
+/** Entity ids are defined in config/site.js and re-exported for existing callers. */
+export const ids = site.ids;
 
-/** The site as a publisher. Emitted on every page so the brand and host are linked. */
+/**
+ * The site as a publisher. Emitted on every page so the brand, host and owner
+ * are linked to one stable Organization node.
+ */
 export function organizationLd() {
+  const owner = String(site.ownerName || '').trim();
+  const email = String(site.businessEmail || '').trim();
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': ids.organization,
     name: site.name,
+    alternateName: site.alternateName,
     url: abs('/'),
     logo: { '@type': 'ImageObject', url: abs('/icon-512.png'), width: 512, height: 512 },
     description: site.defaultDescription,
+    // The owner is a real person, not a brand placeholder. The Person node has
+    // a stable @id so other pages can reference it without restating the name.
+    ...(owner ? {
+      founder: {
+        '@type': 'Person',
+        '@id': ids.owner,
+        name: owner,
+        email: email || undefined,
+        url: abs('/about'),
+        jobTitle: 'Owner',
+      },
+    } : {}),
     // Only ever the profiles the operator configured. Never guessed: a sameAs
     // pointing at an account the brand does not own is a claim about someone
     // else's identity.
     ...(env.sameAs.length ? { sameAs: env.sameAs } : {}),
-    contactPoint: env.contactEmail
-      ? { '@type': 'ContactPoint', contactType: 'customer support', email: env.contactEmail, availableLanguage: 'English' }
+    contactPoint: email
+      ? { '@type': 'ContactPoint', contactType: 'customer support', email, availableLanguage: 'English' }
       : undefined,
+  };
+}
+
+/** The site itself, referenced by every WebPage and every WebApplication. */
+export function websiteLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': ids.website,
+    name: site.name,
+    alternateName: site.alternateName,
+    url: abs('/'),
+    description: site.defaultDescription,
+    inLanguage: 'en',
+    publisher: { '@id': ids.organization },
+  };
+}
+
+/**
+ * One WebApplication, looked up by key from config/site.js.
+ *
+ * The generator reads its feature list from lib/facts.js so the style counts
+ * cannot drift; every tool has its own name, description and features. A tool
+ * page must never publish the generator's feature list, which is what made the
+ * old PDF and image pages claim they could restyle text.
+ */
+export function webApplicationLd(key) {
+  const app = site.apps[key];
+  if (!app) throw new Error(`Unknown WebApplication key: ${key}`);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    '@id': ids.app(key),
+    name: app.name,
+    url: abs(app.path),
+    description: app.description,
+    image: OG_IMAGE.url,
+    applicationCategory: app.applicationCategory,
+    applicationSubCategory: app.applicationSubCategory,
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    featureList: app.features || appFeatures(),
+    isAccessibleForFree: true,
+    isPartOf: { '@id': ids.website },
+    publisher: { '@id': ids.organization },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   };
 }
 
@@ -98,46 +158,6 @@ export function quickAnswerLd(question, answer) {
 }
 
 /**
- * A page's questions and answers as one FAQPage.
- *
- * Note on comparison tables, which generative engines prefer over prose when
- * asked which option to pick: schema.org has no type for one. The honest form
- * is a real semantic `<table>` with headers, which models read directly, and
- * inventing a wrapper type to label it would be schema the standard does not
- * define. The studio's text-vs-image comparison is therefore rendered as a
- * table and left unmarked rather than given a made-up `@type`.
- */
-export function faqLd(faq) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faq.map((f) => quickAnswerLd(f.q, f.a)),
-  };
-}
-
-/**
- * A step-by-step instruction set. Assistants answering "how do I make a text
- * image" prefer this over prose, and the steps must be the ones the page really
- * shows — the studio's own how-to list is the source of the wording here.
- */
-export function howToLd(name, description, path, steps) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name,
-    description,
-    // The instructions belong to the page, not to a separate tutorial URL.
-    ...(path ? { url: abs(path) } : {}),
-    step: steps.map((s, i) => ({
-      '@type': 'HowToStep',
-      position: i + 1,
-      name: s.name,
-      text: s.text,
-    })),
-  };
-}
-
-/**
  * Attach a page's JSON-LD, serialized only if something actually reads it.
  *
  * Every page calls its meta builder twice: once in generateMetadata(), where
@@ -163,36 +183,41 @@ export function attachJsonLd(meta, ld) {
 }
 
 /** One builder for title, description, canonical, social tags, breadcrumbs and JSON-LD. */
-export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], faq = [], quickAnswer = null, howTo = null, noindex = false, app = false, home = false }) {
+export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], quickAnswer = null, noindex = false, app = null, home = false }) {
   const fullTitle = home ? `${site.name}: ${title}` : `${title} | ${site.name}`;
   const desc = (description || site.defaultDescription).slice(0, 300);
-  const canonical = abs(canonicalPath || path);
+  const resolvedPath = canonicalPath || path;
+  const canonical = abs(resolvedPath);
   const ld = [];
-  if (home) ld.push({ '@context': 'https://schema.org', '@type': 'WebSite', '@id': ids.website, name: site.name, url: abs('/'), publisher: { '@id': ids.organization } });
-  // The answer-first claim is emitted before the FAQ so it is the first
-  // Question node a crawler meets. It is only claimed when no ?text= render is
-  // involved, because a personalised render is not the same page.
+
+  // Every page belongs to one WebSite and is one WebPage. The ids are the
+  // join, not a repeated block of prose: a crawler can follow
+  // WebPage -> WebSite -> publisher -> Organization -> founder from any URL.
+  ld.push(websiteLd());
+  if (app) ld.push(webApplicationLd(app));
+  ld.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': ids.page(resolvedPath),
+    url: canonical,
+    name: fullTitle,
+    description: desc,
+    inLanguage: 'en',
+    isPartOf: { '@id': ids.website },
+    publisher: { '@id': ids.organization },
+    ...(breadcrumbs.length ? { breadcrumb: { '@id': `${canonical}#breadcrumb` } } : {}),
+    ...(app ? { mainEntity: { '@id': ids.app(app) } } : {}),
+  });
+
+  // The answer-first claim is emitted as one Question node. The visible FAQ and
+  // how-to sections stay in the page; FAQPage and HowTo markup are deliberately
+  // not emitted, because those rich-result types are no longer used here.
   if (quickAnswer && !noindex) ld.push(quickAnswerLd(quickAnswer.q, quickAnswer.a));
   if (breadcrumbs.length) {
     ld.push({
-      '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+      '@context': 'https://schema.org', '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`,
       itemListElement: breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.name, item: abs(b.path) })),
     });
-  }
-  if (faq.length) {
-    ld.push({
-      '@context': 'https://schema.org', '@type': 'FAQPage',
-      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
-    });
-  }
-  if (howTo && !noindex) ld.push(howToLd(howTo.name, howTo.description, canonical, howTo.steps));
-  if (app) {
-    ld.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': `${canonical}#app`,
-      name: site.name, url: canonical, image: OG_IMAGE.url, applicationCategory: 'UtilitiesApplication',
-      applicationSubCategory: 'Text generator', operatingSystem: 'Any', browserRequirements: 'Requires JavaScript',
-      featureList: appFeatures(),
-      isAccessibleForFree: true, publisher: { '@id': ids.organization },
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } });
   }
   return attachJsonLd({
     title: fullTitle, description: desc, canonical, noindex, breadcrumbs,

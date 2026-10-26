@@ -55,7 +55,7 @@ function pdfEditorMeta() {
   return pageMeta({
     title: 'PDF Editor — Reorder, Rotate and Add Text Free',
     description: 'Edit a PDF in your browser: reorder, rotate, duplicate, delete or merge pages, '
-      + 'then add text or page numbers. Download the new PDF. Free and private, no upload.',
+      + 'then add text or page numbers. Download the result. Free, no upload.',
     path: '/pdf-editor',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -65,7 +65,7 @@ function pdfEditorMeta() {
     faq: PDF_EDITOR_QA,
     quickAnswer: PDF_EDITOR_ANSWER,
     howTo: HOW_TO,
-    app: true,
+    app: 'pdf-editor',
   });
 }
 

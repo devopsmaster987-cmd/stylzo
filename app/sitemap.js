@@ -4,7 +4,8 @@ import path from 'node:path';
 import { env } from '@/config/environment.js';
 import { catalog } from '@/services/catalog.js';
 import { styleSlugs } from '@/lib/styles-material.js';
-import { categoryKeys } from '@/lib/category-content.js';
+import { INDEXABLE_CATEGORY_KEYS } from '@/lib/category-routing.js';
+import { PLATFORM_PAGES } from '@/lib/platform-pages.js';
 
 // Only active, indexable pages. Composed combinations stay out of the sitemap.
 
@@ -53,7 +54,8 @@ const HOME_SOURCES = ['app/page.jsx', 'lib/home-content.js', 'lib/aeo.js', 'serv
 const STATIC_SOURCES = ['data/pages.json', 'components/static-page.jsx', 'lib/pages.js'];
 const FONT_SOURCES = ['data/fonts.json', 'lib/style-content.js', 'data/font-page-content.js', 'app/fonts/[slug]/page.jsx'];
 const STYLE_SOURCES = ['lib/landing-pages.js', 'lib/aeo.js', 'components/landing-page.jsx'];
-const CATEGORY_SOURCES = ['data/categories.json', 'lib/category-content.js', 'components/category-page.jsx'];
+const PLATFORM_SOURCES = ['lib/platform-pages.js', 'components/platform-guide.jsx'];
+const CATEGORY_SOURCES = ['data/categories.json', 'lib/category-content.js', 'lib/category-routing.js', 'components/category-page.jsx'];
 const TOOL_SOURCES = ['lib/aeo.js', 'lib/pages.js', 'services/seo.js'];
 
 /** Static pages never change often; the catalog is the part that does. */
@@ -94,9 +96,16 @@ export default function sitemap() {
       priority: 0.7,
       sources: STYLE_SOURCES,
     })),
-    // Real category hubs, each with its own copy and a link to every indexable
-    // style in that group. They replace the old noindex `/?category=` URLs.
-    ...categoryKeys().map((key) => ({
+    ...PLATFORM_PAGES.map((page) => ({
+      path: page.path,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+      sources: PLATFORM_SOURCES,
+    })),
+    // Only the category hubs that are meant to rank. The four thin hubs keep
+    // their copy and self-canonical URLs but are noindex; Outline and Wide now
+    // redirect to their single style page. A sitemap must contain neither.
+    ...INDEXABLE_CATEGORY_KEYS.map((key) => ({
       path: `/fonts/category/${key}`,
       changeFrequency: 'monthly',
       priority: 0.75,

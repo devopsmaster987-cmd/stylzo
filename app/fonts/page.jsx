@@ -1,11 +1,13 @@
 import { catalog, listStyles } from '@/services/catalog.js';
-import { pageMeta, toMetadata, renderCards } from '@/lib/pages.js';
+import { pageMeta, toMetadata, renderCards, SUPPORT_LABEL } from '@/lib/pages.js';
 import { FONTS_ANSWER, FONTS_QA } from '@/lib/aeo.js';
+import { FONTS_SUPPORT } from '@/lib/fonts-content.js';
 import { RelatedSearches } from '@/components/related-searches.jsx';
 import { itemListLd, safeJson } from '@/services/seo.js';
 import { StyleRow } from '@/components/style-row.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
+import { categoryHref } from '@/lib/category-routing.js';
 
 function fontsMeta({ noindex = false } = {}) {
   return pageMeta({
@@ -32,8 +34,10 @@ export async function generateMetadata({ searchParams }) {
 }
 
 export default async function FontsIndexPage({ searchParams }) {
-  const { categories, indexableCounts, sample } = catalog();
+  const { categories, indexableCounts, sample, indexableStyles } = catalog();
   const sp = (await searchParams) || {};
+  const supportCounts = { safe: 0, good: 0, limited: 0 };
+  for (const style of indexableStyles) supportCounts[style.support] += 1;
 
   // ?q= filters the server-rendered list, so a search result is a real URL with
   // real content rather than something that only exists after JavaScript runs.
@@ -83,7 +87,7 @@ export default async function FontsIndexPage({ searchParams }) {
         <h1>Fancy font styles</h1>
         <nav className="chips" aria-label="Style categories">
           {groups.map((g) => (
-            <a key={g.key} href={`/fonts/category/${g.key}`}>{g.name} ({g.count})</a>
+            <a key={g.key} href={categoryHref(g.key)}>{g.name} ({g.count})</a>
           ))}
         </nav>
         <div className="search">
@@ -131,17 +135,48 @@ export default async function FontsIndexPage({ searchParams }) {
         </>
       ) : null}
 
+      {!searching ? (
+        <section className="prose" aria-labelledby="fonts-support">
+          <h2 id="fonts-support">{FONTS_SUPPORT.h2}</h2>
+          <p className="muted">{FONTS_SUPPORT.intro}</p>
+          <div className="table-wrap">
+            <table className="table">
+              <caption>
+                Counts cover the {indexableStyles.length} styles with their own page.
+              </caption>
+              <thead>
+                <tr>{FONTS_SUPPORT.columns.map((c) => <th key={c} scope="col">{c}</th>)}</tr>
+              </thead>
+              <tbody>
+                {FONTS_SUPPORT.rows.map((r) => (
+                  <tr key={r.key}>
+                    <th scope="row">{SUPPORT_LABEL[r.key]} ({supportCounts[r.key]})</th>
+                    <td>{r.meaning}</td>
+                    <td>{r.examples}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>{FONTS_SUPPORT.fieldHeading}</h3>
+          <p className="muted">{FONTS_SUPPORT.fieldBody}</p>
+          <h3>{FONTS_SUPPORT.fallbackHeading}</h3>
+          <p className="muted">{FONTS_SUPPORT.fallbackBody}</p>
+        </section>
+      ) : null}
+
       {groups.map((g) => (
         <section key={g.key} aria-labelledby={`cat-${g.key}`}>
           <h2 id={`cat-${g.key}`}>
-            <a href={`/fonts/category/${g.key}`}>{g.name}</a>
+            <a href={categoryHref(g.key)}>{g.name}</a>
           </h2>
           <p className="muted">{g.intro}</p>
           <ul className="rows">
             {g.styles.map((s) => <StyleRow key={s.id} s={s} />)}
           </ul>
           <p className="more">
-            <a href={`/fonts/category/${g.key}`}>All {g.count} {g.name.toLowerCase()} styles</a>
+            <a href={categoryHref(g.key)}>All {g.count} {g.name.toLowerCase()} styles</a>
           </p>
         </section>
       ))}

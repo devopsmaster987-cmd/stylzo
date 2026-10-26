@@ -2,11 +2,15 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
+import { CATEGORY_REDIRECTS, REDIRECTED_CATEGORY_KEYS } from '../../lib/category-routing.js';
+import { site, ids } from '../../config/site.js';
+import { TOPIC_CLUSTERS } from '../../lib/topic-clusters.js';
 
 const meta = (html, name) => (html.match(new RegExp(`<meta name="${name}" content="([^"]*)"`)) || [])[1] || '';
 const prop = (html, p) => (html.match(new RegExp(`<meta property="${p}" content="([^"]*)"`)) || [])[1] || '';
 const canonical = (html) => (html.match(/<link rel="canonical" href="([^"]*)"/) || [])[1] || '';
 const link = (html, rel) => (html.match(new RegExp(`<link rel="${rel}" href="([^"]*)"`)) || [])[1] || '';
+const markup = (html) => html.replace(/<script[\s\S]*?<\/script>/g, '');
 const jsonLd = (html, type) => {
   const block = html.match(new RegExp(`<script type="application/ld\\+json"[^>]*>(\\{[^<]*"@type":"${type}".*?\\})</script>`));
   return block ? JSON.parse(block[1]) : null;
@@ -58,7 +62,19 @@ describe('technical seo', () => {
         const res = await get(server.base, pathname);
         assert.equal(res.status, 200, `${pathname} is referenced but not served`);
         assert.match(res.headers.get('content-type'), /image/, `${pathname} is not an image`);
+        await res.arrayBuffer();
       }
+    });
+
+    test('the og image and icons have the dimensions they declare', () => {
+      const dimensions = (file) => {
+        const png = readFileSync(new URL(`../../public/${file}`, import.meta.url));
+        return [png.readUInt32BE(16), png.readUInt32BE(20)];
+      };
+      assert.deepEqual(dimensions('og-default.png'), [1200, 630]);
+      assert.deepEqual(dimensions('icon-192.png'), [192, 192]);
+      assert.deepEqual(dimensions('icon-512.png'), [512, 512]);
+      assert.deepEqual(dimensions('apple-touch-icon.png'), [180, 180]);
     });
   });
 
@@ -74,12 +90,93 @@ describe('technical seo', () => {
       }
     });
 
-    test('SoftwareApplication is disambiguated by a url, not just a name', async () => {
-      const app = jsonLd(await (await get(server.base, '/styles/instagram')).text(), 'SoftwareApplication');
-      assert.ok(app, 'landing pages should describe the generator');
-      assert.match(app.url, /^https?:\/\//);
-      assert.ok(app.image, 'SoftwareApplication needs an image');
-      assert.ok(app.publisher?.['@id'], 'SoftwareApplication should reference its publisher');
+    test('every page joins one WebSite, one WebPage and one Organization by id', async () => {
+      for (const path of ['/', '/fonts', '/fonts/bold', '/styles', '/styles/instagram', '/about', '/tools']) {
+        const html = await (await get(server.base, path)).text();
+        const org = jsonLd(html, 'Organization');
+        const website = jsonLd(html, 'WebSite');
+        const page = jsonLd(html, 'WebPage');
+        assert.equal(org?.['@id'], ids.organization, `${path} has no canonical Organization`);
+        assert.equal(website?.['@id'], ids.website, `${path} has no canonical WebSite`);
+        assert.equal(page?.['@id'], ids.page(new URL(canonical(html)).pathname), `${path} has no canonical WebPage`);
+        assert.equal(new URL(page.url).href, new URL(canonical(html)).href);
+        assert.equal(page.isPartOf?.['@id'], ids.website);
+        assert.equal(page.publisher?.['@id'], ids.organization);
+        assert.equal((html.match(/"@type":"WebPage"/g) || []).length, 1, `${path} emits more than one WebPage`);
+      }
+    });
+
+    test('the Organization names the real owner and links the Stylzo domain', async () => {
+      const org = jsonLd(await (await get(server.base, '/')).text(), 'Organization');
+      assert.equal(org.alternateName, 'abdulsamad.shop');
+      assert.ok(org.founder, 'Organization has no owner/founder');
+      assert.equal(org.founder['@id'], ids.owner);
+      assert.equal(org.founder.name, site.ownerName);
+      assert.match(org.founder.email, /^[^@\s]+@[^@\s]+\.[^@\s]+$/);
+      assert.doesNotMatch(org.founder.name, /todo|placeholder|owner name/i);
+    });
+
+    test('the generator and each tool publish one WebApplication with its own identity', async () => {
+      const pages = {
+        '/': 'generator',
+        '/tools': 'text-tools',
+        '/qr-code-generator': 'qr-code-generator',
+        '/qr-code-reader': 'qr-code-reader',
+        '/image-compression': 'image-compression',
+        '/universal-text-fixer': 'universal-text-fixer',
+        '/screenshot-to-text': 'screenshot-to-text',
+        '/pdf-editor': 'pdf-editor',
+        '/pdf-accessibility-checker': 'pdf-accessibility-checker',
+        '/studio': 'studio',
+      };
+      const seen = new Set();
+      for (const [path, key] of Object.entries(pages)) {
+        const html = await (await get(server.base, path)).text();
+        const app = jsonLd(html, 'WebApplication');
+        assert.ok(app, `${path} is missing its WebApplication`);
+        assert.equal(app['@id'], ids.app(key), `${path} uses a different app id`);
+        assert.equal(new URL(app.url).href, new URL(canonical(html)).href);
+        assert.equal(app.name, site.apps[key].name);
+        assert.match(app.name, /^Stylzo /, `${path} does not use the Stylzo brand consistently`);
+        assert.ok(app.featureList?.length >= 3, `${path} has a thin feature list`);
+        assert.equal(app.isPartOf?.['@id'], ids.website);
+        assert.equal(app.publisher?.['@id'], ids.organization);
+        assert.ok(!seen.has(app['@id']), `two pages share the app id ${app['@id']}`);
+        seen.add(app['@id']);
+      }
+      assert.equal(seen.size, 10);
+    });
+
+    test('guide pages do not pretend to be the application', async () => {
+      for (const path of ['/styles/instagram', '/fonts/bold', '/embed', '/about']) {
+        const html = await (await get(server.base, path)).text();
+        assert.equal(jsonLd(html, 'WebApplication'), null, `${path} claims a WebApplication it is not`);
+        assert.equal(jsonLd(html, 'SoftwareApplication'), null, `${path} still uses the old app type`);
+      }
+    });
+
+    test('breadcrumbs use the same id the WebPage references', async () => {
+      for (const path of ['/fonts', '/tools', '/about', '/styles/instagram']) {
+        const html = await (await get(server.base, path)).text();
+        const page = jsonLd(html, 'WebPage');
+        const crumbs = jsonLd(html, 'BreadcrumbList');
+        assert.equal(crumbs?.['@id'], `${canonical(html)}#breadcrumb`);
+        assert.equal(page.breadcrumb?.['@id'], crumbs['@id']);
+      }
+    });
+
+    test('each topic cluster has one defining page linked in both directions', async () => {
+      const plain = (html) => markup(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').toLowerCase();
+      for (const cluster of TOPIC_CLUSTERS) {
+        const ownerHtml = await (await get(server.base, cluster.owner)).text();
+        assert.ok(plain(ownerHtml).includes(cluster.term.toLowerCase()),
+          `${cluster.owner} does not define "${cluster.term}"`);
+        for (const member of cluster.members) {
+          assert.ok(ownerHtml.includes(`href="${member}"`), `${cluster.owner} does not link to ${member}`);
+          const memberHtml = await (await get(server.base, member)).text();
+          assert.ok(memberHtml.includes(`href="${cluster.owner}"`), `${member} does not link back to ${cluster.owner}`);
+        }
+      }
     });
   });
 
@@ -121,6 +218,19 @@ describe('technical seo', () => {
       }
     });
 
+    test('the category query redirect lands on the final URL in one hop', async () => {
+      for (const key of REDIRECTED_CATEGORY_KEYS) {
+        const res = await get(server.base, `/?category=${key}`, { redirect: 'manual' });
+        const target = new URL(res.headers.get('location'), server.base);
+        assert.equal(res.status, 301);
+        assert.equal(target.pathname, CATEGORY_REDIRECTS[key], `?category=${key} still passes through the retired hub`);
+        const final = await get(server.base, `${target.pathname}${target.search}`, { redirect: 'manual' });
+        assert.equal(final.status, 200, `${target.pathname} is not the final page`);
+      }
+      const withText = await get(server.base, '/?category=outline&text=Hi', { redirect: 'manual' });
+      assert.equal(new URL(withText.headers.get('location'), server.base).search, '?text=Hi');
+    });
+
     test('the case redirect does not loop or disturb valid lowercase URLs', async () => {
       assert.equal((await get(server.base, '/fonts/bold')).status, 200);
       assert.equal((await get(server.base, '/styles/instagram')).status, 200);
@@ -155,14 +265,31 @@ describe('technical seo', () => {
         assert.equal(res.status, 200, `the site chrome links to ${href}, which returns ${res.status}`);
       }
     });
+
+    test('internal category links skip retired hubs and land on a 200', async () => {
+      const pages = ['/', '/fonts', '/fonts/category/lines', '/fonts/category/bold', '/fonts/double-struck', '/styles/instagram'];
+      for (const path of pages) {
+        const doc = await (await get(server.base, path)).text();
+        for (const key of REDIRECTED_CATEGORY_KEYS) {
+          assert.ok(
+            !doc.includes(`href="/fonts/category/${key}"`),
+            `${path} still links to the redirecting /fonts/category/${key}`,
+          );
+        }
+        const hrefs = new Set([...doc.matchAll(/href="(\/fonts\/category\/[^"]+)"/g)].map((m) => m[1]));
+        for (const href of hrefs) {
+          const res = await get(server.base, href, { redirect: 'manual' });
+          assert.equal(res.status, 200, `${path} -> ${href} returned ${res.status}`);
+        }
+      }
+    });
   });
 
   describe('sitemap', () => {
-    test('lastmod is stable rather than stamped at request time', async () => {
+    test('is deterministic and its lastmod is not stamped at request time', async () => {
       const first = await (await get(server.base, '/sitemap.xml')).text();
       const second = await (await get(server.base, '/sitemap.xml')).text();
-      const dates = (s) => new Set([...s.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map((m) => m[1]));
-      assert.deepEqual([...dates(first)], [...dates(second)], 'lastmod changes between requests');
+      assert.equal(first, second, 'sitemap changes between requests');
     });
 
     test('every entry declares a priority and a change frequency', async () => {
@@ -175,16 +302,76 @@ describe('technical seo', () => {
       }
     });
 
-    test('no sitemap URL redirects or 404s', async () => {
+    test('no sitemap URL redirects, 404s, noindexes or canonicalises elsewhere', async () => {
       const sm = await (await get(server.base, '/sitemap.xml')).text();
       for (const loc of sm.match(/<loc>([^<]+)<\/loc>/g).map((l) => l.slice(5, -6))) {
         const res = await get(server.base, new URL(loc).pathname, { redirect: 'manual' });
         assert.equal(res.status, 200, `${loc} returns ${res.status}`);
+        const html = await res.text();
+        assert.equal(meta(html, 'robots'), 'index,follow', `${loc} is not indexable`);
+        assert.equal(canonical(html), loc, `${loc} is not self-canonical`);
+        assert.equal(prop(html, 'og:url'), loc, `${loc} has a different og:url`);
+        assert.equal((markup(html).match(/<h1[ >]/g) || []).length, 1, `${loc} must have exactly one h1`);
+        assert.ok(markup(html).includes('id="main"'), `${loc} has no server-rendered main content`);
+        assert.ok((html.match(/<title>[^<]+<\/title>/) || []).length, `${loc} has no title`);
+        assert.ok(meta(html, 'description'), `${loc} has no meta description`);
+        assert.doesNotMatch(markup(html), /\bTODO\b|lorem ipsum|\[name\]/i, `${loc} contains a placeholder`);
       }
     });
   });
 
+  describe('robots', () => {
+    test('leaves /event crawlable so its noindex directive can be read', async () => {
+      const rb = await (await get(server.base, '/robots.txt')).text();
+      assert.doesNotMatch(rb, /Disallow: \/event/, 'robots.txt blocks /event while the page relies on noindex');
+      assert.match(rb, /Disallow: \/api\//);
+      assert.match(rb, /Disallow: \/admin/);
+      assert.doesNotMatch(rb, /Disallow: .*\.(?:css|js|png|svg)/, 'robots.txt blocks a render asset');
+      const event = await get(server.base, '/event');
+      assert.equal(event.status, 200);
+      assert.equal(meta(await event.text(), 'robots'), 'noindex,follow');
+    });
+  });
+
   describe('delivery', () => {
+    test('pages are not cached stale and send HSTS', async () => {
+      for (const path of ['/', '/fonts', '/about']) {
+        const res = await get(server.base, path);
+        const cache = res.headers.get('cache-control') || '';
+        assert.match(cache, /no-store|no-cache|max-age=0/, `${path} may be cached stale: ${cache}`);
+        assert.doesNotMatch(cache, /max-age=31536000/, `${path} has a year-long page cache`);
+        assert.match(res.headers.get('strict-transport-security') || '', /max-age=\d+/, `${path} has no HSTS`);
+      }
+    });
+
+    test('hashed framework assets are immutable and compressed', async () => {
+      const html = await (await get(server.base, '/')).text();
+      const asset = html.match(/\/_next\/static\/[^"']+\.js/)?.[0];
+      assert.ok(asset, 'the page references no framework script');
+      const res = await get(server.base, asset, { headers: { 'accept-encoding': 'gzip, br' } });
+      assert.equal(res.status, 200);
+      assert.match(res.headers.get('cache-control') || '', /immutable/, `${asset} is not immutable`);
+      assert.match(res.headers.get('content-encoding') || '', /gzip|br/, `${asset} is not compressed`);
+      await res.arrayBuffer();
+    });
+
+    test('HTML, CSS and JS are compressed', async () => {
+      for (const path of ['/', '/css/main.css', '/js/ui.js']) {
+        const res = await get(server.base, path, { headers: { 'accept-encoding': 'gzip, br' } });
+        assert.match(res.headers.get('content-encoding') || '', /gzip|br/, `${path} is not compressed`);
+        await res.arrayBuffer();
+      }
+    });
+
+    test('unknown URLs get the real 404 page, not a 200 soft 404', async () => {
+      const res = await get(server.base, '/this-page-does-not-exist', { redirect: 'manual' });
+      assert.equal(res.status, 404);
+      const html = await res.text();
+      assert.match(html, /<title>Page not found \| Stylzo<\/title>/);
+      assert.match(html, /<meta name="robots" content="noindex/);
+      assert.match(html, /<h1[^>]*>Page not found<\/h1>/);
+    });
+
     test('static assets revalidate, because their filenames are not content-addressed', async () => {
       // These were served `max-age=31536000, immutable`. Nothing under /public
       // is hashed — main.css is not main.<hash>.css — so a stylesheet change

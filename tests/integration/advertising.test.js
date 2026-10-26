@@ -196,6 +196,11 @@ describe('advertising with a configured publisher', () => {
     assert.match(csp, /script-src[^;]*https:\/\/pagead2\.googlesyndication\.com/);
     assert.match(csp, /frame-src[^;]*https:\/\/googleads\.g\.doubleclick\.net/);
     assert.match(csp, /connect-src[^;]*https:\/\/googleads\.g\.doubleclick\.net/);
+    // Ad traffic-quality beacons and frames live on adtrafficquality.google.
+    assert.match(csp, /connect-src[^;]*https:\/\/ep1\.adtrafficquality\.google/);
+    assert.match(csp, /frame-src[^;]*https:\/\/ep1\.adtrafficquality\.google/);
+    // The traffic-quality frame verifies through www.google.com.
+    assert.match(csp, /frame-src[^;]*https:\/\/www\.google\.com/);
     // Ad creatives use inline styles in their own frames.
     assert.match(csp, /style-src[^;]*'unsafe-inline'/);
   });

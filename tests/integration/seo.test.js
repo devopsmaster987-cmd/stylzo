@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
 import { LANDING_PAGES } from '../../lib/landing-pages.js';
+import {
+  INDEXABLE_CATEGORY_KEYS,
+  NOINDEX_CATEGORY_KEYS,
+  REDIRECTED_CATEGORY_KEYS,
+} from '../../lib/category-routing.js';
 
 process.env.ADMIN_KEY = 'test-admin-key-123';
 
@@ -56,17 +61,14 @@ describe('landing pages', () => {
       assert.equal(crumbs.itemListElement[0].name, 'Home');
     });
 
-    test(`GET ${path} renders exactly three visible FAQs and matching JSON-LD`, async () => {
+    test(`GET ${path} renders exactly three visible FAQs without FAQPage markup`, async () => {
       const html = await (await get(server.base, path)).text();
 
       // Visible FAQ questions live in h3s inside the FAQ section only.
       const faqSection = html.slice(html.indexOf('id="faq-heading"'));
       const visible = faqSection.match(/<h3>/g) || [];
       assert.equal(visible.length, 3, `${page.key} must show exactly 3 FAQ questions`);
-
-      const faqLd = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>(\{"@context":"https:\/\/schema\.org","@type":"FAQPage".*?)<\/script>/)[1]);
-      assert.equal(faqLd.mainEntity.length, 3);
-      for (const q of faqLd.mainEntity) assert.ok(q.acceptedAnswer.text.length > 30);
+      assert.ok(!html.includes('"@type":"FAQPage"'), `${page.key} still emits FAQPage`);
     });
 
     test(`GET ${path} server-renders real styled output`, async () => {
@@ -110,12 +112,12 @@ describe('landing pages', () => {
     assert.ok(html.includes('data-sample="Hi"'));
   });
 
-  test('an unknown /styles/<slug> redirects instead of rendering a page', async () => {
-    // The route 404s, but the redirect fires first, so a visitor never lands on
-    // an error page and any accumulated link equity is passed on rather than lost.
+  test('an unknown /styles/<slug> is a real 404, not a thin page', async () => {
     const res = await get(server.base, '/styles/not-a-page', { redirect: 'manual' });
-    assert.equal(res.status, 301);
-    assert.equal(new URL(res.headers.get('location'), 'http://x.test').pathname, '/');
+    assert.equal(res.status, 404);
+    const html = await res.text();
+    assert.match(html, /<title>Page not found \| Stylzo<\/title>/);
+    assert.match(html, /<meta name="robots" content="noindex/);
   });
 
   test('the styles index is the hub, not a redirect', async () => {
@@ -162,7 +164,17 @@ describe('sitemap', () => {
       assert.ok(paths.includes(`/styles/${page.key}`), `sitemap misses /styles/${page.key}`);
     }
     assert.ok(paths.includes('/fonts/bold'));
-    assert.ok(paths.includes('/fonts/category/gothic'));
+    for (const key of INDEXABLE_CATEGORY_KEYS) {
+      assert.ok(paths.includes(`/fonts/category/${key}`), `sitemap misses /fonts/category/${key}`);
+    }
+    for (const key of [...NOINDEX_CATEGORY_KEYS, ...REDIRECTED_CATEGORY_KEYS]) {
+      assert.ok(!paths.includes(`/fonts/category/${key}`), `sitemap lists thin hub /fonts/category/${key}`);
+    }
+    assert.equal(
+      paths.filter((p) => p.startsWith('/fonts/category/')).length,
+      INDEXABLE_CATEGORY_KEYS.length,
+      'sitemap category hub count is wrong',
+    );
   });
 
   test('never lists admin or the dashboard', async () => {

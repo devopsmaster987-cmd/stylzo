@@ -7,7 +7,7 @@ import { AdUnit } from '@/components/ad-unit.jsx';
 import { env, adsenseConfigured } from '@/config/environment.js';
 
 // The same four steps the page's own how-to section renders, in the same order,
-// so the HowTo schema cannot describe a procedure the page does not show.
+// so the visible instructions stay the single source of truth.
 const HOW_TO = {
   name: 'How to create a QR code',
   description: 'Make a QR code for a link, text, Wi-Fi, email, a phone number, WhatsApp, a contact '
@@ -44,9 +44,9 @@ function qrMeta() {
   return pageMeta({
     // "QR code generator" is the term people actually search; "free" leads because
     // it is the qualifier that separates this from the paywalled tools.
-    title: 'Free QR Code Generator — Create & Download QR Codes',
-    description: 'Create free QR codes for websites, text, Wi-Fi, WhatsApp, email, phone numbers and '
-      + 'contact cards. Customize colors and logo, then download as PNG, SVG or JPG. No sign-up.',
+    title: 'Free QR Code Generator — Create & Download',
+    description: 'Create QR codes for links, text, Wi-Fi, WhatsApp, email, phone or a contact card. '
+      + 'Add colours and a logo, then download PNG, SVG or JPG. No sign-up.',
     path: '/qr-code-generator',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -56,7 +56,7 @@ function qrMeta() {
     faq: QR_GENERATOR_QA,
     quickAnswer: QR_GENERATOR_ANSWER,
     howTo: HOW_TO,
-    app: true,
+    app: 'qr-code-generator',
   });
 }
 

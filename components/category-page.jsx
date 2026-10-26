@@ -1,7 +1,12 @@
 import { catalog, getCategory, listStyles } from '@/services/catalog.js';
 import { pageMeta, toMetadata, renderCards, inputFromQuery } from '@/lib/pages.js';
 import { itemListLd, safeJson } from '@/services/seo.js';
-import { categoryContent, categoryKeys } from '@/lib/category-content.js';
+import { categoryContent } from '@/lib/category-content.js';
+import {
+  CATEGORY_PAGE_KEYS,
+  categoryHref,
+  isIndexableCategory,
+} from '@/lib/category-routing.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
@@ -11,12 +16,13 @@ function categoryMeta(key, hasText) {
   const content = categoryContent(key);
   const cat = getCategory(key);
   if (!content || !cat) return null;
+  const label = content.styleLabel || cat.name;
   return pageMeta({
     title: content.title,
     description: content.description,
     path: `/fonts/category/${key}`,
     canonicalPath: `/fonts/category/${key}`,
-    noindex: hasText,
+    noindex: hasText || !isIndexableCategory(key),
     breadcrumbs: [
       { name: 'Home', path: '/' },
       { name: 'Font styles', path: '/fonts' },
@@ -24,14 +30,14 @@ function categoryMeta(key, hasText) {
     ],
     faq: hasText ? [] : content.faq,
     quickAnswer: hasText ? null : {
-      q: `What are ${cat.name.toLowerCase()} text styles?`,
+      q: `What are ${label.toLowerCase()} text styles?`,
       a: content.paragraphs[0],
     },
   });
 }
 
 export function generateStaticParams() {
-  return categoryKeys().map((key) => ({ key }));
+  return CATEGORY_PAGE_KEYS.map((key) => ({ key }));
 }
 
 export async function generateMetadata({ params, searchParams }) {
@@ -46,6 +52,7 @@ export async function renderCategoryPage({ key, searchParams }) {
   const cat = getCategory(key);
   const content = categoryContent(key);
   if (!cat || !content) return null;
+  const label = content.styleLabel || cat.name;
 
   const sp = (await searchParams) || {};
   const text = inputFromQuery(sp);
@@ -59,7 +66,7 @@ export async function renderCategoryPage({ key, searchParams }) {
   }));
 
   const itemLd = safeJson(itemListLd(
-    `${cat.name} text styles`,
+    `${label} text styles`,
     cards.map((s) => ({ name: s.name, path: `/fonts/${s.slug}` })),
   ));
 
@@ -89,11 +96,11 @@ export async function renderCategoryPage({ key, searchParams }) {
       </section>
 
       <section aria-labelledby="category-styles">
-        <h2 id="category-styles">{cat.name} styles you can copy</h2>
+        <h2 id="category-styles">{label} styles you can copy</h2>
         <p className="muted">
           {cards.length === 1
             ? 'This category has one indexable style. The other combinations live in the full generator, but this is the distinct style that gets its own page.'
-            : `Every indexable ${cat.name.toLowerCase()} style in the catalog, rendered with the same engine the generator uses.`}
+            : `Every indexable ${label.toLowerCase()} style in the catalog, rendered with the same engine the generator uses.`}
         </p>
         <ul className="rows" data-rows>
           {cards.map((s) => <StyleRow key={s.id} s={s} />)}
@@ -106,7 +113,7 @@ export async function renderCategoryPage({ key, searchParams }) {
       </section>
 
       <section className="prose" aria-labelledby="category-how">
-        <h2 id="category-how">How {cat.name.toLowerCase()} text works</h2>
+        <h2 id="category-how">How {label.toLowerCase()} text works</h2>
         <p>
           The text on this page is Unicode, not a font file. Each style replaces letters with
           look-alike characters, which is why the result can be pasted into a bio, a caption or a
@@ -144,7 +151,7 @@ export async function renderCategoryPage({ key, searchParams }) {
         <ul className="chip-list">
           {allCategories.map((c) => (
             <li key={c.key}>
-              <a href={`/fonts/category/${c.key}`} aria-current={c.key === key ? 'page' : undefined}>
+              <a href={categoryHref(c.key)} aria-current={c.key === key ? 'page' : undefined}>
                 {c.name} ({c.count})
               </a>
             </li>

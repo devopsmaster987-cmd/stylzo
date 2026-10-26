@@ -31,10 +31,9 @@ const HOW_TO = {
 
 function pdfAccessibilityMeta() {
   return pageMeta({
-    title: 'PDF Accessibility Checker — Test a PDF in Your Browser',
-    description: 'Check a PDF for accessibility in your browser: tags, structure tree, document language, '
-      + 'title, readable fonts, alt text, labelled links and form fields, bookmarks and encryption. '
-      + 'Every check comes with its fix. Free, private, no upload.',
+    title: 'PDF Accessibility Checker — Test a PDF Free',
+    description: 'Check a PDF for tags, reading order, language, title, fonts, alt text, links and '
+      + 'form fields locally. Each failed check explains the fix. Free, no upload.',
     path: '/pdf-accessibility-checker',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -44,7 +43,7 @@ function pdfAccessibilityMeta() {
     faq: PDF_ACCESSIBILITY_QA,
     quickAnswer: PDF_ACCESSIBILITY_ANSWER,
     howTo: HOW_TO,
-    app: true,
+    app: 'pdf-accessibility-checker',
   });
 }
 

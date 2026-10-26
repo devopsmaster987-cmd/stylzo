@@ -2,8 +2,14 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
-import { HOME_META, HOME_HOW, HOME_COLLECTIONS, HOME_SIZES, HOME_LIBRARIES, HOME_DESTINATIONS, HOME_LINKS } from '../../lib/home-content.js';
+import {
+  HOME_META, HOME_ASSURANCE, HOME_HOW, HOME_CHOOSE, HOME_SAFETY, HOME_UNICODE,
+  HOME_COLLECTIONS, HOME_SIZES, HOME_LIBRARIES, HOME_DESTINATIONS, HOME_LINKS,
+  homeWordCount,
+} from '../../lib/home-content.js';
 import { getStyle } from '../../services/catalog.js';
+import { REDIRECTED_CATEGORY_KEYS } from '../../lib/category-routing.js';
+import { site } from '../../config/site.js';
 
 const title = (html) => (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
 const desc = (html) => (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
@@ -40,6 +46,12 @@ describe('home page content', () => {
     assert.ok(HOME_META.description.length >= 70, 'description is too thin to rank');
   });
 
+  test('style rows are labels, not headings, so the outline never skips', async () => {
+    const doc = markup(await (await get(server.base, '/')).text());
+    assert.doesNotMatch(doc, /<h3 class="row-name"/);
+    assert.match(doc, /<p class="row-name"/);
+  });
+
   test('exactly one h1, self-referencing canonical, indexable', async () => {
     const html = await (await get(server.base, '/')).text();
     const doc = markup(html);
@@ -60,12 +72,37 @@ describe('home page content', () => {
     const doc = markup(await (await get(server.base, '/')).text());
     const headings = [
       HOME_HOW.h2,
+      HOME_CHOOSE.h2,
+      HOME_SAFETY.h2,
       ...HOME_COLLECTIONS.map((c) => c.h2),
       HOME_SIZES.h2,
+      HOME_UNICODE.h2,
       HOME_LIBRARIES.h2,
       HOME_DESTINATIONS.h2,
     ];
     for (const h of headings) assert.ok(doc.includes(h), `missing section heading: ${h}`);
+  });
+
+  test('carries 1,200 to 1,800 words of real prose below the tool', () => {
+    const words = homeWordCount();
+    assert.ok(words >= 1200, `home has ${words} words of prose, below the 1,200 floor`);
+    assert.ok(words <= 1800, `home has ${words} words of prose, above the 1,800 ceiling`);
+  });
+
+  test('keeps the owner and privacy statements beside the tool', async () => {
+    const doc = markup(await (await get(server.base, '/')).text());
+    assert.ok(doc.includes(HOME_ASSURANCE.text), 'privacy statement missing beside the tool');
+    for (const l of HOME_ASSURANCE.links) {
+      assert.ok(doc.includes(`href="${l.href}"`), `assurance link missing: ${l.href}`);
+    }
+  });
+
+  test('renders field and support tables with real row headers', async () => {
+    const doc = markup(await (await get(server.base, '/')).text());
+    assert.ok(doc.includes('id="choose-heading"'), 'field guidance section missing');
+    assert.ok(doc.includes('id="safety-heading"'), 'support-label section missing');
+    assert.match(doc, /<th scope="row">Bio or profile description<\/th>/);
+    assert.match(doc, /<th scope="row">Works almost everywhere<\/th>/);
   });
 
   test('every linked style resolves to a real indexable catalog style', async () => {
@@ -111,6 +148,26 @@ describe('home page content', () => {
     }
   });
 
+  test('the footer exposes only the configured social media profiles', async () => {
+    const doc = markup(await (await get(server.base, '/')).text());
+    const footer = doc.slice(doc.indexOf('<footer'), doc.indexOf('</footer>'));
+    const start = footer.indexOf('aria-label="Social media"');
+    assert.ok(start >= 0, 'the footer has no social media section');
+    const social = footer.slice(start, footer.indexOf('</nav>', start));
+
+    const hrefs = [...social.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+    const labels = [...social.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
+    assert.deepEqual(hrefs, site.social.map((profile) => profile.href));
+    assert.deepEqual(labels, ['Facebook', 'Instagram']);
+
+    for (const host of [
+      'x.com', 'twitter.com', 'youtube.com', 'tiktok.com', 'linkedin.com',
+      'pinterest.com', 'threads.net', 'snapchat.com', 'reddit.com', 'tumblr.com',
+    ]) {
+      assert.ok(!footer.includes(host), `the footer still links to ${host}`);
+    }
+  });
+
   test('no brand names appear in home page headings, title or text', async () => {
     const html = await (await get(server.base, '/')).text();
     // Scoped to <main>: the shared footer lists platform names on every page and
@@ -151,6 +208,23 @@ describe('home page content', () => {
     }
   });
 
+  test('does not render the old keyword lists', async () => {
+    const doc = markup(await (await get(server.base, '/')).text());
+    for (const label of ['Other ways people ask for this', 'Related ideas']) {
+      assert.ok(!doc.includes(label), `home page still renders "${label}"`);
+    }
+  });
+
+  test('does not link the redirected category hubs', async () => {
+    const doc = markup(await (await get(server.base, '/')).text());
+    for (const key of REDIRECTED_CATEGORY_KEYS) {
+      assert.ok(
+        !doc.includes(`href="/fonts/category/${key}"`),
+        `home page still links the redirected /fonts/category/${key} hub`,
+      );
+    }
+  });
+
   test('still in the sitemap', async () => {
     const sm = await (await get(server.base, '/sitemap.xml')).text();
     const paths = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
@@ -163,10 +237,10 @@ describe('home page query variants', () => {
   before(async () => { server = await startServer(3232); });
   after(() => server?.stop());
 
-  test('?text= stays noindex and drops the FAQ JSON-LD', async () => {
+  test('?text= stays noindex and drops the answer schema', async () => {
     const html = await (await get(server.base, '/?text=Hi')).text();
     assert.match(html, /noindex,follow/);
-    assert.ok(!html.includes('"@type":"FAQPage"'), 'noindex render should not carry FAQ structured data');
+    assert.ok(!html.includes('"@type":"Question"'), 'a personalised render must not claim the page answer');
     assert.ok(html.includes('data-sample="Hi"'));
   });
 
@@ -178,11 +252,11 @@ describe('home page query variants', () => {
   });
 
   test('the category hub is indexable and self-canonical', async () => {
-    const html = await (await get(server.base, '/fonts/category/gothic')).text();
+    const html = await (await get(server.base, '/fonts/category/italic')).text();
     assert.match(html, /<meta name="robots" content="index,follow"/);
-    assert.equal(new URL(canonical(html)).pathname, '/fonts/category/gothic');
+    assert.equal(new URL(canonical(html)).pathname, '/fonts/category/italic');
     assert.equal((markup(html).match(/<h1[ >]/g) || []).length, 1);
-    assert.ok(markup(html).includes('Gothic text styles'));
+    assert.ok(markup(html).includes('Italic text styles'));
   });
 
   test('unknown category still 404s', async () => {

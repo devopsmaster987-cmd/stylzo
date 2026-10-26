@@ -5,7 +5,7 @@ import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
 // The steps below are the same four the page's own how-to section shows, in the
-// same order, so the HowTo schema cannot describe steps the page does not have.
+// same order, so the visible instructions stay the single source of truth.
 const HOW_TO = {
   name: 'How to make a text image',
   description: 'Turn styled text into a 1200 by 630 PNG you can download, using a style, '
@@ -28,7 +28,7 @@ function studioMeta() {
     // a page that could not rank. With the explainer below it has real content
     // to index, so the link is worth keeping.
     noindex: false,
-    app: true,
+    app: 'studio',
     faq: STUDIO_QA,
     howTo: HOW_TO,
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Studio', path: '/studio' }],

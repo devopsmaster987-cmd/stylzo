@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { catalog, getStyle } from '../../services/catalog.js';
 import { site } from '../../config/site.js';
 import { fontPageContent } from '../../data/font-page-content.js';
+import { FONT_DESCRIPTION_OVERRIDES } from '../../lib/font-meta.js';
 import { renderCustomFontExamples } from '../../lib/font-page-content.js';
 import { styleKind } from '../../lib/style-content.js';
 import { applyStyle } from '../../services/unicode/engine.js';
@@ -78,6 +79,17 @@ describe('list-B font page content', () => {
       assert.ok(full.length < 60, `${slug} title is ${full.length} characters: ${full}`);
       assert.ok(!seen.has(full), `${slug} repeats the title used by ${seen.get(full)}`);
       seen.set(full, slug);
+    }
+  });
+
+  test('meta-only description overrides are editable and fit the budget', () => {
+    const allowed = new Set(B_FONT_SLUGS);
+    const seen = new Set();
+    for (const [slug, description] of Object.entries(FONT_DESCRIPTION_OVERRIDES)) {
+      assert.ok(allowed.has(slug), `${slug} is not an editable list-B page`);
+      assert.ok(description.length < 160, `${slug} description is ${description.length} characters`);
+      assert.ok(!seen.has(description), `${slug} repeats another override description`);
+      seen.add(description);
     }
   });
 

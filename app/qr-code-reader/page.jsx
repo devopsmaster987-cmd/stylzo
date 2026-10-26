@@ -4,8 +4,8 @@ import { JsonLd } from '@/components/json-ld.jsx';
 import { RelatedSearches } from '@/components/related-searches.jsx';
 import { Scripts } from '@/components/scripts.jsx';
 
-// The same steps the page's how-to section renders, so the HowTo schema cannot
-// describe a procedure the page does not show.
+// The same steps the page's how-to section renders, so the visible instructions
+// stay the single source of truth.
 const HOW_TO = {
   name: 'How to read a QR code from an image',
   description: 'Decode a QR code picture in your browser and extract the phone number, email address, '
@@ -33,9 +33,8 @@ const HOW_TO = {
 function qrReaderMeta() {
   return pageMeta({
     title: 'QR Code Reader — Extract Phone, Email & Text Free',
-    description: 'Read a QR code from a screenshot or photo and extract the phone number, email address, '
-      + 'Wi-Fi login, contact card, link, location or text inside it. Decoding happens in your browser, '
-      + 'so the image is never uploaded.',
+    description: 'Read a QR code from a photo or screenshot and extract its link, text, Wi-Fi login, '
+      + 'contact card, phone, email or location. Decoding stays in your browser.',
     path: '/qr-code-reader',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -45,7 +44,7 @@ function qrReaderMeta() {
     faq: QR_READER_QA,
     quickAnswer: QR_READER_ANSWER,
     howTo: HOW_TO,
-    app: true,
+    app: 'qr-code-reader',
   });
 }
 

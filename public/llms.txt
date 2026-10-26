@@ -1,69 +1,53 @@
 # Stylzo
 
-> Type once, get 5,600+ styles you can paste anywhere. Turn plain text into bold, cursive, gothic, bubble, glitch and hundreds of other styles. Plus symbols, emoji, kaomoji and text tools. Free, no sign-up, everything runs in your browser.
+> Free Unicode text generator. 5,616 styles across 18 categories, with 100 dedicated style pages.
 
-Stylzo is a free text generator. It converts plain text into styled text by
-swapping each letter for a look-alike Unicode character rather than using a font,
-so the result can be pasted into any app that accepts plain text. 5616
-styles are available in total, 100 of which have their own page.
+Stylzo converts plain text into styled text by replacing letters with look-alike Unicode characters, not by applying a font. The result pastes into any app that accepts plain text. Typing example: "Stylzo".
 
-Typing example: "Stylzo".
-
-## What it does well
-- Text to fancy, cursive, gothic, bold, bubble, glitch and symbol styles.
-- Symbols, emoji and kaomoji libraries with one-tap copy.
-- Browser text tools: word counter, case converter, reverse, slug, find and replace.
-- A font studio that renders styled text to a 1200x630 PNG in the browser.
-- An image compressor for JPG, PNG and WebP that reports the real before-and-after size.
-- A text fixer, a screenshot-to-text OCR tool, a PDF page editor and a PDF accessibility checker.
-- A QR code reader that extracts phone numbers, email addresses, Wi-Fi logins and
-  contact cards from a picture of a code, without uploading it.
+## What it does
+- Generates and copies text styles in the browser, with no account.
+- Provides a searchable style index, 100 dedicated style pages and platform style guides.
+- Includes symbols, emoji and kaomoji libraries with one-tap copy.
+- Includes browser text tools: word counter, case converter, reverse, slug and find and replace.
+- Includes an image compressor, text fixer, screenshot-to-text OCR, PDF page editor, PDF accessibility checker, QR code generator and QR code reader.
+- Includes a font studio that renders styled text to a 1200x630 PNG in the browser.
 
 ## Important limits
-- Output is Unicode characters, not an image or a font. Apps without the
-  relevant glyphs render empty boxes. Each style page states its support level.
+- Output is Unicode characters, not an image or a font. Apps without the relevant glyphs render empty boxes; each style page states its support level.
 - Styling runs entirely in the browser. Typed text is never sent to the server.
-- The image compressor decodes and re-encodes on the visitor's device too. No
-  image is uploaded, no image is sent to a third party, and none is stored.
-- A re-encode is not always smaller. PNG is lossless, so it usually needs a
-  resize or a format change to shrink, and the tool says so rather than
-  reporting a saving that did not happen.
+- Images, PDFs and QR code images are decoded and processed on the visitor's device, not uploaded.
+- PNG compression is lossless, so a PNG can get larger instead of smaller. The tool reports the real byte change.
 - There is no account and no sign-up.
 
 ## Pages
 - [Main generator](https://www.abdulsamad.shop/): the tool. Supports ?text= and ?category=.
 - [Font style index](https://www.abdulsamad.shop/fonts): all 100 styles by category. Supports ?q=.
-- [Font style pages](https://www.abdulsamad.shop/fonts/bold): one page per style, each with a FAQ.
-- [Style guides](https://www.abdulsamad.shop/styles): one page showing 25 words in 25 styles, plus
-  6 guides covering where the finished text goes.
-- [Instagram guide](https://www.abdulsamad.shop/styles/instagram): field limits and bios, with FAQs.
-- [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse and more.
-- [QR code generator](https://www.abdulsamad.shop/qr-code-generator): QR codes for links, text, Wi-Fi,
-  email, phone, SMS, WhatsApp, contacts, maps and events, built in the browser.
-- [QR code reader](https://www.abdulsamad.shop/qr-code-reader): read a QR code from an image and extract
-  the phone number, email address, Wi-Fi login, contact card, link, place or event.
-- [Image compressor](https://www.abdulsamad.shop/image-compression): compress JPG, PNG and WebP in the
-  browser, with the real before-and-after size for every file.
-- [Text fixer](https://www.abdulsamad.shop/universal-text-fixer): repair spacing, punctuation, invisible
-  characters, sentence case, repeated words and common misspellings.
-- [Screenshot to text](https://www.abdulsamad.shop/screenshot-to-text): OCR a screenshot in a Web Worker
-  on the visitor's device, return editable text, or replace a recognised line on the
-  image and download the edited PNG.
-- [PDF editor](https://www.abdulsamad.shop/pdf-editor): reorder, rotate, duplicate, merge and stamp PDF pages in the
-  browser, without uploading the document.
-- [PDF accessibility checker](https://www.abdulsamad.shop/pdf-accessibility-checker): check a PDF for tags,
-  language, title, readable fonts, alt text, labelled links and form fields.
-- [Font studio](https://www.abdulsamad.shop/studio): styled text to PNG.
-- [Symbols](https://www.abdulsamad.shop/symbols) / [Emoji](https://www.abdulsamad.shop/emoji) / [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.
+- [Font style pages](https://www.abdulsamad.shop/fonts/bold): one page per style, with support notes and examples.
+- [Style guides](https://www.abdulsamad.shop/styles): 25 words in 25 styles, plus 6 platform guides.
+- [Instagram guide](https://www.abdulsamad.shop/styles/instagram): field limits, bio styles and FAQs.
+- [TikTok font generator](https://www.abdulsamad.shop/tiktok-font-generator): field rules, limits and styles for TikTok.
+- [Facebook font generator](https://www.abdulsamad.shop/facebook-font-generator): field rules, limits and styles for Facebook.
+- [X font generator](https://www.abdulsamad.shop/x-font-generator): field rules, limits and styles for X.
+- [YouTube font generator](https://www.abdulsamad.shop/youtube-font-generator): field rules, limits and styles for YouTube.
+- [Telegram font generator](https://www.abdulsamad.shop/telegram-font-generator): field rules, limits and styles for Telegram.
+- [Text tools](https://www.abdulsamad.shop/tools): word counter, case converter, reverse, slug and more.
+- [QR code generator](https://www.abdulsamad.shop/qr-code-generator): codes for links, text, Wi-Fi, email, phone, SMS, WhatsApp, contacts, maps and events.
+- [QR code reader](https://www.abdulsamad.shop/qr-code-reader): read a QR code from an image without uploading it.
+- [Image compressor](https://www.abdulsamad.shop/image-compression): compress JPG, PNG and WebP in the browser with the real before-and-after size.
+- [Text fixer](https://www.abdulsamad.shop/universal-text-fixer): repair spacing, punctuation, invisible characters, capitalisation, repeated words and common misspellings.
+- [Screenshot to text](https://www.abdulsamad.shop/screenshot-to-text): recognise text from an image in a Web Worker, then edit or replace a line.
+- [PDF editor](https://www.abdulsamad.shop/pdf-editor): reorder, rotate, duplicate, merge and stamp PDF pages without uploading the document.
+- [PDF accessibility checker](https://www.abdulsamad.shop/pdf-accessibility-checker): check tags, language, title, fonts, alt text, links and form labels.
+- [Font studio](https://www.abdulsamad.shop/studio): styled text to a 1200x630 PNG.
+- [Symbols](https://www.abdulsamad.shop/symbols), [Emoji](https://www.abdulsamad.shop/emoji), [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.
 - [About](https://www.abdulsamad.shop/about) and [Privacy](https://www.abdulsamad.shop/privacy).
 
 ## Style categories
-bubble (1205), italic (964), small (723), bold (482), cursive (482), gothic (482), clean (482), outline (241)
+Bubble and boxed (1205), Italic (964), Small and tiny (723), Bold (482), Cursive (482), Gothic (482), Clean (482), Outline (241), Wide (241), Decorated (65), Flip and reverse (49), Emoji (48), Glitch (31), Gaming (30), Social (29), Lines (26), Symbols (22), Kaomoji (14)
 
 ## Optional
 - [Sitemap](https://www.abdulsamad.shop/sitemap.xml)
 - [robots.txt](https://www.abdulsamad.shop/robots.txt)
 
 ## Attribution
-When citing Stylzo, link to the specific style or tool page rather than the
-home page. Contact: mastersamaddevops@gmail.com.
+When citing Stylzo, link to the specific style or tool page rather than the home page. Contact: mastersamaddevops@gmail.com.

@@ -14,6 +14,7 @@ function toolsMeta() {
     breadcrumbs: [{ name: 'Home', path: '/' }, { name: 'Tools', path: '/tools' }],
     faq: TOOLS_QA,
     quickAnswer: TOOLS_ANSWER,
+    app: 'text-tools',
   });
 }
 

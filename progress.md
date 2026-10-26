@@ -111,3 +111,142 @@ Status: batch 2 approved with the emoji-frame rewrite. Batch 3 has not started.
 - `/fonts/wavy-under`
 - `/fonts/zalgo-extreme`
 - `/fonts/zalgo-heavy`
+
+## Category hub cleanup (2026-10-26)
+
+- `/fonts/category/outline` permanently redirects to `/fonts/double-struck`.
+- `/fonts/category/wide` permanently redirects to `/fonts/fullwidth`.
+- The two style pages above are unchanged.
+- `/fonts/category/bold`, `/cursive`, `/gothic` and `/clean` stay live with their copy and self-canonical URLs, but emit `robots: noindex,follow`.
+- All six hubs are excluded from `sitemap.xml`; the sitemap now lists 12 category hubs and is byte-identical across requests.
+- The home page no longer links the Outline or Wide hubs, including the category chips.
+- `indexed-urls.txt` is unchanged.
+- Routing rules live in `lib/category-routing.js` so the redirects, metadata, sitemap and tests share one source of truth.
+
+## SEO program (2026-10-26)
+
+- Phase 1, Technical SEO: complete. Full findings, changes and open decisions are in `SEO-REPORT.md`.
+- Fixed: internal links to redirected category hubs; two-hop category query redirects; `/event` blocked while relying on noindex; unknown `/styles/<slug>` soft 404s.
+- Added tests for sitemap canonical/indexability, one-hop redirects, real 404s, robots, page/asset caching, compression, HSTS, image dimensions and placeholder-free rendered HTML.
+- Verified: 138 sitemap URLs all 200/indexable/self-canonical; zero broken internal links, redirect chains, loops or soft 404s; protected pages compared against production.
+- `npm run build`: passed. `npm test`: 639 tests, 635 passed, 4 skipped, 0 failed.
+- Phase 2, Mobile SEO and Core Web Vitals: complete. Findings, scores, files and open decisions are in `SEO-REPORT.md`.
+- Phase 3, On-page and search-intent match: complete, pending review. Findings, the 25-query ownership map, fixes and five protected-page proposals are in `SEO-REPORT.md`.
+- Phase 4, Semantic and entity SEO: complete, pending review. Schema/entity graph, topic clusters and protected-page exceptions are in `SEO-REPORT.md`.
+- Phase 5, Programmatic quality gates: complete, pending review. Gate results, the 70 thin style pages and proposed content batches are in `SEO-REPORT.md`.
+- Phase 6, AEO, GEO and LLMO: complete, pending review. Answer blocks, schema removal, `llms.txt`, AI crawler report and open decisions are in `SEO-REPORT.md`.
+- Phase 7, Content gap audit: complete, pending review. Page-type coverage, the ranked 25 missing page types and build/merge/skip decisions are in `SEO-REPORT.md`.
+
+## Phase 2 summary (2026-10-26)
+
+- Lighthouse 13.5 mobile medians of 3 runs: `/` 91, `/fonts` 91, `/fonts/category/lines` 91, `/fonts/frag-line` 89, `/fonts/overline` 92, `/styles/instagram` 91, `/tools` 94, `/qr-code-generator` 89, `/about` 90.
+- CLS 0.000–0.003 after fixes; CDP pass at 390×844 measured 0 on all nine pages. No horizontal overflow at 320/360/390/414 px. No visible text under 12 px.
+- Removed the empty 260 px 3D hero on phones and aligned the three.js guard to 860 px. On `/`, h1 moved from y≈369 to y≈114 and the generator input from y≈481 to y≈227.
+- Fixed hydration CLS from the menu button and the Paste/Clear row; menu button is now 44×44.
+- Allowed AdSense traffic-quality and Google frame origins in CSP; console CSP errors are gone, best-practices 73 → 77. Remaining failures are AdSense third-party cookies and Chrome cookie inspector issues.
+- Fixed the heading outline: style rows are now `<p class="row-name">` instead of `<h3>`, so `/` and font pages no longer jump h1 → h3. Accessibility is 100 on all nine audited pages.
+- First-party JS 142–156 KiB; CSS 24 KiB; AdSense third-party JS ~253 KiB. Decision while AdSense is unapproved: keep the verification tag and consent banner unchanged; no ad-space reservation, because slots are below the tool and blank gaps would hurt.
+- Mobile and desktop serve byte-identical HTML for the nine audited URLs.
+- Protected set: 47/49 identical to production; the two exceptions are the already-approved home chips and About key facts.
+- `npm run build` passed. `npm test`: 640 tests, 636 passed, 4 skipped, 0 failed.
+- Phase 2 decisions are recorded in `SEO-REPORT.md`: keep AdSense verification-first until approval; heading fixed; fixed consent banner kept; no ad reservation; remaining target-size pass in Phase 10.
+- Context is high; start a fresh session before Phase 3 and read this file plus `SEO-REPORT.md` first.
+
+## Phase 3 summary (2026-10-26)
+
+- Audited 138 sitemap URLs: title/description budgets, one H1, repeated headings, breadcrumbs, click depth, anchor text and 25-query ownership.
+- Fixed 2 long titles and 18 long descriptions on editable pages. Five protected font descriptions remain at exactly 160 and are proposed, not changed.
+- Added `lib/font-meta.js` with metadata-only descriptions for 11 editable font pages; visible copy is untouched.
+- Repositioned five category hubs so they no longer lead with the competing intent: `lines`, `bubble`, `small`, `glitch` and `decorated`. `/fonts/category/lines` also gained a `styleLabel` so its generated headings are grammatical.
+- Renamed the duplicate `/screenshot-to-text` editor H2 to “Edit the recognised text”.
+- Added `QUERY_OWNERS`: 14 style intents plus 11 Instagram/WhatsApp/Discord variants, each with one indexable owner. No protected owner was edited.
+- Final crawl: 0 long titles; 5 long descriptions (protected only); 0 duplicate titles, descriptions or H1s; 0 repeated headings; 0 breadcrumb or click-depth failures; 0 generic anchors.
+- `npm run build` passed. `npm test`: 644 tests, 640 passed, 4 skipped, 0 failed.
+- Phase 3 is complete pending review. Protected description proposals and open decisions are in `SEO-REPORT.md`. No commit or deployment.
+
+
+## Phase 4 summary (2026-10-26)
+
+- Centralised `Organization`, `WebSite`, owner `Person` and ten `WebApplication` definitions in `config/site.js`, with stable `@id` values in `site.ids`.
+- Every sitemap page now emits one `WebSite` and one `WebPage`; app pages also emit one `WebApplication`. `/embed` and platform guides no longer claim the generator as their main entity.
+- Replaced the old generic `SoftwareApplication`; the generator and each tool now have their own name, URL, category and feature list. The generator reads its features from `lib/facts.js` so style counts cannot drift.
+- Added the owner founder node with the configured name and business email. No `sameAs` profiles were invented.
+- Added four topic clusters in `lib/topic-clusters.js`: Unicode text styles, copyable libraries, browser text tools and platform style guides. Each has one defining page; integration tests verify links in both directions.
+- Updated `/about` to define Stylzo and its relationship to `abdulsamad.shop`, and to name the owner. This is a protected-body exception that needs approval.
+- Added `tests/unit/site-entities.test.js` and replaced the stale `SoftwareApplication` assertion with WebSite/WebPage/WebApplication, owner, breadcrumb and topic-cluster coverage.
+- `npm run build` passed. `npm test`: 653 tests, 649 passed, 4 skipped, 0 failed.
+- Entity audit: 138 sitemap URLs, 0 schema issues, 10 app pages with 10 unique app ids, 138 unique WebPage ids.
+- Protected comparison: titles, descriptions, canonicals and H1s unchanged on all 49 URLs. Bodies differ only on `/` (previously approved category chips) and `/about` (Phase 4 sentence plus previously approved key facts). JSON-LD changes on all 49 are expected from the Phase 4 graph.
+- Five protected descriptions from Phase 3 remain unchanged and still need approval.
+- Phase 4 is complete pending review. No commit or deployment.
+
+## Phase 5 summary (2026-10-26)
+
+- Audited the three templates with one metric each: sentence-set overlap (30% maximum) and main-text word-set similarity (40% maximum).
+- Completed style pages: 30 entries, 422-573 words each; worst sentence overlap 3.4%, worst main-text similarity 39.35%. All pass.
+- Category hubs: 18 entries, 221-254 words; worst sentence overlap 6.7%, worst main-text similarity 31.5%. All pass.
+- Platform pages: 6 entries, 259-352 words; worst sentence overlap 5.0%, worst main-text similarity 38.4%. All pass.
+- Added `tests/unit/template-quality.test.js`: gates for completed style pages, hubs and platform pages; direct converter comparison for all 100 style-page examples; and a guard on the thin-page inventory.
+- Thin-page audit: 70 style pages are below the 250-word floor: 30 protected list-A old-template pages and 40 list-B pages with no custom content. No page was merged, redirected, deleted or noindexed.
+- Recommendation: enrich all 70 in approval batches, not merge or noindex. The protected 30 belong to Phase 14; the pending 40 should continue the list-B content batches.
+- `data/font-page-content.js` already contains 30 entries, but `progress.md` marks only batches 1 and 2 (20 pages) as approved. Ten entries are unmarked and need confirmation before being treated as approved copy.
+- `npm run build` passed. `npm test`: 658 tests, 654 passed, 4 skipped, 0 failed.
+- Protected comparison: unchanged from Phase 4. Titles, descriptions, canonicals and H1s match production on all 49 URLs; only `/` and `/about` body differences remain, both already reported.
+- Phase 5 is complete pending review. No commit or deployment.
+
+## Phase 6 summary (2026-10-26)
+
+- Audited the answer-first blocks on 18 key pages. All now fall inside 40-60 words; the home and About definition is 40 words, the shared box explanation is 59 words.
+- Strengthened `/about` with direct answers for “How do fancy text generators work?” and “Why does my fancy text show up as empty boxes?”, and verified both are server-rendered.
+- Removed `FAQPage` and `HowTo` JSON-LD from `buildMeta()`. Visible FAQ and how-to sections remain; the standalone `Question`/`Answer` node remains.
+- Rewrote `scripts/build-llms-txt.js` and regenerated `public/llms.txt`: all 18 categories, real counts, required routes, concise limits, about 3.9 KB.
+- Reported the AI crawler policy in `SEO-REPORT.md` with a recommendation; no robots policy change was made pending your decision.
+- Added tests for 40-60 word answers, server-rendered explanations, full `llms.txt` category coverage, and absence of FAQPage/HowTo.
+- `npm run build` passed. `npm test`: 661 tests, 657 passed, 4 skipped, 0 failed.
+- Protected comparison: 49 URLs, 0 errors. Titles, descriptions, canonicals and H1s unchanged. Bodies changed on `/`, `/styles`, `/emoji`, `/kaomoji`, `/symbols`, `/about` and `/terms`. JSON-LD changed on all 49 by design.
+- Phase 6 is complete pending review. No commit or deployment.
+
+## Phase 7 summary (2026-10-26)
+
+- Audited page types against the 138 sitemap URLs plus the unindexed category hubs. No page code or content was changed.
+- Coverage: 100 style pages, 18 category hubs, six platform guides, three libraries, eight tool pages, `/studio`, and five information/embed pages.
+- Ranked 25 missing page types by visitor need, useful unique content and duplicate risk: 16 build, 7 merge, 2 skip.
+- Build candidates: TikTok, Facebook, Free Fire, PUBG Mobile/BGMI, X, Roblox, Call of Duty Mobile, Telegram, YouTube, Fortnite, Snapchat and Mobile Legends field guides, plus heart, star/sparkle, arrow and divider symbol pages.
+- Merge candidates: emoji categories, kaomoji categories, a platform-limit table, a character counter with warnings, troubleshooting, Instagram highlight names and WhatsApp group names. The existing owners stay canonical.
+- Skip candidates: generic bio/username/nickname generators and the Roman Urdu/Pakistan cluster before Phase 13.
+- No new style-generator pages. Game pages outside the Phase 9 list are not promoted without the same demand and source checks.
+- Phase 9 candidates are conditional on a source-and-checked-date table; pages that cannot meet the gate must not ship.
+- `npm run build`: passed. `npm test`: 661 tests, 657 passed, 4 skipped, 0 failed.
+- Sitemap and protected URLs unchanged. Files changed: `SEO-REPORT.md`, `progress.md`.
+- Phase 7 is complete pending review. No commit or deployment.
+
+## Phase 8 summary (2026-10-26)
+
+- Added home depth: a five-row field-choice table, expanded support-label guidance and a Unicode/search/screen-reader explanation.
+- Added a visible owner/privacy line below the home generator: no account, no upload, no stored text, with links to `/privacy` and `/about`.
+- Home prose is 1,426 words by `homeWordCount()` and 1,633 words in the rendered content band, inside the 1,200–1,800 target. The tool and results list were not moved.
+- Added `/fonts` support-label guidance with live counts: 35 safe, 55 good, 10 limited. It explains glyph coverage versus field validation.
+- Added `/styles` field-safety guidance, eight documented character limits and an accessibility note.
+- Published limits: Instagram bio 150; TikTok nickname 30 and bio 80; X bio 160; Discord display name 32 and username 2–32; Telegram username 5–32; WhatsApp profile name 25. All link to official help pages and are checked to 2026-10-26.
+- No unverified service or limit was added. Instagram usernames and X display names were omitted for lack of an official limit.
+- Added tests for the home word band, assurance links, table semantics, `/fonts` counts, official-source hosts and the rendered `/styles` sections.
+- `npm run build` passed. `npm test`: 667 tests, 663 passed, 4 skipped, 0 failed.
+- Protected comparison: 49 URLs, 0 errors. Titles, descriptions, canonicals and H1s unchanged. Bodies changed on `/`, `/fonts` and `/styles` from this phase; the other five body diffs and all JSON-LD diffs pre-date Phase 8.
+- Sitemap remains 138 URLs. No page added, merged or removed. No commit or deployment.
+- Phase 8 is complete pending review.
+
+## Phase 9 summary (2026-10-26)
+
+- Implemented batch 1: TikTok, Facebook, X, YouTube and Telegram font generator pages at five new top-level routes.
+- Kept the pages outside `/styles/<key>` so the protected `/styles` hub, its “six guides” copy and the existing platform routes were not changed.
+- Added `lib/platform-pages.js` with unique copy, a 40–42-word quick answer, three FAQs, source-linked field rules, fallback advice and internal links for each page.
+- Added a shared `components/platform-guide.jsx` renderer with breadcrumbs, converter output, quick answer, sourced field table, checked dates, FAQs, related searches and related links.
+- Published field rules: TikTok nickname 30, bio 80, username 2–24; Facebook profile name plain, username minimum 5, Intro no limit checked; X display name 50, bio 160, username more than 4/up to 15; YouTube handle 3–30, title 100, description 5,000, channel name no limit checked; Telegram first name 1–64, last name 0–64, bio 0–70, username 5–32.
+- Body copy is 530–597 words per page; the five pages share at most 2.9% of sentences and 37.1% of word tokens.
+- Added all five routes to the sitemap, growing it from 138 to 143 URLs, and to the generated `llms.txt`.
+- Added keyword mapping for the five platforms; rebuild result: 173 unique keywords, 157 mapped, 10 skipped, 6 planned, 0 needing review; 192 variations and 0 SEO validation failures.
+- Added unit and integration coverage for page uniqueness, FAQs, source URLs and dates, converter output, internal links, sitemap, `llms.txt` and `?text=` noindex.
+- `npm run build`: passed. `npm test`: 691 tests, 687 passed, 4 skipped, 0 failed.
+- Protected comparison: 49 URLs, 0 errors. Titles, descriptions, canonicals and H1s unchanged. Bodies still differ on the same eight URLs reported before Phase 9; JSON-LD still differs on all 49 from the Phase 6 schema change. No protected page received a Phase 9 body edit.
+- Sitemap is now 143 URLs. No commit or deployment.
+- Phase 9 batch 1 is complete pending review; the official TikTok, Facebook and Telegram pages could not be re-fetched in this session and should be checked again before deployment.

@@ -29,6 +29,9 @@ import {
   boardRows, WORDS_PER_KEYWORD, EMOJI_MIN, EMOJI_MAX,
   STYLES_LEDE, STYLES_HOW_HEADING, STYLES_HOW,
   STYLES_GUIDES_HEADING, STYLES_GUIDES_BODY, stylesHubAdPlan,
+  STYLES_FIELD_HEADING, STYLES_FIELD_INTRO, STYLES_FIELD_ROWS, STYLES_FIELD_NOTE,
+  STYLES_LIMITS_HEADING, STYLES_LIMITS_INTRO, STYLES_LIMITS, STYLES_LIMITS_NOTE,
+  STYLES_LIMIT_CHECKED, STYLES_ACCESS_HEADING, STYLES_ACCESS,
 } from '@/lib/styles-material.js';
 
 function stylesMeta(hasText = false) {
@@ -124,6 +127,83 @@ export function renderStylesHub(searchParams) {
           policy problem rather than a layout detail, so the floor is checked
           against the prose above rather than assumed. */}
       {allowed ? <AdUnit slot={env.adsense.slot} client={adsenseConfigured ? env.adsense.client : ''} /> : null}
+
+      <section className="prose" aria-labelledby="styles-fields">
+        <h2 id="styles-fields">{STYLES_FIELD_HEADING}</h2>
+        <p className="muted">{STYLES_FIELD_INTRO}</p>
+        <div className="table-wrap">
+          <table className="table">
+            <caption>A support label describes rendering; the field decides whether the string is accepted.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Field</th>
+                <th scope="col">Safest first choice</th>
+                <th scope="col">Avoid</th>
+                <th scope="col">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              {STYLES_FIELD_ROWS.map((r) => (
+                <tr key={r.field}>
+                  <th scope="row">{r.field}</th>
+                  <td>{r.pick}</td>
+                  <td>{r.avoid}</td>
+                  <td>{r.why}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="muted how-note">{STYLES_FIELD_NOTE}</p>
+      </section>
+
+      <section className="prose" aria-labelledby="styles-limits">
+        <h2 id="styles-limits">{STYLES_LIMITS_HEADING}</h2>
+        <p className="muted">
+          {STYLES_LIMITS_INTRO} Source check: <time dateTime={STYLES_LIMIT_CHECKED}>26 October 2026</time>.
+        </p>
+        <div className="table-wrap">
+          <table className="table">
+            <caption>Documented limits only. Undocumented fields are left out rather than guessed.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Service</th>
+                <th scope="col">Field</th>
+                <th scope="col">Limit</th>
+                <th scope="col">What it means for styled text</th>
+                <th scope="col">Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {STYLES_LIMITS.map((r) => (
+                <tr key={`${r.platform}-${r.field}`}>
+                  <th scope="row">{r.platform}</th>
+                  <td>{r.field}</td>
+                  <td>{r.limit}</td>
+                  <td>{r.note}</td>
+                  <td>
+                    <a
+                      href={r.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${r.sourceLabel} (opens in a new tab)`}
+                    >
+                      {r.sourceLabel}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="muted how-note">{STYLES_LIMITS_NOTE}</p>
+      </section>
+
+      <section className="prose" aria-labelledby="styles-accessibility">
+        <h2 id="styles-accessibility">{STYLES_ACCESS_HEADING}</h2>
+        {STYLES_ACCESS.map((paragraph) => <p key={paragraph} className="muted">{paragraph}</p>)}
+        <p><a href="/studio">Open the studio for image text</a></p>
+      </section>
 
       <section className="prose" aria-labelledby="styles-guides">
         <h2 id="styles-guides">{STYLES_GUIDES_HEADING}</h2>

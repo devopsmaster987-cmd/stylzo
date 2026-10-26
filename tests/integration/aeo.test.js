@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { get, startServer } from '../helpers/server.js';
 import { catalog } from '../../services/catalog.js';
+import { WHY_BOXES, WHAT_IT_IS } from '../../lib/aeo.js';
 
 const jsonLd = (html, type) => {
   const re = new RegExp(
@@ -17,6 +18,10 @@ const ldBlocks = (html) => [...html.matchAll(
 )].map((m) => JSON.parse(m[1].replace(/\\u003c/g, '<').replace(/\\u003e/g, '>').replace(/\\u0026/g, '&')));
 
 const markup = (html) => html.replace(/<script[\s\S]*?<\/script>/g, '');
+const decode = (s) => s
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&nbsp;/g, ' ');
+const text = (html) => decode(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
 const questionText = (html) => [...markup(html).matchAll(/<h3>([^<]*\?)<\/h3>/g)].map((m) => m[1]);
 
 describe('answer engine optimisation', () => {
@@ -29,7 +34,7 @@ describe('answer engine optimisation', () => {
       const rb = await (await get(server.base, '/robots.txt')).text();
       for (const agent of [
         'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'anthropic-ai',
-        'PerplexityBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'Bingbot',
+        'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'Bingbot',
         'cohere-ai', 'meta-externalagent',
       ]) {
         assert.ok(rb.includes(`User-Agent: ${agent}`), `robots.txt does not mention ${agent}`);
@@ -57,11 +62,15 @@ describe('answer engine optimisation', () => {
       assert.match(body, /^# Stylzo/);
       // It has to point at pages that exist, or it is worse than nothing.
       for (const path of ['/fonts', '/tools', '/studio', '/image-compression', '/about', '/privacy', '/symbols',
-        '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker', '/qr-code-reader']) {
+        '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker', '/qr-code-reader',
+        '/tiktok-font-generator', '/facebook-font-generator', '/x-font-generator', '/youtube-font-generator', '/telegram-font-generator']) {
         assert.ok(body.includes(`](https://www.abdulsamad.shop${path}`), `llms.txt omits ${path}`);
       }
       assert.match(body, /## Important limits/, 'llms.txt should state what the tool cannot do');
       assert.match(body, /never sent to the server/, 'llms.txt should state the privacy position');
+      for (const category of Object.values(catalog().categories)) {
+        assert.ok(body.includes(category.name), `llms.txt omits the ${category.name} category`);
+      }
     });
 
     test('llms.txt is generated, so it cannot drift from the catalog', () => {
@@ -72,13 +81,26 @@ describe('answer engine optimisation', () => {
   });
 
   describe('answer-first content', () => {
-    const PAGES = ['/', '/tools', '/image-compression', '/qr-code-generator', '/qr-code-reader', '/about', '/privacy', '/terms', '/contact', '/symbols', '/emoji', '/kaomoji', '/fonts', '/styles', '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker'];
+    const PAGES = ['/', '/tools', '/image-compression', '/qr-code-generator', '/qr-code-reader', '/about', '/privacy', '/terms', '/contact', '/symbols', '/emoji', '/kaomoji', '/fonts', '/styles', '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker', '/tiktok-font-generator', '/facebook-font-generator', '/x-font-generator', '/youtube-font-generator', '/telegram-font-generator'];
 
     test('every page answers its core question before the long prose', async () => {
       for (const path of PAGES) {
         const doc = markup(await (await get(server.base, path)).text());
         assert.ok(doc.includes('class="quick-answer"'), `${path} has no answer-first block`);
         assert.match(doc, /class="quick-answer"[\s\S]*?<h2[^>]*>[^<]*\?<\/h2>/, `${path} answer block has no question`);
+      }
+    });
+
+    test('each answer-first paragraph is 40 to 60 words', async () => {
+      for (const path of PAGES) {
+        const doc = markup(await (await get(server.base, path)).text());
+        const block = doc.slice(doc.indexOf('class="quick-answer"'));
+        const paragraph = (block.match(/<p>([\s\S]*?)<\/p>/) || [])[1] || '';
+        const count = text(paragraph).split(' ').filter(Boolean).length;
+        assert.ok(
+          count >= 40 && count <= 60,
+          `${path} answer is ${count} words, outside 40-60`,
+        );
       }
     });
 
@@ -125,28 +147,22 @@ describe('answer engine optimisation', () => {
       assert.ok(site.publisher?.['@id'], 'WebSite should reference its publisher');
     });
 
-    test('every FAQ question in schema is also a visible heading', async () => {
-      // Schema the page does not show is a manual-action risk, and it is the
-      // most common way structured data goes wrong.
+    test('visible FAQ questions remain, without FAQPage rich-result markup', async () => {
       for (const path of ['/tools', '/image-compression', '/qr-code-generator', '/qr-code-reader', '/about', '/symbols', '/studio', '/fonts', '/styles',
         '/universal-text-fixer', '/screenshot-to-text', '/pdf-editor', '/pdf-accessibility-checker']) {
         const html = await (await get(server.base, path)).text();
-        const faq = jsonLd(html, 'FAQPage');
-        assert.ok(faq, `${path} has no FAQPage`);
-        const visible = new Set(questionText(html));
-        for (const q of faq.mainEntity) {
-          assert.ok(visible.has(q.name), `${path} claims an invisible FAQ: "${q.name}"`);
-          assert.ok(q.acceptedAnswer.text.length > 40, `${path} has a thin answer for "${q.name}"`);
-        }
+        const doc = markup(html);
+        assert.ok(doc.includes('Common questions') || doc.includes('Frequently asked questions'), `${path} lost its visible FAQ`);
+        assert.ok(questionText(html).length > 0, `${path} has no visible FAQ questions`);
+        assert.equal(jsonLd(html, 'FAQPage'), null, `${path} still emits FAQPage`);
       }
     });
 
-    test('answers are phrased the way a person would ask', async () => {
-      // Assistant queries are questions, not keywords.
+    test('FAQ headings are phrased the way a person would ask', async () => {
       for (const path of ['/tools', '/about']) {
-        const faq = jsonLd(await (await get(server.base, path)).text(), 'FAQPage');
-        for (const q of faq.mainEntity) {
-          assert.ok(q.name.includes('?'), `"${q.name}" is not a question`);
+        const html = await (await get(server.base, path)).text();
+        for (const question of questionText(html)) {
+          assert.ok(question.includes('?'), `"${question}" is not a question`);
         }
       }
     });
@@ -164,26 +180,15 @@ describe('answer engine optimisation', () => {
       }
     });
 
-    test('the studio describes the steps it really has', async () => {
+    test('the studio describes real steps without HowTo rich-result markup', async () => {
       const html = await (await get(server.base, '/studio')).text();
-      const howTo = ldBlocks(html).find((b) => b['@type'] === 'HowTo');
-      assert.ok(howTo, '/studio emits no HowTo');
-      assert.ok(howTo.step.length >= 3, 'a HowTo with fewer than 3 steps is not a procedure');
-      // Every step must be a real instruction, not a label with nothing behind it.
-      for (const step of howTo.step) {
-        assert.equal(step['@type'], 'HowToStep');
-        assert.ok(step.name.length > 3, `thin step name: "${step.name}"`);
-        assert.ok(step.text.length > 40, `thin step text for "${step.name}"`);
-      }
-      assert.deepEqual(
-        howTo.step.map((s) => s.position),
-        howTo.step.map((_, i) => i + 1),
-        'HowToStep positions must be 1-based and in order',
-      );
-      // The steps are claimed as this page's own, so they have to be on the page.
       const doc = markup(html);
-      for (const step of howTo.step) {
-        assert.ok(doc.includes(step.name), `HowTo claims a step the page does not show: "${step.name}"`);
+      const list = (doc.match(/<ol class="how-steps">([\s\S]*?)<\/ol>/) || [])[1] || '';
+      const steps = [...list.matchAll(/<h3>([^<]+)<\/h3>/g)].map((m) => m[1]);
+      assert.ok(steps.length >= 3, '/studio shows fewer than 3 how-to steps');
+      assert.equal(ldBlocks(html).some((b) => b['@type'] === 'HowTo'), false, '/studio still emits HowTo');
+      for (const step of steps) {
+        assert.ok(step.length > 3, `thin step name: "${step}"`);
       }
     });
 
@@ -194,6 +199,28 @@ describe('answer engine optimisation', () => {
       const questions = ldBlocks(html).filter((b) => b['@type'] === 'Question');
       assert.equal(questions.length, 0, 'a filtered render must not carry Question nodes');
       assert.equal(ldBlocks(html).some((b) => b['@type'] === 'FAQPage'), false, 'and no FAQPage');
+      assert.equal(ldBlocks(html).some((b) => b['@type'] === 'HowTo'), false, 'and no HowTo');
+    });
+
+    test('rich-result schema types are not emitted on key pages', async () => {
+      for (const path of ['/', '/tools', '/about', '/fonts', '/styles', '/studio', '/fonts/bold',
+        '/fonts/category/italic', '/styles/instagram', '/image-compression', '/qr-code-generator',
+        '/tiktok-font-generator', '/facebook-font-generator', '/x-font-generator', '/youtube-font-generator', '/telegram-font-generator']) {
+        const blocks = ldBlocks(await (await get(server.base, path)).text());
+        assert.equal(blocks.some((b) => b['@type'] === 'FAQPage'), false, `${path} emits FAQPage`);
+        assert.equal(blocks.some((b) => b['@type'] === 'HowTo'), false, `${path} emits HowTo`);
+      }
+    });
+
+    test('the shared definition and box explanation are server-rendered', async () => {
+      for (const path of ['/', '/about']) {
+        const doc = text(markup(await (await get(server.base, path)).text()));
+        assert.ok(doc.includes(WHAT_IT_IS), `${path} does not render the shared definition`);
+      }
+      const about = text(markup(await (await get(server.base, '/about')).text()));
+      assert.ok(about.includes('How do fancy text generators work?'), '/about has no generator explanation');
+      assert.ok(about.includes('Why does my fancy text show up as empty boxes?'), '/about has no box explanation');
+      assert.ok(about.includes(WHY_BOXES), '/about does not render the shared box explanation');
     });
 
     test('the about page states every quotable figure, and only real ones', async () => {

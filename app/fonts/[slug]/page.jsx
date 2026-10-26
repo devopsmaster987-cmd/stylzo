@@ -5,10 +5,12 @@ import { pageMeta, toMetadata, renderCards, inputFromQuery, faqFor, SUPPORT_LABE
 import { site as SITE } from '@/config/site.js';
 import { nameWithText, styleContent } from '@/lib/style-content.js';
 import { fontPageContent, renderCustomFontExamples } from '@/lib/font-page-content.js';
+import { FONT_DESCRIPTION_OVERRIDES } from '@/lib/font-meta.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
 import { StyleRow } from '@/components/style-row.jsx';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
+import { categoryHref } from '@/lib/category-routing.js';
 
 const SITE_NAME = SITE.name;
 
@@ -40,7 +42,7 @@ function detailMeta(style, parent, hasText) {
   const textName = nameWithText(style.name);
   return pageMeta({
     title: custom ? custom.title : styleTitle(style.name),
-    description: custom ? custom.description : `${style.description}`.slice(0, 160),
+    description: custom ? custom.description : (FONT_DESCRIPTION_OVERRIDES[style.slug] || `${style.description}`.slice(0, 160)),
     path: `/fonts/${style.slug}`,
     canonicalPath: `/fonts/${style.indexable ? style.slug : (parent ? parent.slug : style.slug)}`,
     noindex: !style.indexable || hasText,
@@ -162,7 +164,7 @@ export default async function FontDetailPage({ params, searchParams }) {
               </ul>
               <p className="muted">
                 Browse the{' '}
-                <a href={`/fonts/category/${style.category}`}>{cat ? cat.name : style.category}</a>{' '}
+                <a href={categoryHref(style.category)}>{cat ? cat.name : style.category}</a>{' '}
                 category, or see <a href="/fonts">all font styles</a>.
               </p>
             </section>
@@ -190,7 +192,7 @@ export default async function FontDetailPage({ params, searchParams }) {
         <p>{content.fact}</p>
         <p>{content.distinct}</p>
         <p>
-          Category: <a href={`/fonts/category/${style.category}`}>{cat ? cat.name : style.category}</a>.{' '}
+          Category: <a href={categoryHref(style.category)}>{cat ? cat.name : style.category}</a>.{' '}
           {style.tags?.length ? `Tagged as ${style.tags.slice(0, 3).join(', ')}.` : ''}
         </p>
         {parent ? <p>This style builds on <a href={`/fonts/${parent.slug}`}>{parent.name}</a>.</p> : null}

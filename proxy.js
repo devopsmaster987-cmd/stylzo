@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { env, firebaseConfigured, adsenseConfigured } from './config/environment.js';
 import { CATEGORY_KEYS } from './lib/category-keys.js';
+import { categoryHref } from './lib/category-routing.js';
 
 // /fonts/Bold and /styles/Instagram are how third-party links and hand-typed
 // URLs actually arrive. Both routes match lowercase slugs only, so today they
@@ -54,7 +55,10 @@ function categoryQueryRedirect(request) {
   if (!key || !CATEGORY_KEYS.includes(key)) return null;
 
   const url = request.nextUrl.clone();
-  url.pathname = `/fonts/category/${key}`;
+  // Redirect straight to the final destination. Sending ?category=outline to
+  // the retiring hub would chain two 301s, which wastes crawl budget and hides
+  // the real target from the crawler.
+  url.pathname = categoryHref(key);
   url.searchParams.delete('category');
   return NextResponse.redirect(url, 301);
 }
@@ -104,6 +108,10 @@ function cspTemplate() {
       'https://tpc.googlesyndication.com',
       'https://csi.gstatic.com',
       'https://googleadservices.com',
+      // Ad traffic quality (SODAR) beacons and its frames. Without these the
+      // tag works but logs CSP violations for every pageview.
+      'https://ep1.adtrafficquality.google',
+      'https://ep2.adtrafficquality.google',
     ]
     : [];
 
@@ -142,8 +150,10 @@ function cspTemplate() {
     `frame-ancestors 'none'`,
     ...(adsEnabled
       ? [
-        // Ads render in iframes on doubleclick / googlesyndication.
-        `frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com`,
+        // Ads render in iframes on doubleclick / googlesyndication, the
+        // traffic-quality check opens frames on adtrafficquality, and its
+        // verification step frames www.google.com.
+        `frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://www.google.com`,
         // Google-certified consent platforms (Funding Choices) load their own frames.
         `child-src https://fundingchoicesmessages.google.com`,
       ]
