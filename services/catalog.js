@@ -202,19 +202,55 @@ export function searchStyles(query, n = 24) {
 
 /**
  * Return related styles from the same category and parent.
+ *
+ * Every indexable style page in a category used to render the same related
+ * block in catalog order, which meant adjacent category pages repeated
+ * near-identical link lists. The low-effort signals Google sees as boilerplate
+ * cross-linking: a whole category agreeing on identical "Related styles"
+ * anchors on every page.
+ *
+ * The list is now specific to each style: candidates score by how many tags
+ * they share with the style itself, with a small boost for the style's parent
+ * (whose output is always a near neighbour) and a deterministic seeded
+ * tie-break so the remaining slots differ page to page without becoming
+ * random per request.
  */
 export function relatedStyles(style, n = 6) {
   const root = style.parent || style.slug;
+  const tags = new Set(style.tags || []);
 
-  const pool = catalog().indexableStyles.filter(
-    (item) =>
-      item.slug !== style.slug &&
-      (item.category === style.category || item.slug === root)
-  );
+  // Same string-seed family as lib/style-content.js so two subagents writing
+  // content for the same style agree on ordering without sharing code.
+  const seed = `related:${style.slug}`;
 
-  pool.sort((a, b) => (b.slug === root) - (a.slug === root));
+  const score = (item) => {
+    let s = 0;
+    if (item.slug === root) s += 100;
+    for (const tag of item.tags || []) s += tags.has(tag) ? 10 : 0;
+    // A per-style offset breaks ties so lists differ across pages of the same
+    // category, while staying identical between requests for the same page.
+    s += hash32(`${seed}:${item.slug}`) % 7;
+    return s;
+  };
 
-  return pool.slice(0, n);
+  return catalog()
+    .indexableStyles.filter(
+      (item) => item.slug !== style.slug && (item.category === style.category || item.slug === root)
+    )
+    .map((item) => [score(item), item])
+    .sort((a, b) => b[0] - a[0])
+    .slice(0, n)
+    .map(([, item]) => item);
+}
+
+/** A deterministic 32-bit hash for stable ordering (no randomness). */
+function hash32(value) {
+  let h = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    h ^= value.charCodeAt(i);
+    h = (h * 16777619) >>> 0;
+  }
+  return h;
 }
 
 export function pageContent(key) {

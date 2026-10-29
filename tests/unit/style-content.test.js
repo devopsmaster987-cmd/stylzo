@@ -18,7 +18,10 @@ function proseFor(style) {
 
 describe('font page content', () => {
   test('the catalog has the indexable pages this is written for', () => {
-    assert.equal(indexable.length, 100);
+    // The catalog went from 100 to 94 indexable styles when the duplicated
+    // output styles were removed (see scripts/build-fonts.js and the
+    // REMOVED_FONT_REDIRECTS map in lib/styles-routing.js).
+    assert.equal(indexable.length, 94);
   });
 
   test('no two pages share the same prose', () => {

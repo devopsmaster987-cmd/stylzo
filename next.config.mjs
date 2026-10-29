@@ -1,4 +1,4 @@
-import { styleRedirects } from './lib/styles-routing.js';
+import { styleRedirects, fontRedirects } from './lib/styles-routing.js';
 import { categoryRedirects } from './lib/category-routing.js';
 
 // See the comment on `headers()` below for why nothing under /public may be
@@ -39,6 +39,12 @@ const nextConfig = {
       // Two category hubs duplicated a single style page. The style pages stay
       // exactly as they are; only the thin hub URLs are retired.
       ...categoryRedirects(),
+
+      // Catalog styles whose output duplicated another style are gone from
+      // data/fonts.json; each /fonts/<slug> URL 301s to the kept style's page.
+      // Same 301-for-good reasoning as the /styles rules below, and the map
+      // lives in lib/styles-routing.js so config, generator and tests agree.
+      ...fontRedirects(),
 
       // Thin doorway pages under /styles/*.
       //

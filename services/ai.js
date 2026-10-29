@@ -4,11 +4,11 @@ import { env } from '../config/environment.js';
 import { getStyle, searchStyles } from './catalog.js';
 
 const VIBES = {
-  cute: { picks: ['circled', 'sparkle-hearts', 'bio-hearts', 'kaomoji-happy', 'emoji-cute'] },
+  cute: { picks: ['circled', 'sparkle-hearts', 'stars-frame', 'kaomoji-happy', 'emoji-cute'] },
   dark: { picks: ['fraktur', 'bold-fraktur', 'zalgo-heavy', 'night-mood', 'boss-mode'] },
   gaming: { picks: ['clan-tag', 'gg-frame', 'console', 'level-up', 'game-over'] },
-  retro: { picks: ['fullwidth', 'aesthetic-wide', 'dot-sep', 'mood-ring'] },
-  classy: { picks: ['bold-script', 'small-caps', 'story-title', 'quote-frame'] },
+  retro: { picks: ['fullwidth', 'symbol-flower', 'bold-dash-sep', 'mood-ring'] },
+  classy: { picks: ['bold-script', 'small-caps', 'quotes-frame', 'double-struck'] },
   chaos: { picks: ['zalgo-extreme', 'upside-down', 'glitch-alternate', 'crossed-out'] },
   bold: { picks: ['bold', 'sans-bold', 'all-caps', 'hype-post'] },
   minimal: { picks: ['sans', 'monospace', 'minimal-bio', 'all-lowercase'] },

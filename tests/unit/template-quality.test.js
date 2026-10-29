@@ -140,12 +140,18 @@ describe('programmatic template quality gates', () => {
     // Phase 5 found 70 style pages below the 250-word floor: the 30 protected
     // old-template pages from list A, and the list-B pages whose content batches
     // are not written yet. This keeps the number from growing silently.
+    // It later dropped to 67 when the three custom list-B pages whose output
+    // duplicated another style (aesthetic-wide, bio-hearts, cute-bubble) were
+    // removed from the catalog and its redirects 301 to the kept styles.
+    // The count includes 29 protected old-template pages: profile-stars came
+    // off the indexed list because its output duplicated stars-frame; that
+    // URL is one of the /fonts 301s in lib/styles-routing.js now.
     const thin = indexable.filter((style) => {
       const custom = fontPageContent[style.slug];
       return words(custom ? customText(custom) : generatedText(style)).length < 250;
     });
     const protectedCount = thin.filter((style) => protectedPaths.has(`/fonts/${style.slug}`)).length;
-    assert.equal(thin.length, 70, `thin style pages changed: ${thin.map((s) => s.slug).join(', ')}`);
-    assert.equal(protectedCount, 30, 'the protected old-template count changed');
+    assert.equal(thin.length, 67, `thin style pages changed: ${thin.map((s) => s.slug).join(', ')}`);
+    assert.equal(protectedCount, 29, 'the protected old-template count changed');
   });
 });

@@ -7,33 +7,7 @@
 // TODO: add the remaining 50 list-B font pages in batches 3-7.
 
 export const fontPageContent = {
-  'aesthetic-wide': {
-    title: 'Aesthetic Wide Text Generator',
-    description: 'Aesthetic Wide turns letters into fullwidth Unicode forms for roomy bios, captions and profile names. Copy the result and paste it anywhere plain text works.',
-    h1: 'Aesthetic Wide Text Generator',
-    lede: 'Fullwidth letters give a name a wider, rounded look without installing a font.',
-    quick: 'Most devices with a font covering the fullwidth block display it; an app without those glyphs may draw empty boxes instead.',
-    intro:
-      'Aesthetic Wide uses the fullwidth forms of Latin letters and digits, the same shapes used in East Asian text and in vaporwave graphics. Each ordinary character is replaced by a Unicode character from the Halfwidth and Fullwidth Forms block, so an A becomes Ａ and a 7 becomes ７. The result keeps the original spelling but takes up more horizontal space, which gives short names and headings a calm, roomy rhythm. The conversion happens in the browser and does not depend on a downloaded font. People use it for Instagram bios, TikTok captions, profile names and display titles where a wider line feels more deliberate than plain text. It is also common in vaporwave and retro layouts. Spaces and punctuation are left as they are, so the output stays easy to select and copy. Because the letters are different characters rather than a styled font, the look survives copy and paste.',
-    where:
-      'Only the twenty-six uppercase letters, twenty-six lowercase letters and ten digits have fullwidth forms in this conversion. A space, comma, full stop, apostrophe or hyphen stays at its ordinary width, and accented letters such as é or ü have no fullwidth equivalent, so they fall back to the surrounding font. A year or a price does become wide because digits are mapped, while a sentence with punctuation ends up with narrow marks between wide letters. Fullwidth characters are separate Unicode code points, not a font effect, so a device without the block may draw boxes. Apps that normalise input can convert the text back to ASCII. Screen readers may announce the wide characters as separate symbols.',
-    examples: ['Alex Rivera', 'coastal breeze', 'Berlin 2026'],
-    faqs: [
-      {
-        q: 'Does Aesthetic Wide text still work as normal text?',
-        a: 'It copies and pastes as text because each letter is a Unicode character. It is not an image or a font file. Some websites may normalise the characters back to plain ASCII when you save a name, so paste it into the field and check before relying on it.',
-      },
-      {
-        q: 'Why do fullwidth letters look uneven in some apps?',
-        a: 'The app font decides how wide and how tall each fullwidth glyph is drawn. Apps that lack the glyphs may substitute a fallback font or show a box. This is a display difference on the receiving device, not a problem with the copied text.',
-      },
-      {
-        q: 'Can a screen reader read a fullwidth name?',
-        a: 'It may read each wide character as its own symbol, spell the name, or map it to the ordinary letter; software differs. The visual width is not announced. Use plain letters where the name has to be recognised by a listener.',
-      },
-    ],
-    related: ['fullwidth', 'soft-bio', 'story-title', 'bold'],
-  },
+
 
   'all-lowercase': {
     title: 'All Lowercase Text Converter',
@@ -203,33 +177,7 @@ export const fontPageContent = {
     related: ['bar-under', 'underline', 'strike-underline', 'overline-underline'],
   },
 
-  'bio-hearts': {
-    title: 'Bio Hearts Text Generator',
-    description: 'Bio Hearts wraps a name or caption in outline heart symbols without changing the letters. The hearts are ordinary Unicode, so nothing needs installing.',
-    h1: 'Bio Hearts Text Generator',
-    lede: 'Outline hearts frame a name or caption and leave every letter readable.',
-    quick: 'The heart is a common text symbol; if an app lacks U+2661 it may show an empty box or substitute a different heart.',
-    intro:
-      'Bio Hearts wraps a name, caption or short line in outline heart symbols. The hearts are U+2661 WHITE HEART SUIT, with a space between the symbol and the text, so the letters are untouched. The result looks like a gentle frame rather than a replacement alphabet. People use it for Instagram bios, profile names, captions, usernames in chats and small headings where a little warmth is enough. Because the output is ordinary Unicode text, it can be copied into any field that accepts text, and the hearts travel with it. The frame is symmetric and stays on one line as long as the text is short. Longer sentences push the hearts far apart and may wrap, which weakens the effect. Bio Hearts is a decoration, not a way to make text more readable. Keep the frame for short personal lines and use plain text where the words carry important information. The heart is an outline glyph, not an emoji, so it usually takes the text colour.',
-    where:
-      'The frame adds U+2661 and an ordinary space at each end; the letters, digits and punctuation inside are not changed. That means the style does not fail because a letter is missing, but it can fail because a field rejects symbols. A username box that allows only letters and numbers may strip the hearts, while a bio or display name usually accepts them. The heart can be drawn as an outline, a filled shape or an emoji-style glyph depending on the font, so its weight and colour are not guaranteed. Because the frame adds characters, it also counts toward a bio limit. On a narrow screen a long line can wrap and leave one heart alone. Keep the line short and check the saved result.',
-    examples: ['Alex Rivera', 'good vibes', 'Berlin 2026'],
-    faqs: [
-      {
-        q: 'Is the heart an emoji?',
-        a: 'This style uses U+2661 WHITE HEART SUIT, a text symbol rather than a colour emoji. It usually takes the surrounding text colour, although some apps may substitute an emoji-style glyph. The letters inside the frame are unchanged.',
-      },
-      {
-        q: 'Can I use Bio Hearts in a username?',
-        a: 'Only if the platform allows that symbol in the field. Many username fields accept letters, numbers, dots and underscores only and will reject or remove the hearts. Test it in the exact field; a display name or bio is usually more permissive than a handle.',
-      },
-      {
-        q: 'Does the frame count toward a bio character limit?',
-        a: 'Yes. The two hearts and the spaces around them are part of the text, so they use the same characters a bio or display-name field counts. A short line leaves room for the frame; a line near the limit may be cut off.',
-      },
-    ],
-    related: ['symbol-heart', 'soft-bio', 'aesthetic-wide', 'handle-wrap'],
-  },
+
 
   'bold-fraktur': {
     title: 'Bold Gothic Text Generator',
@@ -256,7 +204,7 @@ export const fontPageContent = {
         a: 'It may read the Unicode names, map the letters back to A to Z, or spell them out, depending on the software. The heavy blackletter appearance is not conveyed. A listener may not recognise the word, so use ordinary letters where the name must be understood.',
       },
     ],
-    related: ['fraktur', 'boss-mode', 'story-title', 'bold'],
+    related: ['fraktur', 'boss-mode', 'bold-script', 'bold'],
   },
 
   'boss-mode': {
@@ -315,33 +263,7 @@ export const fontPageContent = {
     related: ['monospace', 'boss-mode', 'clan-tag', 'gg-frame'],
   },
 
-  'cute-bubble': {
-    title: 'Cute Bubble Text Generator',
-    description: 'Cute Bubble turns letters and numbers into circled Unicode characters for bios, captions and profile names. The round shapes copy as text.',
-    h1: 'Cute Bubble Text Generator',
-    lede: 'Circled letters give a short name the soft shape of a sticker or a badge.',
-    quick: 'The circled alphabet is common, but a font without those glyphs may replace the characters with empty boxes.',
-    intro:
-      'Cute Bubble maps ordinary letters and digits to enclosed alphanumeric characters. An A becomes Ⓐ, a lowercase b becomes ⓑ, and 2026 becomes ②⓪②⑥. The result looks like a row of small round badges, which suits a gentle bio, a caption or a profile name. The mapping covers both cases and the ten digits, so a mixed line stays consistent. These are text characters, not emoji, so they usually take the colour of the surrounding words instead of turning into a colour picture. The style keeps the spelling, which means the line can still be copied and pasted like any other text. It is most effective on a short name or a two- or three-word phrase. Longer lines become busy and lose the clean, rounded rhythm. A plain copy is worth keeping for search and for fields that only accept standard letters.',
-    where:
-      'Each circled character is a separate Unicode code point from the Enclosed Alphanumerics block. Spaces, punctuation and emoji are not mapped, so a comma or full stop remains ordinary between the round letters. Accented characters such as é or ü have no circled form here and fall back to the surrounding font, which can make a name look uneven. The digit zero uses ⓪, an older code point with a shape that may look smaller than the circled digits ① to ⑨. Some fonts draw the lowercase circles very small, and at a tiny size ⓐ can be mistaken for a symbol. A username field may reject the characters, while a bio or display name is usually more permissive. Screen readers may read each one as a circled letter or simply as its base letter. Check the saved line.',
-    examples: ['Alex Rivera', 'night owl', 'Berlin 2026'],
-    faqs: [
-      {
-        q: 'Are Cute Bubble characters emoji?',
-        a: 'No. They are enclosed alphanumeric characters, not colour emoji. They usually take the text colour, although a device may draw them with a symbol font that gives them a slightly different shape.',
-      },
-      {
-        q: 'Why does the circled zero look smaller than the other digits?',
-        a: 'The zero is ⓪, a separate code point from an older range, while ① to ⑨ come from another block. Fonts often give the zero a smaller or lighter shape. It is still a circled digit and copies as text.',
-      },
-      {
-        q: 'Can Cute Bubble be used in a username?',
-        a: 'Only if the platform allows circled characters. Many handles accept letters, numbers, dots and underscores only and will remove the circles. A display name or bio is usually more permissive, so test the exact field before relying on it.',
-      },
-    ],
-    related: ['negative-circled', 'soft-bio', 'bio-hearts', 'symbol-heart'],
-  },
+
 
   'dot-above': {
     title: 'Dot Above Text Generator',
@@ -508,7 +430,7 @@ export const fontPageContent = {
         a: 'Many handles allow only letters, numbers, dots and underscores and will remove the flower. A display name, bio or caption is more likely to keep it. The two blossoms and their spaces also use part of the character budget, so test the exact field.',
       },
     ],
-    related: ['emoji-frame-fire', 'emoji-frame-party', 'emoji-frame-sparkles', 'bio-hearts'],
+    related: ['emoji-frame-fire', 'emoji-frame-party', 'emoji-frame-sparkles', 'symbol-heart'],
   },
 
   'emoji-frame-fire': {
@@ -648,7 +570,7 @@ export const fontPageContent = {
         a: 'Yes. The style uses a stored seed, so repeating the same input produces the same symbols in the same places. That makes the result predictable when you paste the same line again, unlike a random generator that changes on every press.',
       },
     ],
-    related: ['sparkle-sparkle', 'emoji-frame-sparkles', 'bio-hearts', 'soft-bio'],
+    related: ['sparkle-sparkle', 'emoji-frame-sparkles', 'stars-frame', 'small-caps'],
   },
 
   'flipped-letters': {
@@ -732,7 +654,7 @@ export const fontPageContent = {
         a: 'The Fraktur alphabet contains letters only, so digits are not converted and keep the app\'s normal font. The same is true for punctuation and accented letters. That contrast is part of the style, but it means a year or a price will not match the blackletter weight.',
       },
     ],
-    related: ['bold-fraktur', 'boss-mode', 'story-title', 'clan-tag'],
+    related: ['bold-fraktur', 'boss-mode', 'bold-script', 'clan-tag'],
   },
 
   fullwidth: {
@@ -742,7 +664,7 @@ export const fontPageContent = {
     lede: 'Fullwidth forms give every letter a square, evenly spaced body.',
     quick: 'Fullwidth letters belong to a standard Unicode block; most phones and browsers draw them, though a rare app may lack the glyphs.',
     intro:
-      'Wide (Fullwidth) replaces ASCII letters and digits with the fullwidth forms from the Halfwidth and Fullwidth Forms block. Those forms exist because East Asian typography aligns Latin text to a square grid, where each character occupies the same width as a Han, kana or hangul glyph. In a Latin-only line the effect is a row of square, evenly spaced letters with generous gaps. It reads as retro, technical or futuristic, and it has become a staple of vaporwave art, karaoke screens, arcade menus and banners. The style changes character identity, not font weight or letter spacing, so the output is text that can be copied into a caption, a document or a chat. Only basic letters and digits are converted; punctuation, spaces and accented letters keep their normal width, which creates a visible rhythm of wide and narrow marks. Short lines show the grid clearly. A full paragraph looks stretched and is tiring to read, so reserve the style for headings, names and display lines.',
+      'Wide (Fullwidth) replaces ASCII letters and digits with the fullwidth forms from the Halfwidth and Fullwidth Forms block. Those forms exist because East Asian typography aligns Latin text to a square grid, where each character occupies the same width as a Han, kana or hangul glyph. In a Latin-only line the effect is a row of square, evenly spaced letters with generous gaps. It reads as retro, aesthetic or futuristic, and it has become a staple of vaporwave art, karaoke screens, arcade menus and banners. The style changes character identity, not font weight or letter spacing, so the output is text that can be copied into a caption, a document or a chat. Only basic letters and digits are converted; punctuation, spaces and accented letters keep their normal width, which creates a visible rhythm of wide and narrow marks. Short lines show the grid clearly. A full paragraph looks stretched and is tiring to read, so reserve the style for headings, names and display lines.',
     where:
       'The table covers the twenty-six uppercase letters, twenty-six lowercase letters and ten digits. A comma, full stop, apostrophe, hyphen or accented character is outside the table and stays narrow, so a sentence has wide letters separated by thin marks. The forms are separate code points rather than a font setting. A device without the block may draw boxes, and an app that normalises input can convert them back to ASCII, which is common in handles and search fields. The width is roughly twice that of a normal Latin character, so a line wraps sooner than expected and a bio limit fills quickly. A screen reader may treat each wide letter as its own symbol, pronounce it as the plain letter, or spell the word. East Asian readers often recognise the forms from local typesetting; other readers see a retro display face. The style does not make text bold or monospaced, because spaces and punctuation keep their ordinary width. Test the destination field.',
     examples: ['Alex Rivera', 'TOKYO 1999', 'latte run'],
@@ -760,7 +682,7 @@ export const fontPageContent = {
         a: 'The wide letters are separate code points, so a search for the plain spelling may miss them. Some apps normalise the characters back to ASCII when saving a name, which restores search but removes the look. Keep a plain copy if the text has to be discoverable.',
       },
     ],
-    related: ['aesthetic-wide', 'soft-bio', 'story-title', 'bold'],
+    related: ['negative-circled', 'small-caps', 'bold-script', 'bold'],
   },
 
   'gg-frame': {
@@ -816,7 +738,7 @@ export const fontPageContent = {
         a: 'Rarely. Many handle fields allow only letters, numbers, dots and underscores, and the border also adds about a dozen characters. A display name or bio is more likely to accept it. Test the exact field and keep an unframed handle for mentions.',
       },
     ],
-    related: ['bio-hearts', 'soft-bio', 'emoji-frame-sparkles', 'aesthetic-wide'],
+    related: ['symbol-heart', 'small-caps', 'emoji-frame-sparkles', 'fullwidth'],
   },
 
   'health-bar': {

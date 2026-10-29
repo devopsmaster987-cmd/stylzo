@@ -67,7 +67,10 @@ describe('answer engine optimisation', () => {
         assert.ok(body.includes(`](https://www.abdulsamad.shop${path}`), `llms.txt omits ${path}`);
       }
       assert.match(body, /## Important limits/, 'llms.txt should state what the tool cannot do');
-      assert.match(body, /never sent to the server/, 'llms.txt should state the privacy position');
+      assert.match(body, /Styling runs in your browser/, 'llms.txt should state the privacy position');
+      // The old line claimed typed text is never sent to the server at all,
+      // which was false: the style search and /api/ai/suggest do receive text.
+      assert.match(body, /snippet of what you type/, 'llms.txt should name the helpers that receive text');
       for (const category of Object.values(catalog().categories)) {
         assert.ok(body.includes(category.name), `llms.txt omits the ${category.name} category`);
       }

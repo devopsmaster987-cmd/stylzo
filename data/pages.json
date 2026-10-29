@@ -27,7 +27,7 @@
       {
         "heading": "What is on the site",
         "body": [
-          "The text generator holds more than 5,600 generated styles across eighteen categories, a hundred of which have their own page explaining what the style is, what it looks like and which apps it works in.",
+          "The text generator holds more than 5,500 generated styles across eighteen categories, and the most useful of those have their own page explaining what the style is, what it looks like and which apps it works in.",
           "Six style guides cover where the finished text actually goes, covering Instagram, WhatsApp, Discord, gaming, languages and colours, so you can see a batch of styled words without typing anything first.",
           "There are three copyable libraries for symbols, emoji and kaomoji, a set of browser-based text tools for counting, converting and cleaning text, and a font studio that renders styled text to a PNG image."
         ],
@@ -46,7 +46,7 @@
       {
         "heading": "How it is built",
         "body": [
-          "The whole site runs from a small server that sends the same page to everyone. There is no account system, no database of users and no upload step: the styling runs in your browser, so what you type never reaches our server.",
+          "There is no account system and no database of users. The generator styles text in your browser and never uploads it. Two helpers — the style-name search and the AI suggestion shortcuts — do send a short snippet of what you type to the site to produce their results, and suggestions can use an external AI provider.",
           "The style catalogue is generated from the Unicode tables and stored as a compact index that the site reads once at startup. That is why the generator responds instantly no matter how many styles are available."
         ]
       }
@@ -54,7 +54,7 @@
   },
   "privacy": {
     "title": "Privacy",
-    "description": "What data this site handles, what advertising cookies do, and how to change your choice. Your typed text is never sent to our server.",
+    "description": "What data this site handles, what advertising cookies do, and how to change your choice. Styling runs in your browser; two helpers process short text snippets.",
     "body": [
       "This page explains what Stylzo does with information. It is written in plain language so you can check it rather than take it on trust."
     ],
@@ -62,7 +62,8 @@
       {
         "heading": "The text you type",
         "body": [
-          "Everything you type into the generator, the tools, the libraries and the keyword boards is transformed in your browser by a script that runs on your own device. Your text is not sent to our servers, not stored, and not read by us.",
+          "The generator, the tools and the libraries transform your text in your browser by a script that runs on your own device. The converter does not upload your text or store it anywhere.",
+          "Two on-site helpers do receive a short snippet of what you type across the network so they can produce their results: the style-name search and the AI suggestion shortcuts. The AI helper may pass that snippet to an external AI provider when that feature is switched on.",
           "If you use the share button to send a result somewhere, that action goes directly from your browser to the app you chose, and that app's own privacy rules then apply."
         ]
       },

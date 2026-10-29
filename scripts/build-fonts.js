@@ -25,14 +25,14 @@ const BASES = [
   ['sans-bold-italic', 'Sans Bold Italic', 'italic', ['sans', 'bold', 'italic'], 'Bold, slanted, sans-serif letters in one alphabet.', 'safe'],
   ['monospace', 'Monospace', 'clean', ['typewriter', 'code', 'mono'], 'Typewriter-style letters of equal width, in the Mathematical Monospace block.', 'safe'],
   ['fullwidth', 'Wide (Fullwidth)', 'wide', ['wide', 'vaporwave', 'aesthetic'], 'Fullwidth Latin letters, the same forms used in East Asian typesetting and vaporwave text.', 'safe'],
-  ['circled', 'Bubble (Circled)', 'bubble', ['bubble', 'circle'], 'Letters inside circles. Digits 0 to 9 are circled as well.', 'good'],
+  ['circled', 'Bubble (Circled)', 'bubble', ['bubble', 'circle'], 'Cute, rounded letters inside circles. Digits 0 to 9 are circled as well.', 'good'],
   ['negative-circled', 'Filled Bubble', 'bubble', ['bubble', 'filled', 'circle'], 'Letters on filled black circles. Some systems draw these as emoji, so appearance varies.', 'limited'],
-  ['squared', 'Squared', 'bubble', ['square', 'boxed'], 'Letters inside outlined squares. Support is patchy on older Android and Windows.', 'limited'],
+  ['squared', 'Squared', 'bubble', ['square', 'boxed'], 'Letters inside outlined squares. Digits have no square form and stay normal; support is patchy on older Android and Windows.', 'limited'],
   ['negative-squared', 'Filled Squared', 'bubble', ['square', 'filled'], 'Letters on filled black squares. May render as emoji-style tiles on some phones.', 'limited'],
   ['parenthesized', 'Parenthesized', 'bubble', ['parentheses', 'bracketed'], 'Letters wrapped in parentheses as single characters.', 'limited'],
   ['small-caps', 'Small Caps', 'small', ['small', 'caps', 'tiny'], 'Small capital letters. Looks the same for upper and lower case input.', 'good'],
   ['superscript', 'Superscript', 'small', ['tiny', 'superscript', 'raised'], 'Raised mini letters and digits. A few letters share a glyph across cases.', 'good'],
-  ['subscript', 'Subscript', 'small', ['tiny', 'subscript', 'lowered'], 'Lowered mini characters. Unicode only covers some letters; the rest stay normal.', 'limited'],
+  ['subscript', 'Subscript', 'small', ['tiny', 'subscript', 'lowered'], 'Lowered mini characters. Unicode has subscript forms for a, e and h through x plus the digits, so b, c, d, f, g, q, w, y, z and capitals stay normal.', 'limited'],
 ];
 
 // Line effects: slug, display name, what it does, marks (string or array), support.
@@ -249,15 +249,20 @@ for (const [key, setName, symbols, tags] of FLAIR_SETS) {
     });
   }
 }
-for (const [key, fName] of FRAME_LIST) {
+// The Hearts, Sparkles, Music, Flowers, Crown and Diamonds standalone frames
+// duplicate a symbols category wrap with the same output, so they are not
+// published as separate pages any more. The keys stay in FRAME_LIST because
+// composed styles still use them as decoration; only the standalone page is
+// skipped here.
+const STANDALONE_FRAMES = FRAME_LIST.filter(([key]) => !['hearts', 'sparkles', 'music', 'flower', 'crown', 'diamonds'].includes(key));
+for (const [key, fName] of STANDALONE_FRAMES) {
   const id = `${key}-frame`;
   add({
     id, slug: id, name: `${fName} Frame`, category: 'decorated', type: 'wrap', tags: ['frame', key, 'decorated'],
     pipeline: [{ type: 'frame', frame: key }], support: 'good', indexable: key === 'stars',
     description: `Wraps the whole line in a ${fName.toLowerCase()} frame made of Unicode symbols.`,
   });
-}
-add({
+}add({
   id: 'alternating-case', slug: 'alternating-case', name: 'Alternating Case', category: 'decorated', type: 'transform',
   tags: ['case', 'alternate', 'silly'], pipeline: [{ type: 'fn', name: 'alternate' }], support: 'safe', indexable: true,
   description: 'Switches between upper and lower case letter by letter, the wRiTaLiKeLoOk popular in captions.',
@@ -390,6 +395,10 @@ KAOMOJI_WRAPS.forEach(([key, name, prefix, suffix], i) => {
 });
 
 // ---------------------------------------------------------------- gaming category (M4)
+// Curated gaming styles whose output is identical to an existing style have
+// been removed (AFK Badge was the Squared alphabet with the case forced to
+// upper). Where an old /fonts/<slug> URL name disappears, lib/styles-routing.js
+// 301s it to the live duplicate.
 const GAMING = [
   ['clan-tag', 'Clan Tag', [{ type: 'case', mode: 'upper' }, { type: 'map', name: 'monospace' }, { type: 'frame', prefix: '[', suffix: ']' }], ['gaming', 'clan', 'tag'], 'good'],
   ['gg-frame', 'GG Frame', [{ type: 'frame', prefix: '\u2694 ', suffix: ' \u2694' }], ['gaming', 'gg', 'frame'], 'good'],
@@ -407,7 +416,6 @@ const GAMING = [
   ['final-boss', 'Final Boss', [{ type: 'map', name: 'fraktur' }, { type: 'zalgo', level: 'low', seed: 'final-boss' }], ['gaming', 'boss', 'zalgo'], 'limited'],
   ['spawn-point', 'Spawn Point', [{ type: 'map', name: 'double-struck' }, { type: 'frame', prefix: '\u25ce ', suffix: ' \u25ce' }], ['gaming', 'spawn', 'marker'], 'good'],
   ['critical-hit', 'Critical Hit', [{ type: 'map', name: 'bold' }, { type: 'combine', marks: ['strike', 'underline'] }], ['gaming', 'critical', 'hit'], 'good'],
-  ['afk', 'AFK Badge', [{ type: 'case', mode: 'upper' }, { type: 'map', name: 'squared' }], ['gaming', 'afk', 'badge'], 'limited'],
   ['loading', 'Loading Dots', [{ type: 'fn', name: 'separate', sep: '\u2022' }, { type: 'frame', prefix: '\u25b6 ', suffix: ' \u2026' }], ['gaming', 'loading', 'status'], 'good'],
   ['respawn-timer', 'Respawn Timer', [{ type: 'map', name: 'monospace' }, { type: 'frame', prefix: '\u23f1 ', suffix: ' \u23f1' }], ['gaming', 'timer', 'countdown'], 'good'],
   ['no-scope', 'No Scope', [{ type: 'fn', name: 'alternate' }, { type: 'frame', prefix: '\u25c9 ', suffix: ' \u25c9' }], ['gaming', 'noscope', 'aim'], 'good'],
@@ -431,17 +439,16 @@ GAMING.forEach(([slug, name, pipeline, tags, support], i) => {
 });
 
 // ---------------------------------------------------------------- social category (M4)
+// Social styles that turned out to be byte-for-byte duplicates of a base style
+// were removed: Bio Hearts (Hearts frame), Profile Stars (Stars frame), Story
+// Title (Bold Cursive), Soft Bio (Small Caps), Aesthetic Wide (Fullwidth),
+// Cute Bubble (Circled), Quote Frame (Quote Marks), Mirror Caption
+// (Alternating Case) and Sale Banner (Squared). The surviving pages keep their
+// own names; /fonts URLs of the removed slugs 301 to the kept style.
 const SOCIAL = [
-  ['bio-hearts', 'Bio Hearts', [{ type: 'frame', frame: 'hearts' }], ['bio', 'hearts'], 'safe'],
-  ['profile-stars', 'Profile Stars', [{ type: 'frame', frame: 'stars' }], ['profile', 'stars'], 'safe'],
-  ['story-title', 'Story Title', [{ type: 'map', name: 'bold-script' }], ['story', 'title'], 'good'],
   ['handle-wrap', 'Handle Wrap', [{ type: 'frame', frame: 'sparkles' }], ['handle', 'name'], 'good'],
-  ['soft-bio', 'Soft Bio', [{ type: 'map', name: 'small-caps' }], ['bio', 'soft'], 'good'],
-  ['aesthetic-wide', 'Aesthetic Wide', [{ type: 'map', name: 'fullwidth' }], ['aesthetic', 'wide'], 'safe'],
   ['caption-underline', 'Caption Underline', [{ type: 'map', name: 'sans-bold' }, { type: 'combine', marks: 'underline' }], ['caption', 'underline'], 'good'],
-  ['cute-bubble', 'Cute Bubble', [{ type: 'map', name: 'circled' }], ['cute', 'bubble'], 'good'],
   ['feed-divider', 'Feed Divider', [{ type: 'fn', name: 'separate', sep: '\u2726' }], ['divider', 'feed'], 'good'],
-  ['quote-frame', 'Quote Frame', [{ type: 'frame', frame: 'quotes' }], ['quote', 'frame'], 'safe'],
   ['username-flair', 'Username Flair', [{ type: 'map', name: 'sans-bold' }, { type: 'flair', symbols: '\u2728\u2727\u22c6', density: 'light', seed: 'username-flair' }], ['username', 'flair'], 'good'],
   ['announcement', 'Announcement', [{ type: 'case', mode: 'upper' }, { type: 'combine', marks: 'overline' }], ['announcement', 'shout'], 'good'],
   ['weekend', 'Weekend Post', [{ type: 'map', name: 'bold-script' }, { type: 'frame', frame: 'stars' }], ['weekend', 'post'], 'good'],
@@ -449,28 +456,31 @@ const SOCIAL = [
   ['minimal-bio', 'Minimal Bio', [{ type: 'map', name: 'sans' }, { type: 'fn', name: 'separate', sep: ' ' }], ['bio', 'minimal'], 'safe'],
   ['hype-post', 'Hype Post', [{ type: 'case', mode: 'upper' }, { type: 'map', name: 'sans-bold' }, { type: 'combine', marks: 'double-underline' }], ['hype', 'shout'], 'good'],
   ['night-mood', 'Night Mood', [{ type: 'map', name: 'fraktur' }, { type: 'flair', symbols: '\u263d\u272a\u2606', density: 'light', seed: 'night-mood' }], ['night', 'mood'], 'good'],
-  ['mirror-selfie', 'Mirror Caption', [{ type: 'fn', name: 'alternate' }], ['caption', 'mirror'], 'safe'],
   ['repost-tag', 'Repost Tag', [{ type: 'frame', prefix: '\u21ba ', suffix: ' \u21ba' }, { type: 'map', name: 'sans-bold' }], ['repost', 'tag'], 'good'],
   ['countdown', 'Countdown', [{ type: 'map', name: 'monospace' }, { type: 'frame', prefix: '\u23f3 ', suffix: '' }], ['countdown', 'event'], 'good'],
   ['poll-question', 'Poll Question', [{ type: 'map', name: 'sans-bold' }, { type: 'frame', prefix: '\u2754 ', suffix: '' }], ['poll', 'question'], 'good'],
   ['shoutout', 'Shoutout', [{ type: 'case', mode: 'upper' }, { type: 'frame', frame: 'arrow' }], ['shoutout', 'mention'], 'good'],
   ['diary-entry', 'Diary Entry', [{ type: 'map', name: 'script' }, { type: 'combine', marks: 'dotted' }], ['diary', 'entry'], 'good'],
-  ['sale-banner', 'Sale Banner', [{ type: 'case', mode: 'upper' }, { type: 'map', name: 'squared' }], ['sale', 'banner'], 'limited'],
   ['community-name', 'Community Name', [{ type: 'map', name: 'double-struck' }, { type: 'frame', frame: 'brackets' }], ['community', 'name'], 'good'],
   ['poll-results', 'Poll Results', [{ type: 'map', name: 'monospace' }, { type: 'combine', marks: 'overline' }], ['results', 'stats'], 'good'],
   ['mood-ring', 'Mood Ring', [{ type: 'frame', frame: 'diamonds' }, { type: 'flair', symbols: '\u2661\u2665\u2764', density: 'light', seed: 'mood-ring' }], ['mood', 'ring'], 'good'],
   ['close-friends', 'Close Friends', [{ type: 'map', name: 'small-caps' }, { type: 'frame', frame: 'hearts' }], ['friends', 'close'], 'good'],
   ['intro-post', 'Intro Post', [{ type: 'map', name: 'bold' }, { type: 'frame', frame: 'sparkles' }], ['intro', 'welcome'], 'good'],
 ];
-SOCIAL.forEach(([slug, name, pipeline, tags, support], i) => {
+// Only the social pages that already had their own indexable page keep it. The
+// first eight entries used to decide this by position; after removing the
+// duplicate ones that list would pick four new pages that were built as thin
+// aliases, so the client is named instead.
+const SOCIAL_INDEXABLE = new Set(['handle-wrap', 'caption-underline']);
+SOCIAL.forEach(([slug, name, pipeline, tags, support]) => {
   add({
     id: slug, slug, name, category: 'social', type: 'pipeline', tags: ['social', ...tags],
-    pipeline, support, indexable: i < 8,
+    pipeline, support, indexable: SOCIAL_INDEXABLE.has(slug),
     description: `${name} styling for bios, captions and profile text on Instagram, TikTok and X. ${CAVEAT[support]}`,
   });
 });
 
-// ---------------------------------------------------------------- composed combinations (the volume)
+// Composed combinations (the volume)
 const LINE_SUBSET = LINES.slice(0, 12).map(([key]) => key);
 const FRAME_SUBSET = FRAME_LIST.slice(0, 8).map(([key]) => key);
 const LINE_SUBSET_SM = LINES.slice(0, 6).map(([key]) => key);
@@ -480,14 +490,42 @@ const frameMeta = new Map(FRAME_LIST);
 const sepMeta = new Map(SEPS.map(([key, name, sep]) => [key, { name, sep }]));
 const baseMeta = new Map(BASES.map(([slug, name, category, tags, , support]) => [slug, { name, category, tags, support }]));
 
+// Composed styles whose whole output is identical to a curated style page are
+// not generated. Each key is "<base-slug>|<effect>|<line|frame|sep>", listing
+// only the combinations a curated page already covers:
+// bold-strike -> Frag Line, bold-strike-underline -> Critical Hit,
+// bold-fraktur-strike -> Game Over, double-struck-strike -> Defeat Screen,
+// script-dotted -> Diary Entry, monospace-overline -> Poll Results,
+// monospace-dot-above -> Ping Status, sans-bold-underline -> Caption Underline,
+// bold-script-stars -> Weekend Post, fraktur-ornate -> Boss Mode,
+// script-hearts -> Gratitude Note, sans-bold-brackets -> Lobby Title,
+// fraktur-wings -> Guild Banner, circled-crown -> Rank Badge,
+// bold-fraktur-stars -> Raid Night, sans-bold-sparkles -> Power Up,
+// bold-sparkles -> Intro Post, monospace-dash-sep -> Speedrun,
+// sans-spaced -> Minimal Bio, sans-bold-spaced -> Respawn Text,
+// double-struck-brackets -> Community Name, small-caps-hearts -> Close Friends.
+const REMOVED_COMPOSED = new Set([
+  'bold|line|strike', 'bold|line|strike-underline', 'bold-fraktur|line|strike',
+  'double-struck|line|strike', 'script|line|dotted', 'monospace|line|overline',
+  'monospace|line|dot-above', 'sans-bold|line|underline',
+  'bold|frame|sparkles', 'bold-script|frame|stars', 'sans-bold|frame|sparkles',
+  'fraktur|frame|ornate', 'script|frame|hearts', 'sans-bold|frame|brackets',
+  'fraktur|frame|wings', 'circled|frame|crown', 'bold-fraktur|frame|stars',
+  'double-struck|frame|brackets', 'small-caps|frame|hearts',
+  'monospace|sep|dash-sep', 'sans|sep|spaced', 'sans-bold|sep|spaced',
+]);
+const removed = (kind) => (base, effect) => REMOVED_COMPOSED.has(`${base}|${kind}|${effect}`);
+
 const compose = (id, name, category, tags, pipeline, support, parent, description) => {
   add({ id, slug: id, name, category, type: 'pipeline', tags, pipeline, support, parent, description });
 };
 
 // alphabet x line
+const skipLine = removed('line');
 for (const [slug] of BASES) {
   const b = baseMeta.get(slug);
   for (const [key] of LINES) {
+    if (skipLine(slug, key)) continue;
     const l = lineMeta.get(key);
     compose(`${slug}-${key}`, `${b.name} ${l.name}`, b.category, [...b.tags, key],
       [{ type: 'map', name: slug }, { type: 'combine', marks: l.marks }],
@@ -495,18 +533,22 @@ for (const [slug] of BASES) {
   }
 }
 // alphabet x frame
+const skipFrame = removed('frame');
 for (const [slug] of BASES) {
   const b = baseMeta.get(slug);
   for (const [key, fName] of FRAME_LIST) {
+    if (skipFrame(slug, key)) continue;
     compose(`${slug}-${key}`, `${b.name} with ${fName}`, b.category, [...b.tags, 'frame', key],
       [{ type: 'map', name: slug }, { type: 'frame', frame: key }],
       b.support === 'safe' ? 'good' : b.support, slug, `${b.name} letters wrapped in a ${fName.toLowerCase()} frame.`);
   }
 }
 // alphabet x separator
+const skipSep = removed('sep');
 for (const [slug] of BASES) {
   const b = baseMeta.get(slug);
   for (const [key, sName, sep] of SEPS) {
+    if (skipSep(slug, key)) continue;
     compose(`${slug}-${key}`, `${b.name} ${sName}`, b.category, [...b.tags, 'separator', key],
       [{ type: 'map', name: slug }, { type: 'fn', name: 'separate', sep }],
       'good', slug, `${b.name} letters joined with ${JSON.stringify(sep)} for a ${sName.toLowerCase()} look.`);

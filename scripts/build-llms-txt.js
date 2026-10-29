@@ -41,7 +41,7 @@ ${site.name} converts plain text into styled text by replacing letters with look
 
 ## Important limits
 - Output is Unicode characters, not an image or a font. Apps without the relevant glyphs render empty boxes; each style page states its support level.
-- Styling runs entirely in the browser. Typed text is never sent to the server.
+- Styling runs in your browser. The style search and AI suggestion helpers do send a short snippet of what you type to the site to produce their results; the main generator never uploads your text.
 - Images, PDFs and QR code images are decoded and processed on the visitor's device, not uploaded.
 - PNG compression is lossless, so a PNG can get larger instead of smaller. The tool reports the real byte change.
 - There is no account and no sign-up.

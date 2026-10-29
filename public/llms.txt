@@ -1,12 +1,12 @@
 # Stylzo
 
-> Free Unicode text generator. 5,616 styles across 18 categories, with 100 dedicated style pages.
+> Free Unicode text generator. 5,578 styles across 18 categories, with 94 dedicated style pages.
 
 Stylzo converts plain text into styled text by replacing letters with look-alike Unicode characters, not by applying a font. The result pastes into any app that accepts plain text. Typing example: "Stylzo".
 
 ## What it does
 - Generates and copies text styles in the browser, with no account.
-- Provides a searchable style index, 100 dedicated style pages and platform style guides.
+- Provides a searchable style index, 94 dedicated style pages and platform style guides.
 - Includes symbols, emoji and kaomoji libraries with one-tap copy.
 - Includes browser text tools: word counter, case converter, reverse, slug and find and replace.
 - Includes an image compressor, text fixer, screenshot-to-text OCR, PDF page editor, PDF accessibility checker, QR code generator and QR code reader.
@@ -14,14 +14,14 @@ Stylzo converts plain text into styled text by replacing letters with look-alike
 
 ## Important limits
 - Output is Unicode characters, not an image or a font. Apps without the relevant glyphs render empty boxes; each style page states its support level.
-- Styling runs entirely in the browser. Typed text is never sent to the server.
+- Styling runs in your browser. The style search and AI suggestion helpers do send a short snippet of what you type to the site to produce their results; the main generator never uploads your text.
 - Images, PDFs and QR code images are decoded and processed on the visitor's device, not uploaded.
 - PNG compression is lossless, so a PNG can get larger instead of smaller. The tool reports the real byte change.
 - There is no account and no sign-up.
 
 ## Pages
 - [Main generator](https://www.abdulsamad.shop/): the tool. Supports ?text= and ?category=.
-- [Font style index](https://www.abdulsamad.shop/fonts): all 100 styles by category. Supports ?q=.
+- [Font style index](https://www.abdulsamad.shop/fonts): all 94 styles by category. Supports ?q=.
 - [Font style pages](https://www.abdulsamad.shop/fonts/bold): one page per style, with support notes and examples.
 - [Style guides](https://www.abdulsamad.shop/styles): 25 words in 25 styles, plus 6 platform guides.
 - [Instagram guide](https://www.abdulsamad.shop/styles/instagram): field limits, bio styles and FAQs.
@@ -43,7 +43,7 @@ Stylzo converts plain text into styled text by replacing letters with look-alike
 - [About](https://www.abdulsamad.shop/about) and [Privacy](https://www.abdulsamad.shop/privacy).
 
 ## Style categories
-Bubble and boxed (1205), Italic (964), Small and tiny (723), Bold (482), Cursive (482), Gothic (482), Clean (482), Outline (241), Wide (241), Decorated (65), Flip and reverse (49), Emoji (48), Glitch (31), Gaming (30), Social (29), Lines (26), Symbols (22), Kaomoji (14)
+Bubble and boxed (1204), Italic (964), Small and tiny (722), Cursive (479), Gothic (478), Clean (478), Bold (475), Wide (241), Outline (239), Decorated (59), Flip and reverse (49), Emoji (48), Glitch (31), Gaming (29), Lines (26), Symbols (22), Social (20), Kaomoji (14)
 
 ## Optional
 - [Sitemap](https://www.abdulsamad.shop/sitemap.xml)
