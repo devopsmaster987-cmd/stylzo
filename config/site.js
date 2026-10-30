@@ -184,6 +184,7 @@ export const site = {
   nav: [
     { href: '/', label: 'Generator' },
     { href: '/styles', label: 'Style guides', className: 'nav-board' },
+    { href: '/guides', label: 'Guides' },
     { href: '/studio', label: 'Studio' },
     { href: '/tools', label: 'Tools', children: [
       { href: '/tools', label: 'Text tools' },

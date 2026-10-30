@@ -6,6 +6,7 @@ import { catalog } from '@/services/catalog.js';
 import { styleSlugs } from '@/lib/styles-material.js';
 import { INDEXABLE_CATEGORY_KEYS } from '@/lib/category-routing.js';
 import { PLATFORM_PAGES } from '@/lib/platform-pages.js';
+import { GUIDES } from '@/lib/guides.js';
 
 // Only active, indexable pages. Composed combinations stay out of the sitemap.
 
@@ -57,6 +58,7 @@ const STYLE_SOURCES = ['lib/landing-pages.js', 'lib/aeo.js', 'components/landing
 const PLATFORM_SOURCES = ['lib/platform-pages.js', 'components/platform-guide.jsx'];
 const CATEGORY_SOURCES = ['data/categories.json', 'lib/category-content.js', 'lib/category-routing.js', 'components/category-page.jsx'];
 const TOOL_SOURCES = ['lib/aeo.js', 'lib/pages.js', 'services/seo.js'];
+const GUIDE_SOURCES = ['lib/guides.js', 'components/guide-article.jsx', 'app/guides/page.jsx', 'app/guides/[slug]/page.jsx'];
 
 /** Static pages never change often; the catalog is the part that does. */
 const STATIC_PAGES = [
@@ -81,6 +83,16 @@ const STATIC_PAGES = [
   { path: '/privacy', changeFrequency: 'yearly', priority: 0.2, sources: STATIC_SOURCES },
   { path: '/terms', changeFrequency: 'yearly', priority: 0.2, sources: STATIC_SOURCES },
   { path: '/contact', changeFrequency: 'yearly', priority: 0.3, sources: STATIC_SOURCES },
+  // The guides section. Eight original articles plus the index that lists them;
+  // all indexable, and each with its own last-modified stamp on the same
+  // sources because the content lives in one module.
+  { path: '/guides', changeFrequency: 'weekly', priority: 0.8, sources: GUIDE_SOURCES },
+  ...GUIDES.map(({ path: guidePath }) => ({
+    path: guidePath,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+    sources: GUIDE_SOURCES,
+  })),
 ];
 
 export default function sitemap() {
