@@ -3,6 +3,7 @@ import { env, adsenseConfigured } from '@/config/environment.js';
 import { catalog } from '@/services/catalog.js';
 import { ConsentControl } from '@/components/consent-control.jsx';
 import { LANDING_PAGES } from '@/lib/landing-pages.js';
+import { PRIVACY_SHORT } from '@/lib/facts.js';
 import { wordmark } from './site-header.jsx';
 
 export function SiteFooter() {
@@ -15,8 +16,7 @@ export function SiteFooter() {
             {wordmark()}<span className="brand-dot">.</span>
           </p>
           <p className="muted">
-            {site.name} turns plain text into Unicode styles, symbols and kaomoji. Everything runs in
-            your browser — nothing you type is sent to our server.
+            {site.name} turns plain text into Unicode styles, symbols and kaomoji. {PRIVACY_SHORT}
           </p>
 
           <nav className="foot-social" aria-label="Social media">
@@ -82,7 +82,7 @@ export function SiteFooter() {
       <div className="wrap foot-base">
         <p>© {new Date().getFullYear()} {site.name}. Made for copy and paste.</p>
         <p className="muted">
-          {totalStyles} styles · your text never leaves your browser
+          {totalStyles} styles · styling runs on your own device
           {/* "no tracking cookies" is only true while ads are off. Advertising
               cookies are real once AdSense is configured, so the claim has to
               change with the configuration rather than quietly become false. */}

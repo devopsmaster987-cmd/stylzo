@@ -1,5 +1,6 @@
-import { GUIDES, guideEntries } from '@/lib/guides.js';
+import { GUIDES, guideEntries, GUIDES_UPDATED, GUIDES_UPDATED_LABEL } from '@/lib/guides.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
+import { site } from '@/config/site.js';
 import { itemListLd } from '@/services/seo.js';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
@@ -45,6 +46,10 @@ export default function GuidesIndex() {
           Short, plain-language guides about styled Unicode text: how it works, where it works,
           how it can go wrong, and when ordinary text is simply the better tool. Every example
           shown is real output from the site&rsquo;s generator.
+        </p>
+        <p className="muted">
+          Written by <b>{site.ownerName}</b>, the developer and sole owner of {site.name}. Last
+          reviewed: <time dateTime={GUIDES_UPDATED}>{GUIDES_UPDATED_LABEL}</time>
         </p>
       </section>
 

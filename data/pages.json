@@ -4,7 +4,7 @@
     "description": "What Stylzo does, how Unicode text styles actually work, why some apps render them as empty boxes, and what the site stores about you.",
     "body": [
       "This site turns ordinary text into styled text. It does not use a special font. Each style swaps letters for look-alike characters that already exist in Unicode, such as Mathematical Bold or Fraktur, so the result can be pasted into places that only accept plain text.",
-      "Some styles add combining marks (for underline or strikethrough) or wrap your text in symbols. All of this happens with a small script that runs in your browser, so typing is instant and your text stays on your device.",
+      "Some styles add combining marks (for underline or strikethrough) or wrap your text in symbols. All of this happens with a small script that runs in your browser, so typing is instant. The styling runs on your own device and nothing about the text is stored. Two optional helpers, the style-name search and the AI suggestions, send a short snippet of what you typed to our server to prepare results, and the AI suggestions may also share up to 120 characters with an external AI provider.",
       "Because these are characters rather than fonts, support depends on the app and the device. If you see empty boxes, that app's font has no glyph for the character. Each style page says how widely it is supported."
     ],
     "sections": [
@@ -46,7 +46,7 @@
       {
         "heading": "How it is built",
         "body": [
-          "There is no account system and no database of users. The generator styles text in your browser and never uploads it. Two helpers — the style-name search and the AI suggestion shortcuts — do send a short snippet of what you type to the site to produce their results, and suggestions can use an external AI provider.",
+          "There is no account system and no database of users. The generator styles text on the device itself, and the full typed text is not kept. Two helpers — the style-name search and the AI suggestion shortcuts — send a short snippet of what you type to the site to produce their results, and suggestions can use an external AI provider.",
           "The style catalogue is generated from the Unicode tables and stored as a compact index that the site reads once at startup. That is why the generator responds instantly no matter how many styles are available."
         ]
       }
@@ -62,8 +62,8 @@
       {
         "heading": "The text you type",
         "body": [
-          "The generator, the tools and the libraries transform your text in your browser by a script that runs on your own device. The converter does not upload your text or store it anywhere.",
-          "Two on-site helpers do receive a short snippet of what you type across the network so they can produce their results: the style-name search and the AI suggestion shortcuts. The AI helper may pass that snippet to an external AI provider when that feature is switched on.",
+          "The styling runs on your own device and nothing about the text is stored. Two optional helpers, the style-name search and the AI suggestions, send a short snippet of what you typed to our server to prepare results, and the AI suggestions may also share up to 120 characters with an external AI provider.",
+          "The generator, the tools and the libraries transform your text with a script that runs on your own device. The two helpers above send the only text that crosses the network.",
           "If you use the share button to send a result somewhere, that action goes directly from your browser to the app you chose, and that app's own privacy rules then apply."
         ]
       },
@@ -160,7 +160,7 @@
       {
         "heading": "Your content and your privacy",
         "body": [
-          "The text you type is processed in your browser and is not sent to us or stored. We cannot see it, so we cannot disclose it, and we cannot restore it if you lose it.",
+          "The styling runs on your own device and nothing about the text is stored. Two optional helpers, the style-name search and the AI suggestions, send a short snippet of what you typed to our server to prepare results, and the AI suggestions may also share up to 120 characters with an external AI provider. The full text is never kept, so we cannot restore it if you lose it.",
           "The only information about you this site holds is the anonymous page view counts described on the privacy page. There is no account, no profile and no way for us to identify you.",
           "Clear your browser's storage for this site at any time to remove your saved styles and cookie choice."
         ]

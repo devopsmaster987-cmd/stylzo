@@ -3,7 +3,7 @@ import { env } from '@/config/environment.js';
 import { site } from '@/config/site.js';
 import { pageMeta, toMetadata } from '@/lib/pages.js';
 import { ABOUT_QA, WHAT_IT_IS } from '@/lib/aeo.js';
-import { keyFacts } from '@/lib/facts.js';
+import { keyFacts, PRIVACY_SHORT } from '@/lib/facts.js';
 import { JsonLd } from './json-ld.jsx';
 import { Scripts } from './scripts.jsx';
 
@@ -19,9 +19,7 @@ const PAGE_ANSWER = {
   },
   privacy: {
     q: 'Does this site store the text I type?',
-    a: 'No. The text you type is converted in your browser and is never sent to the server or '
-      + 'stored. The only things kept on your device are your own settings: your cookie choice, '
-      + 'and any styles you have favourited or used recently.',
+    a: PRIVACY_SHORT,
   },
   terms: {
     q: 'Can I use the text this site generates commercially?',

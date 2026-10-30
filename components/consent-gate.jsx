@@ -43,8 +43,11 @@ export function ConsentGate({ client, certifiedCmp = false }) {
   return (
     <div className="consent" role="dialog" aria-label="Cookie choices" aria-live="polite">
       <p className="consent-text">
-        We use cookies to show ads and keep the site working. You can accept or decline.
-        See our <a href="/privacy">privacy policy</a>.
+        We ask before showing ads. Accept means advertising cookies may be set: Google may set
+        or read them to show and measure ads on this site. Decline means no advertising script
+        is loaded, so no advertising cookies are set and no ads are shown. Either way, the text
+        you type isn&rsquo;t used for ads and is not uploaded by the generator, and your choice
+        is kept in your own browser. Read the <a href="/privacy">privacy policy</a>.
       </p>
       <div className="consent-actions">
         <button type="button" className="btn" data-consent="granted" onClick={() => answer('granted')}>

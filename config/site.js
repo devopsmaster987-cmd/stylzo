@@ -166,9 +166,9 @@ export const site = {
   // how schema.org ties the Stylzo brand to abdulsamad.shop without inventing a
   // second brand or a fake legal name.
   alternateName: 'abdulsamad.shop',
-  tagline: 'Type once, get 5,600+ styles you can paste anywhere',
+  tagline: 'Type once, get 5,578 styles you can paste wherever text is accepted',
   defaultDescription:
-    'Turn plain text into bold, cursive, gothic, bubble, glitch and hundreds of other styles. Plus symbols, emoji, kaomoji and text tools. Free, no sign-up, everything runs in your browser.',
+    'Turn plain text into bold, cursive, gothic, bubble, glitch and hundreds of other styles. Plus symbols, emoji, kaomoji and text tools. Free, no sign-up. The styling runs on your own device.',
   twitter: '',
   social: [
     { label: 'Facebook', href: 'https://www.facebook.com/share/1GS6jfYyQS/' },

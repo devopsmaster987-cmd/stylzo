@@ -2,7 +2,7 @@
 
 > Free Unicode text generator. 5,578 styles across 18 categories, with 94 dedicated style pages.
 
-Stylzo converts plain text into styled text by replacing letters with look-alike Unicode characters, not by applying a font. The result pastes into any app that accepts plain text. Typing example: "Stylzo".
+Stylzo converts plain text into styled text by replacing letters with look-alike Unicode characters, not by applying a font. The result is plain text that pastes wherever text is accepted; how it renders depends on the app and its fonts. Typing example: "Stylzo".
 
 ## What it does
 - Generates and copies text styles in the browser, with no account.

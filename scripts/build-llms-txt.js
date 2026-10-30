@@ -29,7 +29,7 @@ const doc = `# ${site.name}
 
 > Free Unicode text generator. ${styles.length.toLocaleString('en-US')} styles across ${Object.keys(categories).length} categories, with ${indexable.length} dedicated style pages.
 
-${site.name} converts plain text into styled text by replacing letters with look-alike Unicode characters, not by applying a font. The result pastes into any app that accepts plain text. Typing example: "${sample}".
+${site.name} converts plain text into styled text by replacing letters with look-alike Unicode characters, not by applying a font. The result is plain text that pastes wherever text is accepted; how it renders depends on the app and its fonts. Typing example: "${sample}".
 
 ## What it does
 - Generates and copies text styles in the browser, with no account.

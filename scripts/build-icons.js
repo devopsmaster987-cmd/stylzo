@@ -55,8 +55,8 @@ function ogImage() {
     `<rect x="80" y="80" width="104" height="104" rx="22" fill="#ffffff" fill-opacity="0.14"/>` +
     `<text x="80" y="290" font-family="Georgia, 'Times New Roman', serif" font-size="86" fill="#ffffff">${SAMPLE}</text>` +
     `<text x="80" y="382" font-family="Georgia, 'Times New Roman', serif" font-size="82" font-weight="700" fill="#ffffff">Stylzo</text>` +
-    `<text x="80" y="446" font-family="system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="38" fill="#ffffff" fill-opacity="0.9">Fancy text generator — 5,600+ Unicode styles</text>` +
-    `<text x="80" y="500" font-family="system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="32" fill="#ffffff" fill-opacity="0.72">Copy and paste anywhere. Free, no sign-up.</text>` +
+    `<text x="80" y="446" font-family="system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="38" fill="#ffffff" fill-opacity="0.9">Fancy text generator — 5,578 Unicode styles</text>` +
+    `<text x="80" y="500" font-family="system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="32" fill="#ffffff" fill-opacity="0.72">Real Unicode characters. Free, no sign-up.</text>` +
     `</svg>`,
   );
 

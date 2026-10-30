@@ -1,6 +1,7 @@
 import { getStyle } from '@/services/catalog.js';
 import { applyStyle } from '@/services/unicode/engine.js';
 import { env, adsenseConfigured } from '@/config/environment.js';
+import { site } from '@/config/site.js';
 import { guideMeta } from '@/lib/guides.js';
 import { JsonLd } from '@/components/json-ld.jsx';
 import { Scripts } from '@/components/scripts.jsx';
@@ -85,7 +86,8 @@ export function GuideArticle({ guide }) {
 
       <article className="prose" aria-labelledby="guide-title">
         <p className="muted guide-updated">
-          Last updated: <time dateTime={guide.updated}>{formatDate(guide.updated)}</time>
+          Written by <b>{site.ownerName}</b>, the developer and sole owner of {site.name}. Last
+          reviewed: <time dateTime={guide.updated}>{formatDate(guide.updated)}</time>
         </p>
         <h1 id="guide-title">{guide.title}</h1>
 

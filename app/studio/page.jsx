@@ -155,7 +155,8 @@ export default function StudioPage() {
         <h2 id="studio-about">What the font studio does</h2>
         <p>
           The generator on the home page turns your text into Unicode characters, which means
-          it can be pasted into any app that accepts plain text. The studio solves the other
+          it is plain text that pastes wherever text is accepted and the app it lands in decides
+          how it renders. The studio solves the other
           half of the problem: turning styled text into an actual image. Choose a style, a
           foreground colour and a background, set the letter spacing, and the preview above
           redraws as you type.

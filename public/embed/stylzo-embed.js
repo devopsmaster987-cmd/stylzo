@@ -21,7 +21,7 @@
 import { transform } from '/js/engine/engine.js';
 import { ALPHABETS } from '/js/engine/mappings.js';
 
-// A small, representative set. The full 5,600 styles stay on the site — the
+// A small, representative set. The full 5,578 styles stay on the site — the
 // widget is a doorway to it, not a replacement for it.
 const STYLES = [
   ['bold', 'Bold'], ['italic', 'Italic'], ['script', 'Cursive'], ['fraktur', 'Gothic'],
