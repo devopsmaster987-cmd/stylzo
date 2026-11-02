@@ -86,6 +86,19 @@ const STATIC_PAGES = [
   // The guides section. Eight original articles plus the index that lists them;
   // all indexable, and each with its own last-modified stamp on the same
   // sources because the content lives in one module.
+  {
+    path: '/site-map',
+    changeFrequency: 'weekly',
+    priority: 0.5,
+    sources: [
+      'app/site-map/page.jsx',
+      'lib/guides.js',
+      'lib/platform-pages.js',
+      'lib/landing-pages.js',
+      'lib/category-routing.js',
+      'data/fonts.json',
+    ],
+  },
   { path: '/guides', changeFrequency: 'weekly', priority: 0.8, sources: GUIDE_SOURCES },
   ...GUIDES.map(({ path: guidePath }) => ({
     path: guidePath,

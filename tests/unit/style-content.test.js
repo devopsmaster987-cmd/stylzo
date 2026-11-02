@@ -1,7 +1,8 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { catalog } from '../../services/catalog.js';
-import { styleContent, styleKind } from '../../lib/style-content.js';
+import { styleContent, styleKind, styleAlphabet } from '../../lib/style-content.js';
+import { applyStyle } from '../../services/unicode/engine.js';
 
 const indexable = catalog().styles.filter((s) => s.indexable);
 
@@ -121,6 +122,37 @@ describe('font page content', () => {
         styleContent(style).examples.map((e) => e.output),
       );
     }
+  });
+
+  test('the alphabet preview is the real converter output', () => {
+    for (const style of indexable) {
+      const rows = styleAlphabet(style);
+      assert.equal(rows.length, 3, `${style.slug} should show letters and digits`);
+      assert.deepEqual(
+        rows.map((row) => row.plain),
+        ['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz', '0123456789'],
+        `${style.slug} shows the wrong character set`,
+      );
+      for (const row of rows) {
+        assert.equal(
+          row.output,
+          applyStyle(row.plain, style, { maxLength: 300 }),
+          `${style.slug} "${row.label}" does not match the converter`,
+        );
+      }
+      // A style that changes nothing would be a broken generator, and the
+      // alphabet block would then be a duplicate of the plain row.
+      assert.ok(
+        rows.some((row) => row.output !== row.plain),
+        `${style.slug} left the whole alphabet unchanged`,
+      );
+    }
+  });
+
+  test('different styles show different alphabets', () => {
+    const bold = styleAlphabet(catalog().bySlug.get('bold'));
+    const script = styleAlphabet(catalog().bySlug.get('script'));
+    assert.notEqual(bold[0].output, script[0].output);
   });
 
   test('every style is classified into a kind the copy understands', () => {

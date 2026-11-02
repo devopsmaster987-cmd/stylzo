@@ -40,6 +40,7 @@ Stylzo converts plain text into styled text by replacing letters with look-alike
 - [PDF accessibility checker](https://www.abdulsamad.shop/pdf-accessibility-checker): check tags, language, title, fonts, alt text, links and form labels.
 - [Font studio](https://www.abdulsamad.shop/studio): styled text to a 1200x630 PNG.
 - [Symbols](https://www.abdulsamad.shop/symbols), [Emoji](https://www.abdulsamad.shop/emoji), [Kaomoji](https://www.abdulsamad.shop/kaomoji): copyable libraries.
+- [Site map](https://www.abdulsamad.shop/site-map): every page above in one linked index.
 - [About](https://www.abdulsamad.shop/about) and [Privacy](https://www.abdulsamad.shop/privacy).
 
 ## Style categories
@@ -47,6 +48,7 @@ Bubble and boxed (1204), Italic (964), Small and tiny (722), Cursive (479), Goth
 
 ## Optional
 - [Sitemap](https://www.abdulsamad.shop/sitemap.xml)
+- [Guides feed](https://www.abdulsamad.shop/feed.xml)
 - [robots.txt](https://www.abdulsamad.shop/robots.txt)
 
 ## Attribution

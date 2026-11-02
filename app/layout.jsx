@@ -56,6 +56,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="stylesheet" href="/css/main.css" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${site.name} guides`}
+          href="/feed.xml"
+        />
         {adsenseConfigured ? (
           <>
             <meta name="google-adsense-account" content={env.adsense.client} />

@@ -63,6 +63,7 @@ ${PLATFORM_PAGES.map((page) => `- [${page.subject} font generator](${base}${page
 - [PDF accessibility checker](${base}/pdf-accessibility-checker): check tags, language, title, fonts, alt text, links and form labels.
 - [Font studio](${base}/studio): styled text to a 1200x630 PNG.
 - [Symbols](${base}/symbols), [Emoji](${base}/emoji), [Kaomoji](${base}/kaomoji): copyable libraries.
+- [Site map](${base}/site-map): every page above in one linked index.
 - [About](${base}/about) and [Privacy](${base}/privacy).
 
 ## Style categories
@@ -70,6 +71,7 @@ ${categoryList}
 
 ## Optional
 - [Sitemap](${base}/sitemap.xml)
+- [Guides feed](${base}/feed.xml)
 - [robots.txt](${base}/robots.txt)
 
 ## Attribution

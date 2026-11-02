@@ -49,7 +49,8 @@ export default function GuidesIndex() {
         </p>
         <p className="muted">
           Written by <b>{site.ownerName}</b>, the developer and sole owner of {site.name}. Last
-          reviewed: <time dateTime={GUIDES_UPDATED}>{GUIDES_UPDATED_LABEL}</time>
+          reviewed: <time dateTime={GUIDES_UPDATED}>{GUIDES_UPDATED_LABEL}</time>.{' '}
+          <a href="/feed.xml">RSS feed</a>
         </p>
       </section>
 

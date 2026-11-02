@@ -3,7 +3,7 @@ import { getStyle, getCategory, relatedStyles } from '@/services/catalog.js';
 import { SLUG_RE } from '@/lib/validation.js';
 import { pageMeta, toMetadata, renderCards, inputFromQuery, faqFor, SUPPORT_LABEL } from '@/lib/pages.js';
 import { site as SITE } from '@/config/site.js';
-import { nameWithText, styleContent } from '@/lib/style-content.js';
+import { nameWithText, styleContent, styleAlphabet } from '@/lib/style-content.js';
 import { fontPageContent, renderCustomFontExamples } from '@/lib/font-page-content.js';
 import { FONT_DESCRIPTION_OVERRIDES } from '@/lib/font-meta.js';
 import { GeneratorInput } from '@/components/generator-input.jsx';
@@ -64,6 +64,37 @@ function detailMeta(style, parent, hasText) {
           + 'If an app draws empty boxes, that app is missing the characters this style uses.',
       },
   });
+}
+
+/**
+ * The full alphabet in this style.
+ *
+ * Every style page used to show the same three example phrases, which made a
+ * hundred pages look interchangeable to a reader and to a crawler. The rendered
+ * characters below are unique to the style and are useful on their own: they
+ * show exactly which letters and digits the style covers before someone pastes
+ * it into a bio.
+ */
+function AlphabetSection({ style }) {
+  const rows = styleAlphabet(style);
+  return (
+    <section className="style-examples" aria-labelledby="alphabet-heading">
+      <h2 id="alphabet-heading">Every letter in {style.name}</h2>
+      <p className="muted">
+        The complete character set this style produces. Characters it does not
+        change are shown exactly as you would type them.
+      </p>
+      <ul className="alphabet-list">
+        {rows.map((row) => (
+          <li key={row.key}>
+            <span className="example-label">{row.label}</span>
+            <p className="alphabet-out">{row.output}</p>
+            <span className="alphabet-plain">typed as: {row.plain}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 export async function generateMetadata({ params, searchParams }) {
@@ -143,8 +174,10 @@ export default async function FontDetailPage({ params, searchParams }) {
                   <span className="example-plain">typed as: {ex.plain}</span>
                 </li>
               ))}
-            </ul>
-          </section>
+        </ul>
+      </section>
+
+          <AlphabetSection style={style} />
 
           <section className="prose" aria-labelledby="faq">
             <h2 id="faq">Questions</h2>
@@ -216,6 +249,8 @@ export default async function FontDetailPage({ params, searchParams }) {
           ))}
         </ul>
       </section>
+
+      <AlphabetSection style={style} />
 
       <section className="prose" aria-labelledby="where-heading">
         <h2 id="where-heading">Where {textName} works</h2>

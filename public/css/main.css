@@ -820,6 +820,29 @@ pre code { display: block; padding: .8rem; overflow: auto; }
 /* The typed source, so the transformation is legible rather than magic. */
 .example-plain { font-size: .78rem; color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; }
 
+/* The alphabet preview. Same card treatment as the examples, but its own class
+   so the example parser in the tests keeps seeing exactly three samples. */
+.alphabet-list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .75rem; }
+.alphabet-list li {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .8rem 1rem; background: var(--surface);
+}
+.alphabet-out {
+  margin: 0 0 .35rem; font-size: 1.05rem; line-height: 1.5;
+  word-break: break-word;
+}
+.alphabet-plain { font-size: .78rem; color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+/* HTML site map ------------------------------------------------------------- */
+.site-map-list {
+  list-style: none; margin: .5rem 0 1.25rem; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: .25rem .9rem;
+}
+.site-map-list li { margin: 0; }
+.site-map-group { margin-top: 1.25rem; }
+.site-map-group h3 { margin: .75rem 0 .25rem; font-size: 1rem; }
+
 /* Answer-first blocks -------------------------------------------------------- */
 /* Used to answer the page's core question in one or two sentences before the
    longer prose, both for readers who scan and for AI engines that need a
