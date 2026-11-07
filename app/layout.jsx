@@ -62,6 +62,12 @@ export default function RootLayout({ children }) {
           title={`${site.name} guides`}
           href="/feed.xml"
         />
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          title={`${site.name} pages`}
+          href="/atom.xml"
+        />
         {adsenseConfigured ? (
           <>
             <meta name="google-adsense-account" content={env.adsense.client} />

@@ -80,4 +80,47 @@ describe('crawl discovery', () => {
     const html = await (await get(server.base, '/')).text();
     assert.ok(markup(html).includes('href="/site-map"'), 'the home page does not link the site map');
   });
+
+  test('the Atom feed is valid and lists every indexable style and guide', async () => {
+    const res = await get(server.base, '/atom.xml');
+    assert.equal(res.status, 200);
+    assert.match(res.headers.get('content-type') || '', /application\/atom\+xml/);
+    const xml = await res.text();
+
+    assert.match(xml, /<feed xmlns="http:\/\/www\.w3\.org\/2005\/Atom">/);
+    assert.match(xml, /<entry>/);
+    for (const style of catalog().styles.filter((s) => s.indexable)) {
+      assert.ok(
+        xml.includes(`${env.siteUrl}/fonts/${style.slug}`),
+        `the Atom feed omits ${style.slug}`,
+      );
+    }
+    for (const guide of await guidePaths(server.base)) {
+      assert.ok(xml.includes(`${env.siteUrl}${guide}`), `the Atom feed omits ${guide}`);
+    }
+    // Same count as the sitemap: one entry per indexable URL.
+    const sm = await (await get(server.base, '/sitemap.xml')).text();
+    const smCount = (sm.match(/<loc>/g) || []).length;
+    const entryCount = (xml.match(/<entry>/g) || []).length;
+    assert.equal(entryCount, smCount, 'Atom feed and sitemap disagree on URL count');
+  });
+
+  test('the layout advertises both the guides RSS and the full-site Atom feed', async () => {
+    const html = await (await get(server.base, '/')).text();
+    assert.match(html, /type="application\/rss\+xml"[^>]+href="\/feed\.xml"/);
+    assert.match(html, /type="application\/atom\+xml"[^>]+href="\/atom\.xml"/);
+  });
+
+  test('the IndexNow key file is served as plain text from the site origin', async () => {
+    const res = await get(server.base, '/indexnow-key.txt');
+    assert.equal(res.status, 200);
+    assert.match(res.headers.get('content-type') || '', /text\/plain/);
+    const key = (await res.text()).trim();
+    assert.match(key, /^[0-9a-f]{32}$/, 'IndexNow key must be a 32-char hex string');
+
+    // The ping script must submit the same key it publishes.
+    const script = await import('node:fs').then((fs) =>
+      fs.readFileSync(new URL('../../scripts/ping-indexnow.js', import.meta.url), 'utf8'));
+    assert.ok(script.includes(key), 'ping-indexnow.js uses a different key than the key file');
+  });
 });

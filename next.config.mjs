@@ -137,6 +137,15 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=3600' },
         ],
       },
+      // IndexNow verifies ownership by fetching this key file from the host
+      // named in the submission. A wrong content type can make the check fail.
+      {
+        source: '/indexnow-key.txt',
+        headers: [
+          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+          { key: 'Cache-Control', value: 'public, max-age=3600' },
+        ],
+      },
     ];
   },
 };

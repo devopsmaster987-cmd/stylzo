@@ -20,6 +20,7 @@
     "build:ads": "node scripts/build-ads-txt.js",
     "build:llms": "node scripts/build-llms-txt.js",
     "adsense:check": "node scripts/adsense-preflight.js",
+    "ping:indexnow": "node scripts/ping-indexnow.js",
     "test": "npm run build && node --test --test-concurrency=1 \"tests/**/*.test.js\""
   },
   "dependencies": {
