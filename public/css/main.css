@@ -820,6 +820,19 @@ pre code { display: block; padding: .8rem; overflow: auto; }
 /* The typed source, so the transformation is legible rather than magic. */
 .example-plain { font-size: .78rem; color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; }
 
+/* Guide featured images ----------------------------------------------------- */
+/* 1200×630 social ratio, constrained to the prose column. Explicit width and
+   height attributes keep CLS at zero before the PNG decodes. */
+.guide-figure { margin: 0 0 1.5rem; }
+.guide-figure img {
+  display: block; width: 100%; height: auto; max-width: 100%;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface);
+}
+.guide-figure figcaption {
+  margin-top: .45rem; font-size: .8rem; line-height: 1.4; color: var(--muted);
+}
+
 /* The alphabet preview. Same card treatment as the examples, but its own class
    so the example parser in the tests keeps seeing exactly three samples. */
 .alphabet-list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .75rem; }

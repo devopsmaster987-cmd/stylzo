@@ -16,6 +16,7 @@
     "build:fonts": "node scripts/build-fonts.js",
     "build:emoji": "node scripts/build-emoji.js",
     "build:icons": "node scripts/build-icons.js",
+    "build:guide-images": "node scripts/build-guide-images.js",
     "build:ads": "node scripts/build-ads-txt.js",
     "build:llms": "node scripts/build-llms-txt.js",
     "adsense:check": "node scripts/adsense-preflight.js",

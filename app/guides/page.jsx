@@ -18,7 +18,7 @@ function guidesIndexMeta() {
     ],
     quickAnswer: {
       q: 'What is on the guides index?',
-      a: 'Eight practical guides about styled Unicode text: where it works, why it breaks, how to copy it, how assistive technology reads it, and where to keep text plain.',
+      a: `${GUIDES.length} practical guides about styled Unicode text: where it works, why it breaks, how to copy it, how assistive technology reads it, and where to keep text plain.`,
     },
   });
   meta.ld.push(itemListLd('Stylzo guides', entries.map((e) => ({ name: e.title, path: e.path }))));

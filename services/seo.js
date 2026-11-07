@@ -183,12 +183,15 @@ export function attachJsonLd(meta, ld) {
 }
 
 /** One builder for title, description, canonical, social tags, breadcrumbs and JSON-LD. */
-export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], quickAnswer = null, noindex = false, app = null, home = false }) {
+export function buildMeta({ title, description, path = '/', canonicalPath, breadcrumbs = [], quickAnswer = null, noindex = false, app = null, home = false, images = null }) {
   const fullTitle = home ? `${site.name}: ${title}` : `${title} | ${site.name}`;
   const desc = (description || site.defaultDescription).slice(0, 300);
   const resolvedPath = canonicalPath || path;
   const canonical = abs(resolvedPath);
   const ld = [];
+  // Callers (guide articles) may supply their own social image. Shape matches
+  // OG_IMAGE so og:image:width/height/alt stay declared either way.
+  const ogImages = images?.length ? images : [OG_IMAGE];
 
   // Every page belongs to one WebSite and is one WebPage. The ids are the
   // join, not a repeated block of prose: a crawler can follow
@@ -223,12 +226,12 @@ export function buildMeta({ title, description, path = '/', canonicalPath, bread
     title: fullTitle, description: desc, canonical, noindex, breadcrumbs,
     ld,
     robots: noindex ? 'noindex,follow' : 'index,follow',
-    og: { title: fullTitle, description: desc, url: canonical, type: 'website', siteName: site.name, images: [OG_IMAGE] },
+    og: { title: fullTitle, description: desc, url: canonical, type: 'website', siteName: site.name, images: ogImages },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description: desc,
-      images: [OG_IMAGE.url],
+      images: ogImages.map((img) => img.url),
       ...(site.twitter ? { site: site.twitter } : {}),
     },
   }, ld);

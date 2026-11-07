@@ -75,6 +75,22 @@ export function GuideArticle({ guide }) {
     ...body.slice(mid),
   ];
 
+  // Featured image sits under the intro: early enough for social scrapers and
+  // image search, late enough that the first screen is still the headline.
+  const figure = guide.image?.src ? (
+    <figure className="guide-figure">
+      <img
+        src={guide.image.src}
+        alt={guide.image.alt}
+        width={guide.image.width || 1200}
+        height={guide.image.height || 630}
+        loading="eager"
+        decoding="async"
+      />
+      {guide.image.caption ? <figcaption>{guide.image.caption}</figcaption> : null}
+    </figure>
+  ) : null;
+
   return (
     <>
       <JsonLd items={meta.jsonLd} />
@@ -92,6 +108,8 @@ export function GuideArticle({ guide }) {
         <h1 id="guide-title">{guide.title}</h1>
 
         {guide.intro.map((p) => <p key={p.slice(0, 40)}>{p}</p>)}
+
+        {figure}
 
         {withAd}
 

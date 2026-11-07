@@ -83,7 +83,7 @@ const STATIC_PAGES = [
   { path: '/privacy', changeFrequency: 'yearly', priority: 0.2, sources: STATIC_SOURCES },
   { path: '/terms', changeFrequency: 'yearly', priority: 0.2, sources: STATIC_SOURCES },
   { path: '/contact', changeFrequency: 'yearly', priority: 0.3, sources: STATIC_SOURCES },
-  // The guides section. Eight original articles plus the index that lists them;
+  // The guides section. Original articles plus the index that lists them;
   // all indexable, and each with its own last-modified stamp on the same
   // sources because the content lives in one module.
   {
